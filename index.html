@@ -1,0 +1,3260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PALESTRA — Gimnasio Verbal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#1c1a17;
+    --paper:#f2ede2;
+    --paper-2:#e8e0cf;
+    --paper-3:#ffffff;
+    --rule:#c9bfa8;
+    --rule-strong:#8a7f65;
+    --bermellon:#b23a2e;
+    --bermellon-dark:#7d281f;
+    --bermellon-ink: rgba(178,58,46,0.9);
+    --ochre:#9c7a2d;
+    --forest:#3c5c43;
+    --ink-soft: rgba(28,26,23,0.62);
+    --ink-faint: rgba(28,26,23,0.38);
+    --mono: 'JetBrains Mono', monospace;
+    --display: 'Fraunces', serif;
+    --sans: 'Space Grotesk', sans-serif;
+    --radius: 3px;
+    --shadow-card: 0 1px 0 rgba(28,26,23,0.06), 0 8px 24px -12px rgba(28,26,23,0.25);
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0; padding:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body{
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(178,58,46,0.03), transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(60,92,67,0.04), transparent 45%);
+    min-height:100vh;
+  }
+
+  ::selection{ background: var(--bermellon); color: var(--paper-3); }
+
+  a{ color: inherit; }
+
+  button{
+    font-family: var(--sans);
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+
+  .sr-only{
+    position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
+
+  /* ---------- Shell layout ---------- */
+  .shell{
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 28px 24px 80px;
+  }
+
+  header.masthead{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 14px;
+    margin-bottom: 22px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .masthead-title{
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 42px;
+    letter-spacing: -0.01em;
+    line-height: 0.9;
+    margin:0;
+  }
+  .masthead-title .accent{ color: var(--bermellon); font-style: italic; font-weight: 500; }
+
+  .masthead-sub{
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 4px 0 0;
+  }
+
+  .masthead-stats{
+    display:flex;
+    gap: 22px;
+    font-family: var(--mono);
+    text-align: right;
+  }
+  .mstat-num{ font-size: 22px; font-weight: 700; line-height:1; display:block; }
+  .mstat-label{ font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); }
+  .history-btn{ align-self: center; font-size: 11px; padding: 8px 14px; }
+
+  /* ---------- Apparatus nav ---------- */
+  nav.apparatus-nav{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--rule);
+    border: 2px solid var(--ink);
+    margin-bottom: 26px;
+  }
+  .apparatus-btn{
+    background: var(--paper-2);
+    padding: 12px 8px 10px;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    gap: 3px;
+    transition: background 0.15s ease;
+  }
+  .apparatus-btn:hover{ background: var(--paper-3); }
+  .apparatus-btn.active{
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .apparatus-num{
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    opacity: 0.55;
+  }
+  .apparatus-name{
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  main{ min-height: 480px; }
+
+  .panel{ display:none; }
+  .panel.active{ display:block; animation: fadein 0.25s ease; }
+  @keyframes fadein{ from{ opacity:0; transform: translateY(4px);} to{opacity:1; transform:translateY(0);} }
+
+  .panel-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    border-bottom: 1px solid var(--rule-strong);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .panel-title{
+    font-family: var(--display);
+    font-size: 26px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .panel-desc{
+    font-size: 13px;
+    color: var(--ink-soft);
+    max-width: 60ch;
+    margin: 4px 0 0;
+    line-height: 1.5;
+  }
+
+  .card{
+    background: var(--paper-3);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    padding: 20px;
+  }
+
+  .btn{
+    font-family: var(--mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 10px 18px;
+    border: 1.5px solid var(--ink);
+    border-radius: var(--radius);
+    background: var(--paper-3);
+    transition: all 0.12s ease;
+  }
+  .btn:hover{ background: var(--ink); color: var(--paper); }
+  .btn:active{ transform: scale(0.97); }
+  .btn.primary{ background: var(--bermellon); border-color: var(--bermellon); color: var(--paper-3); }
+  .btn.primary:hover{ background: var(--bermellon-dark); border-color: var(--bermellon-dark); }
+  .btn.ghost{ border-color: var(--rule-strong); color: var(--ink-soft); }
+  .btn.ghost:hover{ background: var(--paper-2); color: var(--ink); }
+  .btn:disabled{ opacity:0.4; cursor:not-allowed; }
+  .btn:disabled:hover{ background: var(--paper-3); color: var(--ink); }
+
+  select, input[type=text], input[type=number], textarea{
+    font-family: var(--sans);
+    font-size: 14px;
+    padding: 8px 10px;
+    border: 1.5px solid var(--rule-strong);
+    border-radius: var(--radius);
+    background: var(--paper-3);
+    color: var(--ink);
+  }
+  select:focus, input:focus, textarea:focus{
+    outline: none;
+    border-color: var(--bermellon);
+    box-shadow: 0 0 0 3px rgba(178,58,46,0.12);
+  }
+
+  footer.credits{
+    margin-top: 40px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  footer.credits button{
+    font-family: var(--mono);
+    font-size: 10px;
+    text-decoration: underline;
+    color: var(--ink-faint);
+  }
+  footer.credits button:hover{ color: var(--bermellon); }
+
+  @media (max-width: 720px){
+    nav.apparatus-nav{ grid-template-columns: repeat(3,1fr); }
+    .masthead-title{ font-size: 30px; }
+    .masthead-stats{ gap: 14px; }
+  }
+  @media (max-width: 480px){
+    nav.apparatus-nav{ grid-template-columns: repeat(2,1fr); }
+  }
+
+  /* ---- Improviso ---- */
+  .imp-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .imp-label{ font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing:0.1em; color: var(--ink-soft); display:block; margin-bottom:4px; }
+  .imp-topic-box{ flex:1; min-width: 220px; }
+  .imp-topic{ font-family: var(--display); font-size: 20px; font-weight:500; margin:0; }
+  .imp-duration-picker{ display:flex; gap:6px; }
+  .dur-btn{ font-family: var(--mono); font-size:12px; padding:6px 12px; border:1.5px solid var(--rule-strong); border-radius: var(--radius); color: var(--ink-soft); }
+  .dur-btn.active{ background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+  .imp-stage{ display:flex; align-items:center; gap: 24px; margin: 20px 0; flex-wrap: wrap; }
+  .imp-timer-wrap{ position:relative; width:120px; height:120px; flex-shrink:0; }
+  .imp-ring{ width:120px; height:120px; transform: rotate(-90deg); }
+  .ring-bg{ fill:none; stroke: var(--paper-2); stroke-width:6; }
+  .ring-fg{ fill:none; stroke: var(--bermellon); stroke-width:6; stroke-linecap:round; stroke-dasharray: 326.7; stroke-dashoffset:0; transition: stroke-dashoffset 1s linear; }
+  .imp-timer-num{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family: var(--mono); font-size:28px; font-weight:700; }
+  .imp-live-stats{ display:flex; gap:22px; flex-wrap: wrap; }
+  .imp-stat{ text-align:center; min-width:64px; }
+  .imp-stat-num{ font-family: var(--mono); font-size:26px; font-weight:700; display:block; line-height:1; }
+  .imp-stat-label{ font-family: var(--mono); font-size:9px; text-transform:uppercase; color: var(--ink-soft); }
+
+  .imp-ritmo{ width:100%; height:60px; display:block; margin-bottom:14px; }
+  .ritmo-baseline{ stroke: var(--rule); stroke-width:1; }
+  .ritmo-line{ fill:none; stroke: var(--forest); stroke-width:1.5; }
+
+  .imp-transcript{
+    min-height: 90px;
+    max-height: 180px;
+    overflow-y:auto;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+  .imp-transcript[contenteditable="true"]{ cursor: text; }
+  .imp-placeholder{ color: var(--ink-faint); font-style: italic; }
+  .imp-transcript mark.filler{
+    background: rgba(178,58,46,0.16);
+    color: var(--bermellon-dark);
+    text-decoration: line-through;
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+
+  .imp-controls{ display:flex; align-items:center; gap:12px; }
+  .imp-mic-status{ font-family: var(--mono); font-size:11px; color: var(--ink-faint); }
+
+  .imp-playback{
+    background: var(--paper); border: 1px solid var(--rule);
+    border-radius: var(--radius); padding: 12px 14px;
+    margin-bottom: 16px;
+  }
+  .imp-playback audio{ height: 36px; }
+  .imp-playback audio::-webkit-media-controls-panel{ background: var(--paper-3); }
+
+  /* ---- Trabalenguas ---- */
+  .tw-text{
+    font-family: var(--display); font-size: 19px; font-weight:500;
+    line-height:1.4; margin:0;
+  }
+  .tw-rounds-wrap{ margin: 16px 0 14px; }
+  .tw-rounds{ display:flex; gap:8px; margin-top:6px; }
+  .tw-round-dot{
+    width:32px; height:32px; border-radius:50%;
+    border: 1.5px solid var(--rule-strong);
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--mono); font-size:12px; color: var(--ink-soft);
+  }
+  .tw-round-dot.done{ background: var(--forest); border-color: var(--forest); color: var(--paper-3); }
+  .tw-round-dot.fail{ background: var(--bermellon); border-color: var(--bermellon); color: var(--paper-3); }
+
+  .tw-pitch-wrap{ margin: 16px 0 14px; }
+  .tw-pitch-chart{ width:100%; height:70px; display:block; margin-top:6px; background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius); }
+  .tw-pitch-line{ fill:none; stroke: var(--forest); stroke-width:1.5; }
+  .tw-pitch-stats{ display:flex; gap:22px; margin-top:10px; flex-wrap:wrap; }
+
+  /* ---- Sirena Vocal / Énfasis Móvil ---- */
+  .sir-chart-wrap{ margin: 14px 0; }
+  .sir-chart{
+    width:100%; height:140px; display:block; margin-top:6px;
+    background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius);
+  }
+  .sir-guide-line{ fill:none; stroke: var(--rule-strong); stroke-width:2; stroke-dasharray: 6 5; }
+  .sir-voice-line{ fill:none; stroke: var(--bermellon); stroke-width:2; }
+  .enf-target-word{
+    font-family: var(--display); font-style: italic; font-weight:600;
+    color: var(--bermellon); text-transform: none;
+  }
+  .tw-text mark.enf-emphasis{
+    background: rgba(178,58,46,0.14); color: var(--bermellon-dark);
+    font-weight:700; border-radius:2px; padding: 0 3px;
+  }
+
+  .imp-topic-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+  .imp-compare-badge{
+    font-family: var(--mono); font-size:11px;
+    background: rgba(60,92,67,0.1); color: var(--forest);
+    border: 1px solid var(--forest); border-radius: 20px;
+    padding: 4px 12px;
+  }
+
+  .ring-fg.zone-under{ stroke: var(--ochre); }
+  .ring-fg.zone-over{ stroke: var(--bermellon); }
+  .ring-fg.zone-ideal{ stroke: var(--forest); }
+
+  .imp-stat-num.warn{ color: var(--ochre); }
+
+  .imp-energy-wrap{ margin-bottom: 14px; }
+  .imp-energy-bar{
+    height: 8px; background: var(--paper-2); border-radius: 4px;
+    overflow:hidden; margin-top:5px;
+  }
+  .imp-energy-fill{
+    height:100%; width:0%; background: var(--forest);
+    border-radius:4px; transition: width 0.1s linear, background 0.2s ease;
+  }
+  .imp-energy-fill.low{ background: var(--ink-faint); }
+  .imp-energy-fill.high{ background: var(--bermellon); }
+
+  .imp-transcript mark.weak{
+    background: rgba(156,122,45,0.16);
+    color: var(--ochre);
+    border-bottom: 2px dotted var(--ochre);
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+
+  /* ---- Tormenta ---- */
+  .tor-chips{ display:flex; flex-wrap:wrap; gap:6px; min-height: 32px; }
+  .tor-chip{
+    font-family: var(--mono); font-size:12px;
+    background: var(--paper-2); border:1px solid var(--rule);
+    border-radius: 20px; padding:4px 10px;
+    animation: chipIn 0.2s ease;
+  }
+  .tor-chip.miss{ background: rgba(178,58,46,0.1); border-color: var(--bermellon); color: var(--bermellon-dark); }
+  @keyframes chipIn{ from{ transform: scale(0.6); opacity:0;} to{ transform:scale(1); opacity:1; } }
+
+  /* ---- Precisión ---- */
+  .pre-draft{
+    font-family: var(--display); font-style: italic; font-size:18px;
+    background: var(--paper); border-left: 3px solid var(--rule-strong);
+    padding: 10px 14px; margin: 0;
+  }
+  .pre-scores{ display:flex; gap:18px; flex-wrap:wrap; }
+  .pre-score-item{ min-width:100px; }
+  .pre-score-label{ font-family:var(--mono); font-size:10px; text-transform:uppercase; color:var(--ink-soft); display:block; margin-bottom:4px; }
+  .pre-score-bar{ height:6px; background:var(--paper-2); border-radius:3px; overflow:hidden; }
+  .pre-score-fill{ height:100%; background: var(--forest); border-radius:3px; transition: width 0.4s ease; }
+  .pre-score-fill.warn{ background: var(--ochre); }
+  .pre-score-fill.bad{ background: var(--bermellon); }
+  .pre-examples{ display:flex; flex-direction:column; gap:10px; margin-top:8px; }
+  .pre-example{
+    background: var(--paper); border: 1px solid var(--rule);
+    border-radius: var(--radius); padding: 10px 14px;
+    font-family: var(--display); font-size: 15px; line-height:1.5;
+  }
+
+  /* ---- Tabú ---- */
+  .tabu-card{ background: var(--paper); border: 2px solid var(--ink); padding: 16px; }
+  .tabu-secret{ font-family: var(--display); font-weight:700; font-size:26px; margin:0; }
+  .tabu-transcript-strike{ background: rgba(178,58,46,0.22); color: var(--bermellon-dark); font-weight:600; border-radius:2px; padding:0 3px; }
+
+  /* ---- Arsenal ---- */
+  .ars-row{
+    display:grid; grid-template-columns: 1fr 24px 1fr 32px;
+    align-items:center; gap:10px;
+    padding: 9px 4px;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px;
+  }
+  .ars-row:last-child{ border-bottom:none; }
+  .ars-flojo{ color: var(--ink-faint); text-decoration: line-through; }
+  .ars-arrow{ color: var(--bermellon); text-align:center; }
+  .ars-preciso{ font-weight: 500; }
+  .ars-play{ font-size:14px; color: var(--ink-soft); text-align:center; }
+  .ars-play:hover{ color: var(--bermellon); }
+  .ars-empty{ color: var(--ink-faint); font-style: italic; padding: 12px 4px; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <header class="masthead">
+    <div>
+      <h1 class="masthead-title">PALESTRA<span class="accent">.</span></h1>
+      <p class="masthead-sub">Gimnasio verbal — ocho aparatos, sesiones de 60 segundos</p>
+    </div>
+    <div class="masthead-stats" id="masthead-stats">
+      <div><span class="mstat-num" id="stat-racha">0</span><span class="mstat-label">Racha (días)</span></div>
+      <div><span class="mstat-num" id="stat-sesiones">0</span><span class="mstat-label">Sesiones</span></div>
+      <div><span class="mstat-num" id="stat-record">0</span><span class="mstat-label">Mejor PPM</span></div>
+      <button class="btn ghost history-btn" id="btn-open-history">Historial ↗</button>
+    </div>
+  </header>
+
+  <nav class="apparatus-nav" id="apparatus-nav">
+    <button class="apparatus-btn active" data-panel="improviso"><span class="apparatus-num">01 · VOZ</span><span class="apparatus-name">Improviso</span></button>
+    <button class="apparatus-btn" data-panel="tormenta"><span class="apparatus-num">02 · ESCRITO</span><span class="apparatus-name">Tormenta</span></button>
+    <button class="apparatus-btn" data-panel="precision"><span class="apparatus-num">03 · ESCRITO</span><span class="apparatus-name">Precisión</span></button>
+    <button class="apparatus-btn" data-panel="tabu"><span class="apparatus-num">04 · VOZ</span><span class="apparatus-name">Tabú</span></button>
+    <button class="apparatus-btn" data-panel="trabalenguas"><span class="apparatus-num">05 · VOZ</span><span class="apparatus-name">Trabalenguas</span></button>
+    <button class="apparatus-btn" data-panel="sirena"><span class="apparatus-num">06 · VOZ</span><span class="apparatus-name">Sirena Vocal</span></button>
+    <button class="apparatus-btn" data-panel="enfasis"><span class="apparatus-num">07 · VOZ</span><span class="apparatus-name">Énfasis Móvil</span></button>
+    <button class="apparatus-btn" data-panel="arsenal"><span class="apparatus-num">08 · REF.</span><span class="apparatus-name">Arsenal</span></button>
+  </nav>
+
+  <main id="main">
+    <section class="panel active" id="panel-improviso">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">01 · Improviso</h2>
+          <p class="panel-desc">Habla sin parar sobre el tema durante el tiempo elegido. La transcripción tacha tus muletillas en rojo y tu lenguaje débil en ámbar; el ritmógrafo dibuja cada palabra y el aro cambia de color si tu ritmo se sale de la zona ideal.</p>
+        </div>
+      </div>
+
+      <div class="card" id="imp-card">
+        <div class="imp-setup" id="imp-setup">
+          <div class="imp-row">
+            <div class="imp-topic-box">
+              <span class="imp-label">Tema</span>
+              <p class="imp-topic" id="imp-topic">Pulsa "Nuevo tema" para empezar</p>
+            </div>
+            <div class="imp-topic-actions">
+              <button class="btn ghost" id="imp-repeat-topic" title="Vuelve a hablar del mismo tema para comparar tu mejora">Repetir tema ↻</button>
+              <button class="btn ghost" id="imp-new-topic">Nuevo tema (N)</button>
+            </div>
+          </div>
+          <div class="imp-row" style="margin-top:14px;">
+            <span class="imp-label">Duración</span>
+            <div class="imp-duration-picker" id="imp-duration-picker">
+              <button class="dur-btn active" data-dur="30">30s</button>
+              <button class="dur-btn" data-dur="60">60s</button>
+              <button class="dur-btn" data-dur="90">90s</button>
+            </div>
+          </div>
+          <div class="imp-row" id="imp-compare-row" style="display:none; margin-top:10px;">
+            <span class="imp-compare-badge" id="imp-compare-badge"></span>
+          </div>
+        </div>
+
+        <div class="imp-stage">
+          <div class="imp-timer-wrap">
+            <svg viewBox="0 0 120 120" class="imp-ring" aria-hidden="true">
+              <circle cx="60" cy="60" r="52" class="ring-bg"/>
+              <circle cx="60" cy="60" r="52" class="ring-fg" id="imp-ring-fg"/>
+            </svg>
+            <span class="imp-timer-num" id="imp-timer-num">30</span>
+          </div>
+          <div class="imp-live-stats">
+            <div class="imp-stat"><span class="imp-stat-num" id="imp-ppm">0</span><span class="imp-stat-label" id="imp-ppm-label">PPM</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="imp-muletillas">0</span><span class="imp-stat-label">Muletillas</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="imp-debil">0</span><span class="imp-stat-label">Lenguaje débil</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="imp-silencios">0</span><span class="imp-stat-label">Silencios</span></div>
+          </div>
+        </div>
+
+        <div class="imp-energy-wrap">
+          <span class="imp-label">Energía de voz</span>
+          <div class="imp-energy-bar"><div class="imp-energy-fill" id="imp-energy-fill"></div></div>
+        </div>
+
+        <svg id="imp-ritmo" class="imp-ritmo" viewBox="0 0 600 60" preserveAspectRatio="none" aria-hidden="true">
+          <line x1="0" y1="30" x2="600" y2="30" class="ritmo-baseline"/>
+          <polyline id="imp-ritmo-line" points="" class="ritmo-line"/>
+        </svg>
+
+        <div class="imp-transcript" id="imp-transcript" aria-live="polite">
+          <span class="imp-placeholder">Tu transcripción en vivo aparecerá aquí. Si el navegador no soporta reconocimiento de voz, este cuadro se vuelve editable y podrás escribir en tiempo real como ejercicio alterno.</span>
+        </div>
+
+        <div class="imp-playback" id="imp-playback" style="display:none;">
+          <span class="imp-label">Reescúchate</span>
+          <audio id="imp-audio" controls style="width:100%; margin-top:6px;"></audio>
+          <button class="btn ghost" id="imp-download-audio" style="margin-top:8px;">Descargar audio</button>
+        </div>
+
+        <div class="imp-controls">
+          <button class="btn primary" id="imp-start">Empezar (ESPACIO)</button>
+          <button class="btn ghost" id="imp-stop" disabled>Detener</button>
+          <span class="imp-mic-status" id="imp-mic-status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-tormenta">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">02 · Tormenta</h2>
+          <p class="panel-desc">Una categoría, 60 segundos: escribe todas las palabras que puedas, separadas por espacio o Enter. Al final verás cuáles se te escaparon.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="imp-row">
+          <div class="imp-topic-box">
+            <span class="imp-label">Categoría</span>
+            <p class="imp-topic" id="tor-category">Pulsa "Nueva categoría"</p>
+          </div>
+          <button class="btn ghost" id="tor-new-cat">Nueva categoría (N)</button>
+        </div>
+
+        <div class="imp-stage" style="margin-top:18px;">
+          <div class="imp-timer-wrap">
+            <svg viewBox="0 0 120 120" class="imp-ring" aria-hidden="true">
+              <circle cx="60" cy="60" r="52" class="ring-bg"/>
+              <circle cx="60" cy="60" r="52" class="ring-fg" id="tor-ring-fg"/>
+            </svg>
+            <span class="imp-timer-num" id="tor-timer-num">60</span>
+          </div>
+          <div class="imp-live-stats">
+            <div class="imp-stat"><span class="imp-stat-num" id="tor-count">0</span><span class="imp-stat-label">Palabras</span></div>
+          </div>
+        </div>
+
+        <input type="text" id="tor-input" placeholder="Escribe una palabra y pulsa Enter o espacio…" style="width:100%; font-size:16px; padding:12px 14px; margin-bottom:12px;" disabled>
+
+        <div class="tor-chips" id="tor-chips"></div>
+
+        <div class="imp-controls" style="margin-top:14px;">
+          <button class="btn primary" id="tor-start">Empezar (ESPACIO)</button>
+        </div>
+
+        <div id="tor-missing-wrap" style="display:none; margin-top:18px; border-top:1px solid var(--rule); padding-top:14px;">
+          <span class="imp-label">Se te escaparon</span>
+          <div class="tor-chips" id="tor-missing"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-precision">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">03 · Precisión</h2>
+          <p class="panel-desc">Reescribe el borrador vago con palabras concretas. El análisis puntúa vaguedades restantes, riqueza léxica y detalle sensorial — y te muestra dos reescrituras de redactor.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="imp-label">Borrador vago</span>
+        <p class="pre-draft" id="pre-draft"></p>
+
+        <span class="imp-label" style="margin-top:14px; display:block;">Tu reescritura</span>
+        <textarea id="pre-input" rows="4" style="width:100%;" placeholder="Reescribe el borrador con palabras precisas y concretas…"></textarea>
+        <p class="imp-mic-status" id="pre-error" style="color:var(--bermellon);"></p>
+
+        <div class="imp-controls">
+          <button class="btn primary" id="pre-check">Revisar</button>
+          <button class="btn ghost" id="pre-next">Nuevo borrador (N)</button>
+        </div>
+
+        <div id="pre-result" style="display:none; margin-top:18px; border-top:1px solid var(--rule); padding-top:16px;">
+          <div class="pre-scores" id="pre-scores"></div>
+          <div id="pre-vague-found" style="margin-top:10px;"></div>
+          <div style="margin-top:16px;">
+            <span class="imp-label">Dos reescrituras de redactor</span>
+            <div class="pre-examples" id="pre-examples"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-tabu">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">04 · Tabú</h2>
+          <p class="panel-desc">Describe la palabra secreta en voz alta durante 60 segundos sin decir ninguna de las palabras prohibidas. Si se te escapa una, suena un zumbido y resta puntos.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="tabu-card" id="tabu-card">
+          <span class="imp-label">Palabra secreta</span>
+          <p class="tabu-secret" id="tabu-secret">Pulsa "Nueva palabra"</p>
+          <span class="imp-label" style="margin-top:10px; display:block;">Prohibidas</span>
+          <div class="tor-chips" id="tabu-forbidden"></div>
+        </div>
+
+        <div class="imp-stage" style="margin-top:18px;">
+          <div class="imp-timer-wrap">
+            <svg viewBox="0 0 120 120" class="imp-ring" aria-hidden="true">
+              <circle cx="60" cy="60" r="52" class="ring-bg"/>
+              <circle cx="60" cy="60" r="52" class="ring-fg" id="tabu-ring-fg"/>
+            </svg>
+            <span class="imp-timer-num" id="tabu-timer-num">60</span>
+          </div>
+          <div class="imp-live-stats">
+            <div class="imp-stat"><span class="imp-stat-num" id="tabu-strikes">0</span><span class="imp-stat-label">Escapes</span></div>
+          </div>
+        </div>
+
+        <div class="imp-transcript" id="tabu-transcript" aria-live="polite">
+          <span class="imp-placeholder">Tu transcripción en vivo aparecerá aquí durante la ronda.</span>
+        </div>
+
+        <div class="imp-controls">
+          <button class="btn primary" id="tabu-new">Nueva palabra (N)</button>
+          <button class="btn primary" id="tabu-start" disabled>Empezar (ESPACIO)</button>
+          <span class="imp-mic-status" id="tabu-mic-status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-trabalenguas">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">05 · Trabalenguas</h2>
+          <p class="panel-desc">Repite el trabalenguas cada vez más rápido sin trabarte. Entrena dicción, articulación y variedad de tono — complementa a Improviso, que entrena fluidez de ideas.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="imp-row">
+          <div class="imp-topic-box">
+            <span class="imp-label">Trabalenguas</span>
+            <p class="tw-text" id="tw-text">Pulsa "Nuevo trabalenguas" para empezar</p>
+          </div>
+          <button class="btn ghost" id="tw-new">Nuevo trabalenguas (N)</button>
+        </div>
+
+        <div class="imp-row" style="margin-top:14px;">
+          <span class="imp-label">Nivel de dificultad</span>
+          <div class="imp-duration-picker" id="tw-level-picker">
+            <button class="dur-btn active" data-level="facil">Fácil</button>
+            <button class="dur-btn" data-level="medio">Medio</button>
+            <button class="dur-btn" data-level="dificil">Difícil</button>
+          </div>
+        </div>
+
+        <div class="tw-rounds-wrap">
+          <span class="imp-label">Repeticiones seguidas sin trabarte</span>
+          <div class="tw-rounds" id="tw-rounds">
+            <span class="tw-round-dot" data-round="1">1</span>
+            <span class="tw-round-dot" data-round="2">2</span>
+            <span class="tw-round-dot" data-round="3">3</span>
+          </div>
+        </div>
+
+        <div class="tw-pitch-wrap">
+          <span class="imp-label">Tono de voz (Hz)</span>
+          <svg id="tw-pitch-chart" class="tw-pitch-chart" viewBox="0 0 600 70" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="0" y1="35" x2="600" y2="35" class="ritmo-baseline"/>
+            <polyline id="tw-pitch-line" points="" class="tw-pitch-line"/>
+          </svg>
+          <div class="tw-pitch-stats" id="tw-pitch-stats">
+            <div class="imp-stat"><span class="imp-stat-num" id="tw-pitch-avg">—</span><span class="imp-stat-label">Promedio Hz</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="tw-pitch-range">—</span><span class="imp-stat-label">Rango Hz</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="tw-pitch-variety">—</span><span class="imp-stat-label">Variedad</span></div>
+          </div>
+        </div>
+
+        <div class="imp-energy-wrap">
+          <span class="imp-label">Energía de voz</span>
+          <div class="imp-energy-bar"><div class="imp-energy-fill" id="tw-energy-fill"></div></div>
+        </div>
+
+        <div class="imp-transcript" id="tw-transcript" aria-live="polite">
+          <span class="imp-placeholder">Tu transcripción en vivo aparecerá aquí mientras repites el trabalenguas.</span>
+        </div>
+
+        <div class="imp-playback" id="tw-playback" style="display:none;">
+          <span class="imp-label">Reescúchate</span>
+          <audio id="tw-audio" controls style="width:100%; margin-top:6px;"></audio>
+        </div>
+
+        <div class="imp-controls">
+          <button class="btn primary" id="tw-start">Grabar intento (ESPACIO)</button>
+          <button class="btn ghost" id="tw-stop" disabled>Detener</button>
+          <span class="imp-mic-status" id="tw-mic-status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-sirena">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">06 · Sirena Vocal</h2>
+          <p class="panel-desc">Sostén un sonido y sube y baja el tono de forma controlada, como una sirena. Entrena el rango y el control dinámico de tu voz — la base de sonar expresivo en vez de plano.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="imp-row">
+          <div class="imp-topic-box">
+            <span class="imp-label">Patrón a seguir</span>
+            <p class="tw-text" id="sir-pattern">Pulsa "Empezar" y sigue la guía con la voz</p>
+          </div>
+          <div class="imp-duration-picker" id="sir-pattern-picker">
+            <button class="dur-btn active" data-pattern="sube">Solo sube</button>
+            <button class="dur-btn" data-pattern="baja">Solo baja</button>
+            <button class="dur-btn" data-pattern="ola">Sube y baja</button>
+          </div>
+        </div>
+
+        <div class="sir-chart-wrap">
+          <span class="imp-label">Guía (línea punteada) vs. tu voz (línea sólida)</span>
+          <svg id="sir-chart" class="sir-chart" viewBox="0 0 600 140" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="0" y1="70" x2="600" y2="70" class="ritmo-baseline"/>
+            <polyline id="sir-guide-line" points="" class="sir-guide-line"/>
+            <polyline id="sir-voice-line" points="" class="sir-voice-line"/>
+          </svg>
+        </div>
+
+        <div class="imp-live-stats" style="margin: 14px 0;">
+          <div class="imp-stat"><span class="imp-stat-num" id="sir-fit">—</span><span class="imp-stat-label">Ajuste a la guía</span></div>
+          <div class="imp-stat"><span class="imp-stat-num" id="sir-range">—</span><span class="imp-stat-label">Rango alcanzado</span></div>
+        </div>
+
+        <div class="imp-controls">
+          <button class="btn primary" id="sir-start">Empezar (ESPACIO)</button>
+          <button class="btn ghost" id="sir-stop" disabled>Detener</button>
+          <span class="imp-mic-status" id="sir-mic-status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-enfasis">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">07 · Énfasis Móvil</h2>
+          <p class="panel-desc">Lee la misma frase varias veces cambiando cuál palabra enfatizas. Verás cómo tu pitch reacciona distinto según dónde pones el peso — así se controla el énfasis a voluntad.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="imp-row">
+          <div class="imp-topic-box">
+            <span class="imp-label">Frase — palabra a enfatizar en <span class="enf-target-word" id="enf-target-word">—</span></span>
+            <p class="tw-text" id="enf-sentence">Pulsa "Nueva frase" para empezar</p>
+          </div>
+          <button class="btn ghost" id="enf-new">Nueva frase (N)</button>
+        </div>
+
+        <div class="tw-rounds-wrap">
+          <span class="imp-label">Palabra enfatizada en esta vuelta</span>
+          <div class="tw-rounds" id="enf-rounds"></div>
+        </div>
+
+        <div class="sir-chart-wrap">
+          <span class="imp-label">Tu tono al leer esta vez</span>
+          <svg id="enf-chart" class="sir-chart" viewBox="0 0 600 90" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="0" y1="45" x2="600" y2="45" class="ritmo-baseline"/>
+            <polyline id="enf-voice-line" points="" class="tw-pitch-line"/>
+          </svg>
+        </div>
+
+        <div class="imp-transcript" id="enf-transcript" aria-live="polite">
+          <span class="imp-placeholder">Tu transcripción aparecerá aquí mientras lees la frase.</span>
+        </div>
+
+        <div class="imp-controls">
+          <button class="btn primary" id="enf-start">Leer esta vuelta (ESPACIO)</button>
+          <button class="btn ghost" id="enf-stop" disabled>Detener</button>
+          <span class="imp-mic-status" id="enf-mic-status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-arsenal">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">08 · Arsenal</h2>
+          <p class="panel-desc">Tabla de referencia: términos flojos y su versión precisa. Busca, escucha la pronunciación y revisa la palabra del día.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div class="imp-row">
+          <div class="imp-topic-box">
+            <span class="imp-label">Palabra del día</span>
+            <p class="imp-topic" id="ars-wotd-word"></p>
+            <p style="font-size:13px; color:var(--ink-soft); margin:4px 0 0;" id="ars-wotd-def"></p>
+          </div>
+          <button class="btn ghost" id="ars-wotd-play"><i>▶</i> Escuchar</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <input type="text" id="ars-search" placeholder="Buscar término flojo o preciso…" style="width:100%; margin-bottom:14px;">
+        <div id="ars-table"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="credits">
+    <span>Atajos: ESPACIO inicia/detiene · N cambia estímulo</span>
+    <button id="btn-reset-progress">Borrar ficha de progreso</button>
+  </footer>
+
+</div>
+
+<div id="stamp-overlay" class="stamp-overlay" aria-hidden="true">
+  <div class="stamp-card" id="stamp-card">
+    <button class="stamp-close" id="stamp-close" aria-label="Cerrar">✕</button>
+    <div class="stamp-mark" id="stamp-mark">
+      <div class="stamp-level" id="stamp-level">CICERÓN</div>
+      <div class="stamp-sub" id="stamp-sub">nivel alcanzado</div>
+    </div>
+    <div class="stamp-metrics" id="stamp-metrics"></div>
+    <p class="stamp-note" id="stamp-note"></p>
+    <div class="stamp-actions">
+      <button class="btn primary" id="stamp-retry">Otra ronda</button>
+      <button class="btn ghost" id="stamp-done">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="history-overlay" class="stamp-overlay" aria-hidden="true">
+  <div class="stamp-card history-card">
+    <button class="stamp-close" id="history-close" aria-label="Cerrar">✕</button>
+    <h2 class="history-title">Tu avance</h2>
+    <p class="history-sub" id="history-empty" style="display:none;">Todavía no completaste ninguna ronda. Cuando termines una, aparecerá aquí.</p>
+
+    <div id="history-body" style="display:none;">
+      <div class="history-chart-wrap">
+        <span class="imp-label">Rondas por día (últimos 14 días)</span>
+        <svg id="history-chart" viewBox="0 0 560 140" preserveAspectRatio="none" class="history-chart" aria-hidden="true"></svg>
+        <div class="history-chart-labels" id="history-chart-labels"></div>
+      </div>
+
+      <div class="history-filters" id="history-filters">
+        <button class="hist-filter-btn active" data-app="todos">Todos</button>
+        <button class="hist-filter-btn" data-app="improviso">Improviso</button>
+        <button class="hist-filter-btn" data-app="tormenta">Tormenta</button>
+        <button class="hist-filter-btn" data-app="precision">Precisión</button>
+        <button class="hist-filter-btn" data-app="tabu">Tabú</button>
+        <button class="hist-filter-btn" data-app="trabalenguas">Trabalenguas</button>
+        <button class="hist-filter-btn" data-app="sirena">Sirena Vocal</button>
+        <button class="hist-filter-btn" data-app="enfasis">Énfasis Móvil</button>
+      </div>
+
+      <div class="history-list" id="history-list"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .stamp-overlay{
+    position: fixed; inset:0;
+    background: rgba(28,26,23,0.55);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index: 200;
+    padding: 20px;
+  }
+  .stamp-overlay.show{ display:flex; }
+  .stamp-card{
+    background: var(--paper-3);
+    border: 2px solid var(--ink);
+    max-width: 420px;
+    width:100%;
+    padding: 28px 26px 24px;
+    position: relative;
+    box-shadow: 0 24px 60px -20px rgba(0,0,0,0.5);
+    animation: stampin 0.35s cubic-bezier(.2,1.3,.4,1);
+  }
+  @keyframes stampin{
+    0%{ transform: scale(1.4) rotate(-8deg); opacity:0; }
+    60%{ transform: scale(0.96) rotate(2deg); opacity:1; }
+    100%{ transform: scale(1) rotate(-1.2deg); opacity:1; }
+  }
+  .stamp-close{
+    position:absolute; top:10px; right:12px;
+    font-size:14px; color: var(--ink-faint);
+  }
+  .stamp-close:hover{ color: var(--ink); }
+  .stamp-mark{
+    text-align:center;
+    border: 4px double var(--bermellon);
+    color: var(--bermellon);
+    padding: 18px 10px 14px;
+    transform: rotate(-1.5deg);
+    margin-bottom: 18px;
+  }
+  .stamp-level{
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .stamp-sub{
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-top: 4px;
+    opacity: 0.75;
+  }
+  .stamp-metrics{
+    display:flex;
+    justify-content: space-around;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 10px 0;
+    margin-bottom: 14px;
+  }
+  .stamp-metric{ text-align:center; }
+  .stamp-metric-num{ font-family: var(--mono); font-size:18px; font-weight:700; display:block; }
+  .stamp-metric-label{ font-family: var(--mono); font-size:9px; text-transform:uppercase; color: var(--ink-soft); }
+  .stamp-note{
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink);
+    text-align: center;
+    margin: 0 0 20px;
+  }
+  .stamp-actions{ display:flex; gap:8px; justify-content:center; }
+
+  /* ---- Historial ---- */
+  .history-card{ max-width: 640px; text-align: left; }
+  .history-title{
+    font-family: var(--display); font-weight:700; font-size:24px;
+    margin: 0 0 4px;
+  }
+  .history-sub{ font-size:14px; color: var(--ink-soft); margin: 8px 0 0; }
+  .history-chart-wrap{ margin: 16px 0 18px; }
+  .history-chart{ width:100%; height:120px; display:block; margin-top:6px; }
+  .hist-bar{ fill: var(--bermellon); }
+  .hist-bar.empty{ fill: var(--paper-2); }
+  .hist-baseline{ stroke: var(--rule); stroke-width:1; }
+  .history-chart-labels{
+    display:flex; justify-content:space-between;
+    font-family: var(--mono); font-size:9px; color: var(--ink-faint);
+    margin-top: 4px;
+  }
+  .history-filters{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px; }
+  .hist-filter-btn{
+    font-family: var(--mono); font-size:11px; text-transform:uppercase;
+    padding: 5px 12px; border:1.5px solid var(--rule-strong); border-radius: 20px;
+    color: var(--ink-soft);
+  }
+  .hist-filter-btn.active{ background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .history-list{ max-height: 260px; overflow-y:auto; border-top:1px solid var(--rule); }
+  .hist-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 10px 2px; border-bottom: 1px solid var(--rule);
+    font-size: 13px;
+  }
+  .hist-row-left{ display:flex; flex-direction:column; gap:2px; }
+  .hist-row-app{ font-family: var(--mono); font-size:10px; text-transform:uppercase; color: var(--ink-soft); letter-spacing:0.06em; }
+  .hist-row-level{ font-family: var(--display); font-weight:600; font-size:15px; color: var(--bermellon-dark); }
+  .hist-row-date{ font-family: var(--mono); font-size:10px; color: var(--ink-faint); }
+  .hist-row-metrics{ font-family: var(--mono); font-size:11px; color: var(--ink-soft); text-align:right; }
+</style>
+
+<script>
+/* ============ ALMACENAMIENTO ============ */
+const STORE_KEY = 'palestra_v1';
+function loadStore(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return defaultStore();
+    const parsed = JSON.parse(raw);
+    return Object.assign(defaultStore(), parsed);
+  }catch(e){ return defaultStore(); }
+}
+function defaultStore(){
+  return {
+    lastSessionDate: null,
+    racha: 0,
+    sesiones: 0,
+    recordPPM: 0,
+    rounds: [] // {apparatus, date, level, metrics}
+  };
+}
+function saveStore(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(store)); }catch(e){}
+}
+let store = loadStore();
+
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+
+function registerSession(){
+  const today = todayStr();
+  if(store.lastSessionDate === today){
+    // already counted today
+  } else {
+    const y = new Date(); y.setDate(y.getDate()-1);
+    const yesterday = y.toISOString().slice(0,10);
+    if(store.lastSessionDate === yesterday){ store.racha += 1; }
+    else { store.racha = 1; }
+    store.lastSessionDate = today;
+  }
+  store.sesiones += 1;
+  saveStore();
+  paintMasthead();
+}
+
+function paintMasthead(){
+  document.getElementById('stat-racha').textContent = store.racha;
+  document.getElementById('stat-sesiones').textContent = store.sesiones;
+  document.getElementById('stat-record').textContent = store.recordPPM;
+}
+
+function resetProgress(){
+  if(!confirm('¿Borrar toda tu ficha de progreso? Esto no se puede deshacer.')) return;
+  store = defaultStore();
+  saveStore();
+  paintMasthead();
+}
+document.getElementById('btn-reset-progress').addEventListener('click', resetProgress);
+
+/* ============ AUDIO (WebAudio, generado localmente) ============ */
+let actx = null;
+function getActx(){
+  if(!actx){
+    try{ actx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ actx = null; }
+  }
+  return actx;
+}
+
+/* ---- Detector de tono de voz (pitch) por autocorrelación, compartido ---- */
+/* Algoritmo estándar y liviano: busca el período dominante de la señal
+   en el dominio del tiempo, sin depender de librerías externas. */
+function autoCorrelate(buf, sampleRate){
+  const SIZE = buf.length;
+  let rms = 0;
+  for(let i=0;i<SIZE;i++){ rms += buf[i]*buf[i]; }
+  rms = Math.sqrt(rms/SIZE);
+  if(rms < 0.01) return -1; // silencio o ruido demasiado bajo
+
+  let r1 = 0, r2 = SIZE-1, thres = 0.2;
+  for(let i=0;i<SIZE/2;i++){ if(Math.abs(buf[i]) < thres){ r1 = i; break; } }
+  for(let i=1;i<SIZE/2;i++){ if(Math.abs(buf[SIZE-i]) < thres){ r2 = SIZE-i; break; } }
+  const trimmed = buf.slice(r1, r2);
+  const newSize = trimmed.length;
+
+  const c = new Array(newSize).fill(0);
+  for(let lag=0; lag<newSize; lag++){
+    for(let i=0; i<newSize-lag; i++){ c[lag] += trimmed[i]*trimmed[i+lag]; }
+  }
+  let d = 0;
+  while(d < newSize-1 && c[d] > c[d+1]) d++;
+  let maxVal = -1, maxPos = -1;
+  for(let i=d; i<newSize; i++){
+    if(c[i] > maxVal){ maxVal = c[i]; maxPos = i; }
+  }
+  let T0 = maxPos;
+  if(T0 <= 0) return -1;
+  const freq = sampleRate/T0;
+  if(freq < 60 || freq > 500) return -1; // fuera de rango vocal humano típico
+  return freq;
+}
+
+function beep(freq=880, dur=0.09, type='sine', vol=0.18, delay=0){
+  const ctx = getActx();
+  if(!ctx) return;
+  const t0 = ctx.currentTime + delay;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, t0);
+  gain.gain.setValueAtTime(0.0001, t0);
+  gain.gain.exponentialRampToValueAtTime(vol, t0+0.008);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(t0);
+  osc.stop(t0+dur+0.02);
+}
+function countdownBeep(){ beep(660, 0.08, 'sine', 0.15); }
+function startBeep(){ beep(440,0.06,'square',0.12); beep(880,0.12,'sine',0.18,0.07); }
+function endBeep(){ beep(300,0.18,'sawtooth',0.15); beep(200,0.28,'sine',0.16,0.1); }
+function buzzWrong(){
+  const ctx = getActx(); if(!ctx) return;
+  const t0 = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(120, t0);
+  gain.gain.setValueAtTime(0.0001, t0);
+  gain.gain.exponentialRampToValueAtTime(0.16, t0+0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0+0.35);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(t0); osc.stop(t0+0.4);
+}
+function stampThud(){
+  const ctx = getActx(); if(!ctx) return;
+  const t0 = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(90, t0);
+  osc.frequency.exponentialRampToValueAtTime(40, t0+0.15);
+  gain.gain.setValueAtTime(0.001, t0);
+  gain.gain.exponentialRampToValueAtTime(0.32, t0+0.01);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0+0.3);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(t0); osc.stop(t0+0.32);
+}
+function speakWord(text){
+  try{
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'es-ES';
+    u.rate = 0.92;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* ============ MULETILLAS (para detección en Improviso) ============ */
+const MULETILLAS = ['este','eh','ehh','osea','o sea','como que','tipo','digamos','bueno','en plan',
+  'entonces','ya','pues','ehm','emm','mmm','vale','okay','ok','entonces este'];
+function muletillaRegex(){
+  const esc = MULETILLAS.slice().sort((a,b)=>b.length-a.length).map(m=>m.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
+  return new RegExp('\\b(' + esc.join('|') + ')\\b', 'gi');
+}
+
+/* ============ VEREDICTOS / SELLO ============ */
+const LEVEL_TABLE = {
+  improviso: [
+    {min:0, name:'SEDENTARIO'}, {min:20, name:'CAMINANTE'}, {min:40, name:'TROTADOR'},
+    {min:60, name:'ORADOR'}, {min:80, name:'CICERÓN'}
+  ],
+  tormenta: [
+    {min:0, name:'GOTEANDO'}, {min:20, name:'LLOVIZNA'}, {min:40, name:'AGUACERO'},
+    {min:65, name:'TORMENTA'}, {min:85, name:'HURACÁN'}
+  ],
+  precision: [
+    {min:0, name:'BORRADOR'}, {min:20, name:'APRENDIZ'}, {min:45, name:'ARTESANO'},
+    {min:70, name:'CINCEL'}, {min:88, name:'ORFEBRE'}
+  ],
+  tabu: [
+    {min:0, name:'MUDO'}, {min:20, name:'TARTAMUDO'}, {min:40, name:'FLUIDO'},
+    {min:65, name:'INGENIOSO'}, {min:85, name:'VIRTUOSO'}
+  ],
+  trabalenguas: [
+    {min:0, name:'TRABALENGUAS'}, {min:30, name:'LENGUA DE TRAPO'}, {min:50, name:'DICCIÓN CLARA'},
+    {min:75, name:'LOCUTOR'}, {min:95, name:'AFILALENGUAS'}
+  ],
+  sirena: [
+    {min:0, name:'VOZ PLANA'}, {min:30, name:'AFINANDO'}, {min:55, name:'CONTROL VOCAL'},
+    {min:75, name:'SIRENA'}, {min:90, name:'CANTANTE'}
+  ],
+  enfasis: [
+    {min:0, name:'MONOCORDE'}, {min:30, name:'MATIZANDO'}, {min:55, name:'CON PESO'},
+    {min:75, name:'INTENCIONAL'}, {min:90, name:'MAESTRO DEL ÉNFASIS'}
+  ]
+};
+function levelFor(apparatus, score){
+  const table = LEVEL_TABLE[apparatus] || LEVEL_TABLE.improviso;
+  let level = table[0].name;
+  for(const row of table){ if(score >= row.min) level = row.name; }
+  return level;
+}
+
+function showStamp({apparatus, score, metrics, note}){
+  registerSession();
+  const level = levelFor(apparatus, score);
+  document.getElementById('stamp-level').textContent = level;
+  document.getElementById('stamp-sub').textContent = 'nivel alcanzado · ' + apparatus;
+  const metricsEl = document.getElementById('stamp-metrics');
+  metricsEl.innerHTML = '';
+  metrics.forEach(m => {
+    const d = document.createElement('div');
+    d.className = 'stamp-metric';
+    d.innerHTML = '<span class="stamp-metric-num">'+m.value+'</span><span class="stamp-metric-label">'+m.label+'</span>';
+    metricsEl.appendChild(d);
+  });
+  document.getElementById('stamp-note').textContent = note;
+  const overlay = document.getElementById('stamp-overlay');
+  overlay.classList.add('show');
+  stampThud();
+
+  store.rounds.unshift({apparatus, date: new Date().toISOString(), level, metrics});
+  store.rounds = store.rounds.slice(0, 50);
+  saveStore();
+}
+document.getElementById('stamp-close').addEventListener('click', ()=> document.getElementById('stamp-overlay').classList.remove('show'));
+document.getElementById('stamp-done').addEventListener('click', ()=> document.getElementById('stamp-overlay').classList.remove('show'));
+
+/* ============ HISTORIAL ============ */
+(function(){
+  const overlay = document.getElementById('history-overlay');
+  const openBtn = document.getElementById('btn-open-history');
+  const closeBtn = document.getElementById('history-close');
+  const emptyEl = document.getElementById('history-empty');
+  const bodyEl = document.getElementById('history-body');
+  const chartSvg = document.getElementById('history-chart');
+  const chartLabels = document.getElementById('history-chart-labels');
+  const filtersEl = document.getElementById('history-filters');
+  const listEl = document.getElementById('history-list');
+
+  let activeFilter = 'todos';
+
+  function last14Days(){
+    const days = [];
+    for(let i=13; i>=0; i--){
+      const d = new Date();
+      d.setDate(d.getDate()-i);
+      days.push(d.toISOString().slice(0,10));
+    }
+    return days;
+  }
+
+  function renderChart(){
+    const days = last14Days();
+    const counts = days.map(day =>
+      store.rounds.filter(r => r.date.slice(0,10) === day).length
+    );
+    const max = Math.max(1, ...counts);
+    const barW = 560/14;
+    const chartH = 110;
+    let bars = '';
+    counts.forEach((c, i)=>{
+      const h = c === 0 ? 2 : Math.max(6, (c/max)*chartH);
+      const x = i*barW + barW*0.2;
+      const w = barW*0.6;
+      const y = chartH - h;
+      bars += '<rect class="hist-bar'+(c===0?' empty':'')+'" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="2"><title>'+c+' ronda(s)</title></rect>';
+      if(c>0){
+        bars += '<text x="'+(x+w/2)+'" y="'+(y-4)+'" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="var(--ink-soft)">'+c+'</text>';
+      }
+    });
+    chartSvg.innerHTML = '<line x1="0" y1="'+chartH+'" x2="560" y2="'+chartH+'" class="hist-baseline"/>' + bars;
+
+    chartLabels.innerHTML = '';
+    days.forEach((day, i)=>{
+      if(i % 2 === 0 || i === days.length-1){
+        const d = new Date(day+'T00:00:00');
+        const label = d.toLocaleDateString('es-PE', {day:'2-digit', month:'2-digit'});
+        const span = document.createElement('span');
+        span.textContent = label;
+        chartLabels.appendChild(span);
+      }
+    });
+  }
+
+  const APP_LABELS = {improviso:'Improviso', tormenta:'Tormenta', precision:'Precisión', tabu:'Tabú', trabalenguas:'Trabalenguas', sirena:'Sirena Vocal', enfasis:'Énfasis Móvil'};
+
+  function renderList(){
+    const rows = store.rounds.filter(r => activeFilter==='todos' || r.apparatus===activeFilter);
+    if(rows.length === 0){
+      listEl.innerHTML = '<p class="ars-empty">Sin rondas registradas todavía en esta categoría.</p>';
+      return;
+    }
+    listEl.innerHTML = rows.map(r=>{
+      const d = new Date(r.date);
+      const dateStr = d.toLocaleDateString('es-PE', {day:'2-digit', month:'short'}) + ' · ' + d.toLocaleTimeString('es-PE', {hour:'2-digit', minute:'2-digit'});
+      const metricsStr = (r.metrics||[]).map(m=>m.value+' '+m.label).join(' · ');
+      return '<div class="hist-row">'+
+        '<div class="hist-row-left">'+
+          '<span class="hist-row-app">'+(APP_LABELS[r.apparatus]||r.apparatus)+'</span>'+
+          '<span class="hist-row-level">'+r.level+'</span>'+
+        '</div>'+
+        '<div style="text-align:right;">'+
+          '<div class="hist-row-date">'+dateStr+'</div>'+
+          '<div class="hist-row-metrics">'+metricsStr+'</div>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+  }
+
+  function renderAll(){
+    if(store.rounds.length === 0){
+      emptyEl.style.display = 'block';
+      bodyEl.style.display = 'none';
+      return;
+    }
+    emptyEl.style.display = 'none';
+    bodyEl.style.display = 'block';
+    renderChart();
+    renderList();
+  }
+
+  filtersEl.querySelectorAll('.hist-filter-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      filtersEl.querySelectorAll('.hist-filter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.app;
+      renderList();
+    });
+  });
+
+  openBtn.addEventListener('click', ()=>{
+    renderAll();
+    overlay.classList.add('show');
+  });
+  closeBtn.addEventListener('click', ()=> overlay.classList.remove('show'));
+  overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.classList.remove('show'); });
+})();
+
+/* ============ NAVEGACIÓN DE APARATOS ============ */
+document.querySelectorAll('.apparatus-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=> activatePanel(btn.dataset.panel));
+});
+function activatePanel(name){
+  document.querySelectorAll('.apparatus-btn').forEach(b=> b.classList.toggle('active', b.dataset.panel===name));
+  document.querySelectorAll('.panel').forEach(p=> p.classList.toggle('active', p.id === 'panel-'+name));
+  window.__activePanel = name;
+}
+
+paintMasthead();
+activatePanel('improviso');
+
+/* ================= APARATO 1: IMPROVISO ================= */
+(function(){
+  const TOPICS = [
+    'El futuro del trabajo en fábricas', 'Por qué vale la pena madrugar', 'Un error que te enseñó algo',
+    'La ciudad ideal para vivir', 'Cómo tomar mejores decisiones bajo presión', 'El liderazgo que admiras y por qué',
+    'Un producto que cambiaría el mundo', 'La disciplina frente al talento', 'Cómo explicarías tu trabajo a un niño',
+    'El mayor reto de tu equipo ahora mismo', 'La tecnología que más te sorprende', 'Un consejo que darías a tu yo de hace 5 años',
+    'Cómo convencerías a un inversionista escéptico', 'La diferencia entre gerenciar y liderar', 'Un viaje que te marcó',
+    'Por qué la minería importa para el desarrollo', 'Cómo manejarías una crisis de producción', 'El hábito que más te ha ayudado',
+    'La ciudad de Arequipa en tres frases', 'Qué harías con un día libre inesperado'
+  ];
+  const WEAK_PHRASES = ['un poco','más o menos','tal vez','quizás','quizá','creo que','no sé pero','como que',
+    'algo así','en cierta forma','de alguna manera','supongo que','a lo mejor','no estoy seguro pero','digamos que'];
+  function weakRegex(){
+    const esc = WEAK_PHRASES.slice().sort((a,b)=>b.length-a.length).map(m=>m.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
+    return new RegExp('(' + esc.join('|') + ')', 'gi');
+  }
+
+  const PPM_MIN_IDEAL = 130, PPM_MAX_IDEAL = 165;
+
+  let usedTopics = [];
+  function pickTopic(){
+    let pool = TOPICS.filter(t=>!usedTopics.includes(t));
+    if(pool.length===0){ usedTopics=[]; pool=TOPICS; }
+    const t = pool[Math.floor(Math.random()*pool.length)];
+    usedTopics.push(t);
+    return t;
+  }
+
+  const topicEl = document.getElementById('imp-topic');
+  const newTopicBtn = document.getElementById('imp-new-topic');
+  const repeatTopicBtn = document.getElementById('imp-repeat-topic');
+  const compareRow = document.getElementById('imp-compare-row');
+  const compareBadge = document.getElementById('imp-compare-badge');
+  const durButtons = document.querySelectorAll('#imp-duration-picker .dur-btn');
+  const startBtn = document.getElementById('imp-start');
+  const stopBtn = document.getElementById('imp-stop');
+  const timerNum = document.getElementById('imp-timer-num');
+  const ringFg = document.getElementById('imp-ring-fg');
+  const ppmEl = document.getElementById('imp-ppm');
+  const ppmLabelEl = document.getElementById('imp-ppm-label');
+  const muletillasEl = document.getElementById('imp-muletillas');
+  const debilEl = document.getElementById('imp-debil');
+  const silenciosEl = document.getElementById('imp-silencios');
+  const transcriptEl = document.getElementById('imp-transcript');
+  const ritmoLine = document.getElementById('imp-ritmo-line');
+  const micStatus = document.getElementById('imp-mic-status');
+  const energyFill = document.getElementById('imp-energy-fill');
+  const playbackWrap = document.getElementById('imp-playback');
+  const audioEl = document.getElementById('imp-audio');
+  const downloadAudioBtn = document.getElementById('imp-download-audio');
+
+  let duration = 30;
+  let running = false;
+  let timeLeft = 30;
+  let tickInterval = null;
+  let wordCount = 0, fillerCount = 0, weakCount = 0, silenceCount = 0;
+  let ritmoPoints = [];
+  let lastWordTime = 0;
+  let silenceCheckInterval = null;
+  let recognition = null;
+  let usingFallback = false;
+  const RING_CIRC = 326.7;
+
+  // Comparación de rondas por tema
+  let lastRoundByTopic = {}; // { topicText: {ppm, fillerCount, weakCount} }
+  let isRepeatRound = false;
+
+  // Medidor de energía (Web Audio, independiente del reconocimiento de voz)
+  let micStream = null;
+  let energyAnalyser = null;
+  let energySource = null;
+  let energyRafId = null;
+
+  // Grabación de audio para reescuchar (reutiliza el mismo micStream)
+  let mediaRecorder = null;
+  let recordedChunks = [];
+  let recordedUrl = null;
+
+  function resetLiveUI(){
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Tu transcripción en vivo aparecerá aquí. Si el navegador no soporta reconocimiento de voz, este cuadro se vuelve editable y podrás escribir en tiempo real como ejercicio alterno.</span>';
+    transcriptEl.contentEditable = 'false';
+    ppmEl.textContent = 0; ppmEl.classList.remove('warn');
+    muletillasEl.textContent = 0; debilEl.textContent = 0; silenciosEl.textContent = 0;
+    resetRitmo();
+    micStatus.textContent = '';
+    energyFill.style.width = '0%';
+    ringFg.classList.remove('zone-under','zone-over','zone-ideal');
+  }
+
+  newTopicBtn.addEventListener('click', ()=>{
+    if(running) return;
+    isRepeatRound = false;
+    topicEl.textContent = pickTopic();
+    updateCompareBadge();
+    resetLiveUI();
+  });
+
+  repeatTopicBtn.addEventListener('click', ()=>{
+    if(running) return;
+    isRepeatRound = true;
+    updateCompareBadge();
+    resetLiveUI();
+  });
+
+  function updateCompareBadge(){
+    const prev = lastRoundByTopic[topicEl.textContent];
+    if(prev){
+      compareRow.style.display = 'flex';
+      compareBadge.textContent = 'Ronda anterior de este tema: ' + prev.ppm + ' PPM · ' + prev.fillerCount + ' muletillas — supérala';
+    } else {
+      compareRow.style.display = 'none';
+    }
+  }
+
+  topicEl.textContent = pickTopic();
+
+  durButtons.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      if(running) return;
+      durButtons.forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      duration = parseInt(b.dataset.dur,10);
+      timeLeft = duration;
+      timerNum.textContent = timeLeft;
+    });
+  });
+
+  function resetRitmo(){
+    ritmoPoints = [];
+    ritmoLine.setAttribute('points','');
+    const svg = document.getElementById('imp-ritmo');
+    svg.querySelectorAll('circle').forEach(c=>c.remove());
+  }
+  function addRitmoPoint(kind){
+    // kind: 'normal' | 'filler' | 'weak'
+    const x = Math.min(600, ritmoPoints.length * 14);
+    const y = kind !== 'normal' ? 8 : (30 - (10 + Math.random()*16));
+    ritmoPoints.push([x,y,kind]);
+    const pts = ritmoPoints.map(p=>p[0]+','+(p[1])).join(' ');
+    ritmoLine.setAttribute('points', pts);
+    if(kind !== 'normal'){
+      const svg = document.getElementById('imp-ritmo');
+      const c = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 3);
+      c.setAttribute('fill', kind === 'filler' ? 'var(--bermellon)' : 'var(--ochre)');
+      svg.appendChild(c);
+    }
+  }
+
+  function updatePPM(){
+    const elapsed = duration - timeLeft;
+    const mins = Math.max(elapsed/60, 1/60);
+    const ppm = Math.round(wordCount / mins);
+    ppmEl.textContent = isFinite(ppm) ? ppm : 0;
+
+    // Zona ideal de ritmo — solo evaluamos con una muestra mínima para no parpadear al inicio
+    if(elapsed >= 4){
+      if(ppm < PPM_MIN_IDEAL){
+        ringFg.classList.remove('zone-over','zone-ideal'); ringFg.classList.add('zone-under');
+        ppmLabelEl.textContent = 'PPM · lento';
+      } else if(ppm > PPM_MAX_IDEAL){
+        ringFg.classList.remove('zone-under','zone-ideal'); ringFg.classList.add('zone-over');
+        ppmLabelEl.textContent = 'PPM · rápido';
+      } else {
+        ringFg.classList.remove('zone-under','zone-over'); ringFg.classList.add('zone-ideal');
+        ppmLabelEl.textContent = 'PPM · ideal';
+      }
+    }
+  }
+
+  function renderTranscriptText(text){
+    let escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    escaped = escaped.replace(weakRegex(), m => '§WEAK§'+m+'§/WEAK§');
+    escaped = escaped.replace(muletillaRegex(), m => '<mark class="filler">'+m+'</mark>');
+    escaped = escaped.replace(/§WEAK§([\s\S]*?)§\/WEAK§/g, (full, inner) => '<mark class="weak">'+inner+'</mark>');
+    transcriptEl.innerHTML = escaped || '<span class="imp-placeholder">Escuchando…</span>';
+    transcriptEl.scrollTop = transcriptEl.scrollHeight;
+  }
+
+  function processFinalChunk(chunk){
+    const wre = weakRegex();
+    const weakMatches = chunk.match(wre) || [];
+    weakCount += weakMatches.length;
+    debilEl.textContent = weakCount;
+
+    const words = chunk.trim().split(/\s+/).filter(Boolean);
+    const re = muletillaRegex();
+    words.forEach(w=>{
+      wordCount++;
+      const isFiller = re.test(w);
+      re.lastIndex = 0;
+      if(isFiller){ fillerCount++; }
+      addRitmoPoint(isFiller ? 'filler' : 'normal');
+    });
+    muletillasEl.textContent = fillerCount;
+    updatePPM();
+    lastWordTime = Date.now();
+  }
+
+  function setupRecognition(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR) return null;
+    const rec = new SR();
+    rec.lang = 'es-ES';
+    rec.continuous = true;
+    rec.interimResults = true;
+    let fullFinal = '';
+    let shouldRestart = false;
+    rec.onresult = (e)=>{
+      let interim = '';
+      for(let i=e.resultIndex; i<e.results.length; i++){
+        const res = e.results[i];
+        if(res.isFinal){
+          fullFinal += res[0].transcript + ' ';
+          processFinalChunk(res[0].transcript);
+        } else {
+          interim += res[0].transcript;
+        }
+      }
+      renderTranscriptText(fullFinal + interim);
+    };
+    rec.onerror = (e)=>{
+      if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+        micStatus.textContent = 'Micrófono denegado — modo escritura activado';
+        shouldRestart = false;
+        switchToFallback();
+      }
+      // 'no-speech' y otros errores transitorios: se dejan que onend decida si reinicia
+    };
+    rec.onend = ()=>{
+      if(shouldRestart && running && !usingFallback){
+        setTimeout(()=>{
+          if(shouldRestart && running && !usingFallback){
+            try{ rec.start(); }catch(e){}
+          }
+        }, 80);
+      }
+    };
+    rec.__setRestart = (v)=>{ shouldRestart = v; };
+    return rec;
+  }
+
+  function switchToFallback(){
+    usingFallback = true;
+    transcriptEl.contentEditable = 'true';
+    transcriptEl.innerHTML = '';
+    transcriptEl.focus();
+    let lastLen = 0;
+    transcriptEl.addEventListener('input', onFallbackInput);
+    function onFallbackInput(){
+      const text = transcriptEl.innerText;
+      lastLen = text.length;
+      const words = text.trim().split(/\s+/).filter(Boolean);
+      const re = muletillaRegex();
+      const wre = weakRegex();
+      let fc = 0;
+      words.forEach(w=>{ if(re.test(w)){ fc++; } re.lastIndex=0; });
+      const wm = text.match(wre) || [];
+      wordCount = words.length;
+      fillerCount = fc;
+      weakCount = wm.length;
+      muletillasEl.textContent = fillerCount;
+      debilEl.textContent = weakCount;
+      updatePPM();
+      lastWordTime = Date.now();
+    }
+  }
+
+  /* ---- Medidor de energía de voz (independiente del reconocimiento) ---- */
+  /* Se pide el permiso de micrófono UNA sola vez y se reutiliza el mismo stream
+     en todas las rondas, para no disparar el diálogo de permiso repetidamente. */
+  function getMicStream(){
+    if(micStream) return Promise.resolve(micStream);
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return Promise.reject();
+    return navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+      micStream = stream;
+      return stream;
+    });
+  }
+
+  function startEnergyMeter(){
+    getMicStream().then(stream=>{
+      const ctx = getActx();
+      if(!ctx) return;
+      if(!energyAnalyser){
+        energySource = ctx.createMediaStreamSource(stream);
+        energyAnalyser = ctx.createAnalyser();
+        energyAnalyser.fftSize = 256;
+        energySource.connect(energyAnalyser);
+      }
+      const data = new Uint8Array(energyAnalyser.frequencyBinCount);
+      function tick(){
+        if(!running){ return; }
+        energyAnalyser.getByteFrequencyData(data);
+        let sum = 0;
+        for(let i=0;i<data.length;i++) sum += data[i];
+        const avg = sum / data.length; // 0-255
+        const pct = Math.min(100, Math.round((avg/90)*100));
+        energyFill.style.width = pct + '%';
+        energyFill.classList.toggle('low', pct < 12);
+        energyFill.classList.toggle('high', pct > 75);
+        energyRafId = requestAnimationFrame(tick);
+      }
+      tick();
+    }).catch(()=>{ /* silencioso: si se deniega, el medidor simplemente no se muestra */ });
+  }
+  function stopEnergyMeter(){
+    if(energyRafId){ cancelAnimationFrame(energyRafId); energyRafId = null; }
+    energyFill.style.width = '0%';
+    // Nota: NO detenemos ni liberamos micStream/energySource/energyAnalyser aquí,
+    // para poder reutilizar el mismo permiso de micrófono en la próxima ronda.
+  }
+
+  /* ---- Grabación de audio para reescucharte (reutiliza el mismo micStream) ---- */
+  function startRecording(){
+    if(!window.MediaRecorder){ return; }
+    getMicStream().then(stream=>{
+      recordedChunks = [];
+      try{
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
+        mediaRecorder = mimeType ? new MediaRecorder(stream, {mimeType}) : new MediaRecorder(stream);
+      }catch(e){ mediaRecorder = null; return; }
+      mediaRecorder.ondataavailable = (e)=>{ if(e.data && e.data.size > 0) recordedChunks.push(e.data); };
+      mediaRecorder.start();
+    }).catch(()=>{ mediaRecorder = null; });
+  }
+
+  function stopRecordingAndShow(){
+    if(!mediaRecorder || mediaRecorder.state === 'inactive'){ return; }
+    mediaRecorder.onstop = ()=>{
+      if(recordedChunks.length === 0) return;
+      if(recordedUrl) URL.revokeObjectURL(recordedUrl);
+      const blob = new Blob(recordedChunks, {type: recordedChunks[0].type || 'audio/webm'});
+      recordedUrl = URL.createObjectURL(blob);
+      audioEl.src = recordedUrl;
+      playbackWrap.style.display = 'block';
+      downloadAudioBtn.onclick = ()=>{
+        const a = document.createElement('a');
+        a.href = recordedUrl;
+        a.download = 'improviso-' + Date.now() + '.webm';
+        a.click();
+      };
+    };
+    try{ mediaRecorder.stop(); }catch(e){}
+  }
+
+  function startRound(){
+    if(running) return;
+    running = true;
+    wordCount=0; fillerCount=0; weakCount=0; silenceCount=0; usingFallback=false;
+    timeLeft = duration;
+    resetRitmo();
+    transcriptEl.contentEditable = 'false';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Escuchando…</span>';
+    ppmEl.textContent = 0; ppmEl.classList.remove('warn');
+    ppmLabelEl.textContent = 'PPM';
+    muletillasEl.textContent = 0; debilEl.textContent = 0; silenciosEl.textContent = 0;
+    timerNum.textContent = timeLeft;
+    ringFg.style.strokeDashoffset = 0;
+    ringFg.classList.remove('zone-under','zone-over','zone-ideal');
+    startBtn.disabled = true; stopBtn.disabled = false;
+    playbackWrap.style.display = 'none';
+    startBeep();
+
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.abort(); }catch(e){} }
+    recognition = setupRecognition();
+    if(recognition){
+      recognition.__setRestart(true);
+      try{
+        recognition.start();
+        micStatus.textContent = 'Micrófono activo';
+      }catch(e){ switchToFallback(); micStatus.textContent = 'Modo escritura (voz no disponible)'; }
+    } else {
+      switchToFallback();
+      micStatus.textContent = 'Este navegador no soporta voz — modo escritura activado';
+    }
+
+    startEnergyMeter();
+    startRecording();
+
+    lastWordTime = Date.now();
+    silenceCheckInterval = setInterval(()=>{
+      if(Date.now() - lastWordTime > 3000){
+        silenceCount++;
+        silenciosEl.textContent = silenceCount;
+        lastWordTime = Date.now();
+      }
+    }, 500);
+
+    tickInterval = setInterval(()=>{
+      timeLeft--;
+      timerNum.textContent = Math.max(timeLeft,0);
+      ringFg.style.strokeDashoffset = RING_CIRC * (1 - timeLeft/duration);
+      if(timeLeft <= 3 && timeLeft > 0) countdownBeep();
+      if(timeLeft <= 0){ endRound(); }
+    }, 1000);
+  }
+
+  function endRound(){
+    running = false;
+    clearInterval(tickInterval);
+    clearInterval(silenceCheckInterval);
+    startBtn.disabled = false; stopBtn.disabled = true;
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.stop(); }catch(e){} }
+    stopEnergyMeter();
+    stopRecordingAndShow();
+    endBeep();
+    updatePPM();
+
+    const ppm = parseInt(ppmEl.textContent,10) || 0;
+    if(ppm > store.recordPPM){ store.recordPPM = ppm; saveStore(); }
+
+    const fillerRate = wordCount>0 ? fillerCount/wordCount : 0;
+    const inIdealZone = ppm >= PPM_MIN_IDEAL && ppm <= PPM_MAX_IDEAL;
+    let score = inIdealZone ? 60 : Math.max(0, 60 - Math.min(60, Math.abs(ppm - 147)/147*60));
+    score -= fillerRate*100*0.5;
+    score -= Math.min(weakCount*3, 15);
+    score -= Math.min(silenceCount*4, 20);
+    score = Math.round(Math.max(0, Math.min(100, score)));
+
+    // Comparación con ronda anterior del mismo tema
+    const topicText = topicEl.textContent;
+    const prev = lastRoundByTopic[topicText];
+    let comparisonNote = '';
+    if(isRepeatRound && prev){
+      const deltaPpm = ppm - prev.ppm;
+      const deltaFiller = fillerCount - prev.fillerCount;
+      if(deltaFiller < 0 || (deltaFiller === 0 && deltaPpm >= 0)){
+        comparisonNote = ' Mejoraste frente a tu intento anterior: ' + (deltaFiller<0? Math.abs(deltaFiller)+' muletillas menos':'mismo control') + (deltaPpm>0? ' y '+deltaPpm+' PPM más':'') + '.';
+      } else if(deltaFiller > 0){
+        comparisonNote = ' Esta vez te salieron ' + deltaFiller + ' muletillas más que en tu intento anterior — repítelo una vez más antes de pasar a otro tema.';
+      }
+    }
+    lastRoundByTopic[topicText] = {ppm, fillerCount, weakCount};
+
+    let note;
+    if(fillerRate > 0.12) note = 'Tus muletillas se acumulan cuando piensas en voz alta — prueba a callar un segundo en vez de rellenar con "eh" o "este".';
+    else if(weakCount >= 4) note = 'Usaste bastante lenguaje débil ("un poco", "tal vez", "creo que") — afirma tus ideas directamente, sin suavizarlas de más.';
+    else if(silenceCount > 3) note = 'Varios silencios largos: seguramente te quedaste sin ideas. Practica el mismo tema otra vez, ya tienes el contenido — solo falta orden.';
+    else if(!inIdealZone && ppm < PPM_MIN_IDEAL) note = 'Ritmo por debajo de la zona ideal (130-165 PPM) — empújate un poco más, sin perder claridad.';
+    else if(!inIdealZone && ppm > PPM_MAX_IDEAL) note = 'Hablaste más rápido que la zona ideal (130-165 PPM) — cuidado, la velocidad alta suele esconder más muletillas.';
+    else note = 'Buen flujo, pocas muletillas y ritmo en la zona ideal. Así suena alguien que domina el tema y lo sabe.';
+    note += comparisonNote;
+
+    showStamp({
+      apparatus:'improviso',
+      score,
+      metrics:[
+        {value: ppm, label:'PPM'},
+        {value: fillerCount, label:'Muletillas'},
+        {value: weakCount, label:'Lenguaje débil'},
+        {value: silenceCount, label:'Silencios'}
+      ],
+      note
+    });
+
+    updateCompareBadge();
+  }
+
+  startBtn.addEventListener('click', startRound);
+  stopBtn.addEventListener('click', endRound);
+
+  document.addEventListener('keydown', (e)=>{
+    if(window.__activePanel !== 'improviso') return;
+    if(e.code === 'Space' && document.activeElement.tagName !== 'TEXTAREA' && !transcriptEl.isContentEditable){
+      e.preventDefault();
+      running ? endRound() : startRound();
+    }
+    if(e.code === 'KeyN' && !running){ newTopicBtn.click(); }
+  });
+})();
+
+/* ================= APARATO 2: TORMENTA ================= */
+(function(){
+  const CATEGORIES = [
+    {name:'Palabras para decir "importante" sin decir "importante"', words:['crucial','clave','esencial','vital','decisivo','fundamental','prioritario','determinante','trascendental','relevante','urgente','crítico']},
+    {name:'Sinónimos de "problema"', words:['inconveniente','contratiempo','obstáculo','conflicto','dificultad','falla','error','traba','complicación','imprevisto','escollo']},
+    {name:'Palabras para elogiar un buen trabajo', words:['excelente','sobresaliente','impecable','notable','ejemplar','admirable','pulido','sólido','brillante','meritorio','destacado']},
+    {name:'Formas de decir que algo salió mal', words:['fracasó','falló','se desplomó','se malogró','naufragó','colapsó','se frustró','se estancó','retrocedió','se descarriló']},
+    {name:'Palabras para describir a un buen líder', words:['visionario','firme','empático','decidido','justo','inspirador','coherente','accesible','resiliente','estratégico']},
+    {name:'Conectores para argumentar mejor', words:['sin embargo','no obstante','por lo tanto','en consecuencia','asimismo','por consiguiente','de hecho','en cambio','pese a ello','dicho esto']},
+    {name:'Sinónimos de "rápido"', words:['veloz','ágil','raudo','fugaz','vertiginoso','acelerado','presuroso','ligero','expedito','inmediato']},
+    {name:'Palabras para negociar sin sonar débil', words:['propongo','planteo','sugiero','considero','estimo','requiero','condiciono','exijo','negocio','concedo']},
+    {name:'Sinónimos de "grande" (para minería/industria)', words:['masivo','colosal','considerable','extenso','sustancial','voluminoso','descomunal','imponente','gigantesco','monumental']},
+    {name:'Formas de empezar una presentación sin decir "bueno"', words:['hoy','quiero','permítanme','comenzaré','partamos','arranquemos','abro con','empiezo por']}
+  ];
+  let usedCats = [];
+  function pickCat(){
+    let pool = CATEGORIES.filter(c=>!usedCats.includes(c.name));
+    if(pool.length===0){ usedCats=[]; pool=CATEGORIES; }
+    const c = pool[Math.floor(Math.random()*pool.length)];
+    usedCats.push(c.name);
+    return c;
+  }
+
+  const catEl = document.getElementById('tor-category');
+  const newCatBtn = document.getElementById('tor-new-cat');
+  const startBtn = document.getElementById('tor-start');
+  const timerNum = document.getElementById('tor-timer-num');
+  const ringFg = document.getElementById('tor-ring-fg');
+  const countEl = document.getElementById('tor-count');
+  const inputEl = document.getElementById('tor-input');
+  const chipsEl = document.getElementById('tor-chips');
+  const missingWrap = document.getElementById('tor-missing-wrap');
+  const missingEl = document.getElementById('tor-missing');
+  const RING_CIRC = 326.7;
+  const DURATION = 60;
+
+  let current = pickCat();
+  catEl.textContent = current.name;
+  let running = false;
+  let timeLeft = DURATION;
+  let tick = null;
+  let found = new Set();
+
+  newCatBtn.addEventListener('click', ()=>{
+    if(running) return;
+    current = pickCat();
+    catEl.textContent = current.name;
+  });
+
+  function normalize(s){
+    return s.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  }
+
+  function addWord(raw){
+    const w = raw.trim();
+    if(!w) return;
+    const norm = normalize(w);
+    if(found.has(norm)) return;
+    found.add(norm);
+    countEl.textContent = found.size;
+    const chip = document.createElement('span');
+    chip.className = 'tor-chip';
+    chip.textContent = w;
+    chipsEl.appendChild(chip);
+  }
+
+  inputEl.addEventListener('keydown', (e)=>{
+    if(e.code === 'Enter' || e.code === 'Space'){
+      e.preventDefault();
+      addWord(inputEl.value);
+      inputEl.value = '';
+    }
+  });
+
+  function startRound(){
+    if(running) return;
+    running = true;
+    found = new Set();
+    chipsEl.innerHTML = '';
+    countEl.textContent = 0;
+    timeLeft = DURATION;
+    timerNum.textContent = timeLeft;
+    ringFg.style.strokeDashoffset = 0;
+    missingWrap.style.display = 'none';
+    inputEl.disabled = false;
+    inputEl.value = '';
+    inputEl.focus();
+    startBtn.disabled = true;
+    newCatBtn.disabled = true;
+    startBeep();
+
+    tick = setInterval(()=>{
+      timeLeft--;
+      timerNum.textContent = Math.max(timeLeft,0);
+      ringFg.style.strokeDashoffset = RING_CIRC * (1 - timeLeft/DURATION);
+      if(timeLeft <= 3 && timeLeft > 0) countdownBeep();
+      if(timeLeft <= 0) endRound();
+    }, 1000);
+  }
+
+  function endRound(){
+    running = false;
+    clearInterval(tick);
+    inputEl.disabled = true;
+    startBtn.disabled = false;
+    newCatBtn.disabled = false;
+    endBeep();
+
+    const total = current.words.length;
+    const hits = current.words.filter(w => found.has(normalize(w)));
+    const misses = current.words.filter(w => !found.has(normalize(w)));
+
+    missingEl.innerHTML = '';
+    if(misses.length){
+      missingWrap.style.display = 'block';
+      misses.forEach(w=>{
+        const chip = document.createElement('span');
+        chip.className = 'tor-chip miss';
+        chip.textContent = w;
+        missingEl.appendChild(chip);
+      });
+    } else {
+      missingWrap.style.display = 'none';
+    }
+
+    const score = Math.round((hits.length/total)*100);
+    let note;
+    if(hits.length === total) note = 'Cubriste toda la categoría. Tu banco de palabras activo en este campo es amplio.';
+    else if(hits.length >= total*0.6) note = 'Buena cobertura. Revisa las que se te escaparon — probablemente ya las conocías, solo no llegaron a tiempo.';
+    else note = 'Se te escaparon varias. No es falta de vocabulario, es falta de acceso rápido — por eso conviene repetir este ejercicio.';
+
+    showStamp({
+      apparatus:'tormenta',
+      score,
+      metrics:[
+        {value: found.size, label:'Palabras'},
+        {value: hits.length+'/'+total, label:'De la lista'},
+        {value: misses.length, label:'Faltantes'}
+      ],
+      note
+    });
+  }
+
+  startBtn.addEventListener('click', startRound);
+
+  document.addEventListener('keydown', (e)=>{
+    if(window.__activePanel !== 'tormenta') return;
+    if(e.code === 'Space' && document.activeElement !== inputEl){
+      e.preventDefault();
+      if(!running) startRound();
+    }
+    if(e.code === 'KeyN' && !running && document.activeElement !== inputEl){
+      current = pickCat();
+      catEl.textContent = current.name;
+    }
+  });
+})();
+
+/* ================= APARATO 3: PRECISIÓN ================= */
+(function(){
+  const VAGUE_WORDS = ['bueno','malo','cosa','cosas','muy','mucho','muchos','muchas','bastante','algo','genial',
+    'increíble','interesante','importante','bonito','feo','grande','pequeño','normal','ok','regular','nice','chevere','bacán'];
+
+  const DRAFTS = [
+    {text:'El evento estuvo muy bueno y la gente estaba contenta.',
+     rewrites:['La ceremonia de cierre reunió a 200 colaboradores que aplaudieron de pie cuando anunciaron los resultados del trimestre.',
+               'El salón se llenó de risas y abrazos apenas se proyectaron las cifras: superamos la meta en un 14%.']},
+    {text:'La reunión fue larga y un poco aburrida, no se avanzó mucho.',
+     rewrites:['La reunión se extendió tres horas repasando el mismo punto del cronograma, sin que nadie tomara una decisión.',
+               'Tras noventa minutos de rodeos, salimos con una sola conclusión: posponer la decisión otra semana más.']},
+    {text:'El producto nuevo es bastante bueno, mejor que el anterior.',
+     rewrites:['El nuevo modelo reduce el tiempo de calibrado de 40 a 12 minutos frente a la versión anterior.',
+               'A diferencia del modelo previo, este resiste vibraciones de hasta 5G sin perder precisión de medición.']},
+    {text:'El clima estuvo feo todo el día, no se pudo hacer nada afuera.',
+     rewrites:['Llovió sin pausa desde las siete de la mañana, así que cancelamos la inspección de campo programada.',
+               'El viento alcanzó ráfagas de 60 km/h, suficiente para suspender toda actividad en altura.']},
+    {text:'Mi jefe dio un discurso muy motivador en la reunión.',
+     rewrites:['Mi jefe citó la meta que casi no cumplimos en 2023 y explicó, cifra por cifra, cómo la superamos este año.',
+               'Habló diez minutos sin notas, mirando a cada equipo por su nombre y agradeciendo un logro específico de cada uno.']},
+    {text:'La comida del restaurante estuvo rica, se nota que cocinan bien.',
+     rewrites:['El lomo saltado llegó humeante, con la carne dorada por fuera y jugosa por dentro, y las papas crocantes hasta el final.',
+               'El ceviche tenía un punto de acidez exacto — ni ahogado en limón ni tibio — y el pescado se deshacía solo.']},
+    {text:'El nuevo software es más rápido y fácil de usar que el anterior.',
+     rewrites:['El nuevo sistema carga los reportes en 2 segundos, frente a los 18 segundos que tomaba el anterior.',
+               'Reduce el proceso de cierre de turno de nueve clics a tres, sin necesidad de manual.']},
+    {text:'El equipo trabajó duro esta semana y logró buenos resultados.',
+     rewrites:['El equipo se quedó hasta las nueve de la noche tres días seguidos y cerró el lote con cero reprocesos.',
+               'Reorganizaron los turnos por su cuenta y terminaron la producción semanal un día antes de lo previsto.']}
+  ];
+  let usedDrafts = [];
+  function pickDraft(){
+    let pool = DRAFTS.filter(d=>!usedDrafts.includes(d.text));
+    if(pool.length===0){ usedDrafts=[]; pool=DRAFTS; }
+    const d = pool[Math.floor(Math.random()*pool.length)];
+    usedDrafts.push(d.text);
+    return d;
+  }
+
+  const draftEl = document.getElementById('pre-draft');
+  const inputEl = document.getElementById('pre-input');
+  const errorEl = document.getElementById('pre-error');
+  const checkBtn = document.getElementById('pre-check');
+  const nextBtn = document.getElementById('pre-next');
+  const resultWrap = document.getElementById('pre-result');
+  const scoresEl = document.getElementById('pre-scores');
+  const vagueFoundEl = document.getElementById('pre-vague-found');
+  const examplesEl = document.getElementById('pre-examples');
+
+  let current = pickDraft();
+  draftEl.textContent = '"' + current.text + '"';
+
+  function loadNext(){
+    current = pickDraft();
+    draftEl.textContent = '"' + current.text + '"';
+    inputEl.value = '';
+    errorEl.textContent = '';
+    resultWrap.style.display = 'none';
+  }
+  nextBtn.addEventListener('click', loadNext);
+
+  function scoreBar(label, pct, kind){
+    const cls = pct < 40 ? 'bad' : (pct < 70 ? 'warn' : '');
+    return '<div class="pre-score-item"><span class="pre-score-label">'+label+'</span>'+
+      '<div class="pre-score-bar"><div class="pre-score-fill '+cls+'" style="width:'+pct+'%"></div></div></div>';
+  }
+
+  checkBtn.addEventListener('click', ()=>{
+    const val = inputEl.value.trim();
+    if(!val){
+      errorEl.textContent = 'Escribe tu reescritura primero.';
+      return;
+    }
+    errorEl.textContent = '';
+
+    const words = val.toLowerCase().match(/[a-záéíóúñü]+/g) || [];
+    const uniqueWords = new Set(words);
+    const richness = words.length ? Math.round((uniqueWords.size/words.length)*100) : 0;
+
+    const foundVague = [...uniqueWords].filter(w => VAGUE_WORDS.includes(w));
+    const vagueRatio = words.length ? foundVague.length / words.length : 0;
+    const precisionScore = Math.round(Math.max(0, 100 - vagueRatio*400));
+
+    const numberPattern = /\d/;
+    const hasNumbers = numberPattern.test(val);
+    const lengthScore = Math.min(100, Math.round((val.length / 90) * 100));
+    const detailScore = Math.round((hasNumbers ? 30 : 0) + Math.min(70, lengthScore*0.7));
+
+    const overall = Math.round(precisionScore*0.45 + richness*0.25 + detailScore*0.3);
+
+    scoresEl.innerHTML =
+      scoreBar('Precisión (sin vaguedades)', precisionScore) +
+      scoreBar('Riqueza léxica', richness) +
+      scoreBar('Detalle concreto', Math.min(detailScore,100));
+
+    vagueFoundEl.innerHTML = foundVague.length
+      ? '<span class="imp-label">Vaguedades que quedaron</span><div class="tor-chips">' +
+        foundVague.map(w=>'<span class="tor-chip miss">'+w+'</span>').join('') + '</div>'
+      : '<span class="imp-label" style="color:var(--forest);">Sin vaguedades detectadas</span>';
+
+    examplesEl.innerHTML = current.rewrites.map(r=>'<div class="pre-example">'+r+'</div>').join('');
+    resultWrap.style.display = 'block';
+
+    let note;
+    if(overall >= 80) note = 'Reescritura afilada: concreta, variada y sin relleno. Así se escribe para que a nadie le quede duda.';
+    else if(overall >= 50) note = 'Vas bien encaminado, pero todavía queda algo de vaguedad. Cambia los adjetivos genéricos por datos o imágenes específicas.';
+    else note = 'Sigue sonando general. Pregúntate: ¿qué vería, oiría o mediría alguien que estuvo ahí? Esa es la palabra que falta.';
+
+    showStamp({
+      apparatus:'precision',
+      score: overall,
+      metrics:[
+        {value: precisionScore+'%', label:'Precisión'},
+        {value: richness+'%', label:'Riqueza'},
+        {value: foundVague.length, label:'Vaguedades'}
+      ],
+      note
+    });
+  });
+
+  document.addEventListener('keydown', (e)=>{
+    if(window.__activePanel !== 'precision') return;
+    if(e.code === 'KeyN' && document.activeElement !== inputEl){ loadNext(); }
+  });
+})();
+
+/* ================= APARATO 4: TABÚ ================= */
+(function(){
+  const TABU_SET = [
+    {secret:'liderazgo', forbidden:['líder','equipo','guiar','jefe','dirigir']},
+    {secret:'reunión', forbidden:['juntarse','sala','agenda','equipo','hablar']},
+    {secret:'fracaso', forbidden:['error','perder','mal','fallar','equivocarse']},
+    {secret:'presupuesto', forbidden:['dinero','plata','gastar','costo','soles']},
+    {secret:'motivación', forbidden:['ganas','ánimo','impulso','querer','inspirar']},
+    {secret:'plazo', forbidden:['fecha','tiempo','entrega','límite','vencer']},
+    {secret:'calidad', forbidden:['bueno','bien hecho','estándar','defecto','norma']},
+    {secret:'competencia', forbidden:['rival','mercado','otro','empresa','ganar']},
+    {secret:'eficiencia', forbidden:['rápido','ahorrar','optimizar','tiempo','productivo']},
+    {secret:'confianza', forbidden:['creer','seguro','fiar','duda','seguridad']},
+    {secret:'mina', forbidden:['minería','cobre','excavar','yacimiento','extraer']},
+    {secret:'turno', forbidden:['horario','trabajo','día','noche','cambio']},
+    {secret:'ascenso', forbidden:['subir','puesto','mejor','cargo','promoción']},
+    {secret:'estrés', forbidden:['presión','nervioso','cansado','ansiedad','agobio']},
+    {secret:'negociación', forbidden:['acuerdo','pedir','ceder','trato','conversar']}
+  ];
+  let usedTabu = [];
+  function pickTabu(){
+    let pool = TABU_SET.filter(t=>!usedTabu.includes(t.secret));
+    if(pool.length===0){ usedTabu=[]; pool=TABU_SET; }
+    const t = pool[Math.floor(Math.random()*pool.length)];
+    usedTabu.push(t.secret);
+    return t;
+  }
+
+  const secretEl = document.getElementById('tabu-secret');
+  const forbiddenEl = document.getElementById('tabu-forbidden');
+  const newBtn = document.getElementById('tabu-new');
+  const startBtn = document.getElementById('tabu-start');
+  const timerNum = document.getElementById('tabu-timer-num');
+  const ringFg = document.getElementById('tabu-ring-fg');
+  const strikesEl = document.getElementById('tabu-strikes');
+  const transcriptEl = document.getElementById('tabu-transcript');
+  const micStatus = document.getElementById('tabu-mic-status');
+  const RING_CIRC = 326.7;
+  const DURATION = 60;
+
+  let current = null;
+  let running = false;
+  let timeLeft = DURATION;
+  let tick = null;
+  let strikes = 0;
+  let recognition = null;
+  let usingFallback = false;
+  let flaggedWords = new Set();
+
+  function renderChips(){
+    forbiddenEl.innerHTML = current.forbidden.map(w=>'<span class="tor-chip">'+w+'</span>').join('');
+  }
+
+  newBtn.addEventListener('click', ()=>{
+    if(running) return;
+    current = pickTabu();
+    secretEl.textContent = current.secret;
+    renderChips();
+    startBtn.disabled = false;
+    strikes = 0; strikesEl.textContent = 0;
+    transcriptEl.contentEditable = 'false';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Tu transcripción en vivo aparecerá aquí durante la ronda.</span>';
+    micStatus.textContent = '';
+  });
+
+  function normalize(s){ return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
+
+  function checkForbidden(text){
+    const norm = normalize(text);
+    let hit = false;
+    current.forbidden.concat([current.secret]).forEach(w=>{
+      const nw = normalize(w);
+      if(norm.includes(nw) && !flaggedWords.has(nw+':'+Math.floor(Date.now()/2000))){
+        hit = true;
+        strikes++;
+        strikesEl.textContent = strikes;
+        buzzWrong();
+        flaggedWords.add(nw+':'+Math.floor(Date.now()/2000));
+      }
+    });
+    return hit;
+  }
+
+  function highlightTranscript(text){
+    let escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    const all = current.forbidden.concat([current.secret]).sort((a,b)=>b.length-a.length)
+      .map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
+    const re = new RegExp('\\b('+all.join('|')+')\\b','gi');
+    escaped = escaped.replace(re, m=>'<span class="tabu-transcript-strike">'+m+'</span>');
+    transcriptEl.innerHTML = escaped || '<span class="imp-placeholder">Escuchando…</span>';
+    transcriptEl.scrollTop = transcriptEl.scrollHeight;
+  }
+
+  function setupRecognition(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR) return null;
+    const rec = new SR();
+    rec.lang = 'es-ES'; rec.continuous = true; rec.interimResults = true;
+    let fullFinal = '';
+    let shouldRestart = false;
+    rec.onresult = (e)=>{
+      let interim = '';
+      for(let i=e.resultIndex; i<e.results.length; i++){
+        const res = e.results[i];
+        if(res.isFinal){ fullFinal += res[0].transcript + ' '; checkForbidden(res[0].transcript); }
+        else{ interim += res[0].transcript; }
+      }
+      highlightTranscript(fullFinal + interim);
+    };
+    rec.onerror = (e)=>{
+      if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+        micStatus.textContent = 'Micrófono denegado — modo escritura activado';
+        shouldRestart = false;
+        switchToFallback();
+      }
+    };
+    rec.onend = ()=>{
+      if(shouldRestart && running && !usingFallback){
+        setTimeout(()=>{
+          if(shouldRestart && running && !usingFallback){ try{ rec.start(); }catch(e){} }
+        }, 80);
+      }
+    };
+    rec.__setRestart = (v)=>{ shouldRestart = v; };
+    return rec;
+  }
+
+  function switchToFallback(){
+    usingFallback = true;
+    transcriptEl.contentEditable = 'true';
+    transcriptEl.innerHTML = '';
+    transcriptEl.focus();
+    let lastLen = 0;
+    transcriptEl.addEventListener('input', ()=>{
+      const text = transcriptEl.innerText;
+      if(text.length > lastLen){ checkForbidden(text.slice(Math.max(0,lastLen-15))); }
+      lastLen = text.length;
+    });
+  }
+
+  function startRound(){
+    if(running || !current) return;
+    running = true;
+    strikes = 0; strikesEl.textContent = 0; flaggedWords = new Set();
+    timeLeft = DURATION;
+    timerNum.textContent = timeLeft;
+    ringFg.style.strokeDashoffset = 0;
+    transcriptEl.contentEditable = 'false';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Escuchando…</span>';
+    startBtn.disabled = true; newBtn.disabled = true;
+    startBeep();
+
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.abort(); }catch(e){} }
+    recognition = setupRecognition();
+    if(recognition){
+      recognition.__setRestart(true);
+      try{ recognition.start(); micStatus.textContent = 'Micrófono activo'; }
+      catch(e){ switchToFallback(); micStatus.textContent = 'Modo escritura'; }
+    } else {
+      switchToFallback();
+      micStatus.textContent = 'Este navegador no soporta voz — modo escritura activado';
+    }
+
+    tick = setInterval(()=>{
+      timeLeft--;
+      timerNum.textContent = Math.max(timeLeft,0);
+      ringFg.style.strokeDashoffset = RING_CIRC * (1 - timeLeft/DURATION);
+      if(timeLeft <= 3 && timeLeft > 0) countdownBeep();
+      if(timeLeft <= 0) endRound();
+    }, 1000);
+  }
+
+  function endRound(){
+    running = false;
+    clearInterval(tick);
+    startBtn.disabled = false; newBtn.disabled = false;
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.stop(); }catch(e){} }
+    endBeep();
+
+    const score = Math.round(Math.max(0, 100 - strikes*22));
+    let note;
+    if(strikes === 0) note = 'Ni un escape. Encontraste el rodeo perfecto para explicar algo sin usar las palabras obvias.';
+    else if(strikes <= 2) note = 'Casi limpio. Se te escapó lo evidente una o dos veces — normal cuando el concepto es muy directo.';
+    else note = 'Se te escaparon varias. Cuando falta la palabra exacta, tiendes a usarla igual — practica parafrasear con ejemplos en vez de sinónimos cercanos.';
+
+    showStamp({
+      apparatus:'tabu',
+      score,
+      metrics:[
+        {value: strikes, label:'Escapes'},
+        {value: current.secret, label:'Palabra'},
+        {value: score, label:'Puntaje'}
+      ],
+      note
+    });
+    startBtn.disabled = true;
+  }
+
+  startBtn.addEventListener('click', startRound);
+
+  document.addEventListener('keydown', (e)=>{
+    if(window.__activePanel !== 'tabu') return;
+    if(e.code === 'Space' && !transcriptEl.isContentEditable){
+      e.preventDefault();
+      if(!running && current) startRound();
+    }
+    if(e.code === 'KeyN' && !running){ newBtn.click(); }
+  });
+})();
+
+/* ================= APARATO 5: TRABALENGUAS ================= */
+(function(){
+  const TWISTERS = {
+    facil: [
+      'Tres tristes tigres tragan trigo en un trigal.',
+      'Pablito clavó un clavito en la calva de un calvito.',
+      'Compré pocas copas, pocas copas compré.',
+      'El cielo está enladrillado, quién lo desenladrillará.',
+      'Como poco coco como, poco coco compro.',
+      'Pancha plancha con cuatro planchas, ¿con cuántas planchas plancha Pancha?',
+      'El amor es una locura que solo el cura la cura, pero si el cura la cura, comete una gran locura.',
+      'Poquito a poquito Paquito empaca su paquete.',
+      'Mi mamá me mima mucho.',
+      'Juan tuvo un tubo, y el tubo que tuvo se le rompió.',
+      'La bruja piruja prepara un brebaje con brea y cerveza para la vieja Doroteja.',
+      'Toto toma té, Tita toma mate, y yo tomo mi tecito de tila todas las tardes.',
+      'El hipopótamo Hipo está con hipo, ¿quién le quita el hipo al hipopótamo Hipo?',
+      'Ando pico picoteando, pico picoteando ando.',
+      'Cuando cuentas cuentos nunca cuentas cuántos cuentos cuentas.'
+    ],
+    medio: [
+      'El perro de Rita me irrita, dile a Rita que cambie de perrito.',
+      'Si Sansón no sazona su salsa con sal, le sale sosa la salsa que Sansón sazona.',
+      'Parra tenía una parra y Guerra tenía una parra, la parra de Parra creció y la parra de Guerra murió.',
+      'Cuando cuentes cuentos, cuenta cuántos cuentos cuentas, porque si no cuentas cuántos cuentos cuentas, nunca sabrás cuántos cuentos cuentas tú.',
+      'Un tigre, dos tigres, tres tigres comían trigo en un trigal, un tigre, dos tigres, tres tigres.',
+      'Compadre, cómpreme un coco, compadre, no compro coco porque como poco coco, poco coco compro.',
+      'Debajo del puente de Guadalajara había un conejo debajo del agua, el que lo desenconejare buen desenconejador será.',
+      'Tres tristes trapecistas tristes atrapan tres trapecios tristes en el circo.',
+      'La sucesión sucesiva de sucesos sucede sucesivamente con la sucesión del tiempo.',
+      'Pedro Pérez pide peras, Pedro Pablo pide papas, ambos piden peras y papas para Pedro y Pablo.',
+      'El rey de Parangaricutirimícuaro se quiere desemparangaricutirimicuarizar, el desemparangaricutirimicuarizador que lo desemparangaricutirimicuarice buen desemparangaricutirimicuarizador será.',
+      'Tengo un tallo con tres trigos, tres trigos tiene mi tallo, si el tallo pierde un trigo, mi tallo, ¿qué trigo tiene?',
+      'María Chuzena su choza techaba, un techador que por allí pasaba le dijo, María Chuzena, ¿techas tu choza o techas la ajena?',
+      'El que poco coco come, poco coco compra; el que poco coco compra, poco coco come.',
+      'Cómo quieres que te quiera si el que quiero que me quiera no me quiere como quiero que me quiera.'
+    ],
+    dificil: [
+      'El arzobispo de Constantinopla se quiere desarzobispoconstantinopolizar, el desarzobispoconstantinopolizador que lo desarzobispoconstantinopolice, buen desarzobispoconstantinopolizador será.',
+      'Erre con erre cigarro, erre con erre barril, rápido corren los carros cargados de azúcar del ferrocarril.',
+      'Paco Peco chico rico insultaba como un loco a su tío Federico, y éste dijo, "poco a poco, Paco Peco, poco pico".',
+      'Coloquialmente Cali colinda con Cauca, y Cauca colinda cordialmente con Cali.',
+      'Tres platos trigueros comían tres tigres trigueros, trigo comían tres tristes tigres en un trigal.',
+      'El cielo está enladrillado, ¿quién lo desenladrillará? El desenladrillador que lo desenladrille, buen desenladrillador será.',
+      'Si el abad de Cádiz nada, ¿cuántas nadadas nada el abad de Cádiz cuando nada?',
+      'Papá, pon pan para Pepe, Pepe pon pan para papá, si Pepe pon pan para papá, papá pon pan para Pepe.',
+      'Busco al vasco bizco brusco, y al vasco bizco brusco que busco no lo hallo, ¿dónde está el vasco bizco brusco que busco?',
+      'El otorrinolaringólogo de Constantinopla se quiere desotorrinolaringologizar, el desotorrinolaringologizador que lo desotorrinolaringologice buen desotorrinolaringologizador será.',
+      'Tres tristes trigres trituraban trigo triturado en tres tristes trastos de trigo triturado.',
+      'Tanto trote para el potro, con tan tétrico trotar, que en tres trancos otro potro trota tras tan tétrico trotar.',
+      'Tres cortos tigres comían trigo en tres trastos, tres tristes tigres tragaban trigo triturado en un trigal.',
+      'Tino tenía un tren de trigo, tanto trigo tenía Tino que su tren se transformó en tren de trigo trillado.',
+      'Tras tras tres tristes trapecistas trotan tristes tras tres tigres trotando tras trigo triturado.'
+    ]
+  };
+  let level = 'facil';
+  let usedByLevel = {facil:[], medio:[], dificil:[]};
+
+  function pickTwister(){
+    const pool = TWISTERS[level];
+    let used = usedByLevel[level];
+    let candidates = pool.filter(t=>!used.includes(t));
+    if(candidates.length===0){ used.length = 0; candidates = pool; }
+    const t = candidates[Math.floor(Math.random()*candidates.length)];
+    used.push(t);
+    return t;
+  }
+
+  const textEl = document.getElementById('tw-text');
+  const newBtn = document.getElementById('tw-new');
+  const levelButtons = document.querySelectorAll('#tw-level-picker .dur-btn');
+  const roundsWrap = document.getElementById('tw-rounds');
+  const roundDots = roundsWrap.querySelectorAll('.tw-round-dot');
+  const transcriptEl = document.getElementById('tw-transcript');
+  const startBtn = document.getElementById('tw-start');
+  const stopBtn = document.getElementById('tw-stop');
+  const micStatus = document.getElementById('tw-mic-status');
+  const playbackWrap = document.getElementById('tw-playback');
+  const audioEl = document.getElementById('tw-audio');
+  const pitchLine = document.getElementById('tw-pitch-line');
+  const pitchAvgEl = document.getElementById('tw-pitch-avg');
+  const pitchRangeEl = document.getElementById('tw-pitch-range');
+  const pitchVarietyEl = document.getElementById('tw-pitch-variety');
+  const energyFill = document.getElementById('tw-energy-fill');
+
+  let current = pickTwister();
+  textEl.textContent = current;
+
+  let running = false;
+  let usingFallback = false;
+  let recognition = null;
+  let streakCount = 0; // repeticiones seguidas correctas en esta tanda
+  let micStream = null;
+  let mediaRecorder = null;
+  let recordedChunks = [];
+  let recordedUrl = null;
+
+  // Medidor de tono (pitch) por autocorrelación sobre el mismo micStream
+  let pitchAnalyser = null;
+  let pitchSource = null;
+  let pitchRafId = null;
+  let pitchSamples = [];
+  let pitchPoints = [];
+
+  // Medidor de energía de voz (volumen), sobre el mismo micStream
+  let energyAnalyser = null;
+  let energySource = null;
+  let energyRafId = null;
+  let energySamples = [];
+
+  function normalize(s){
+    return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[.,!?]/g,'').trim();
+  }
+
+  function resetRounds(){
+    streakCount = 0;
+    roundDots.forEach(d=> d.classList.remove('done','fail'));
+  }
+
+  function markRound(success){
+    if(success){
+      streakCount++;
+      const dot = roundsWrap.querySelector('[data-round="'+streakCount+'"]');
+      if(dot) dot.classList.add('done');
+    } else {
+      const dot = roundsWrap.querySelector('[data-round="'+(streakCount+1)+'"]');
+      if(dot) dot.classList.add('fail');
+      streakCount = 0;
+      setTimeout(()=>{ roundDots.forEach(d=> d.classList.remove('done','fail')); }, 900);
+    }
+  }
+
+  newBtn.addEventListener('click', ()=>{
+    if(running) return;
+    current = pickTwister();
+    textEl.textContent = current;
+    resetRounds();
+    resetPitchChart();
+    energyFill.style.width = '0%';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Tu transcripción en vivo aparecerá aquí mientras repites el trabalenguas.</span>';
+    playbackWrap.style.display = 'none';
+    micStatus.textContent = '';
+  });
+
+  levelButtons.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      if(running) return;
+      levelButtons.forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      level = b.dataset.level;
+      current = pickTwister();
+      textEl.textContent = current;
+      resetRounds();
+      resetPitchChart();
+      energyFill.style.width = '0%';
+    });
+  });
+
+  function getMicStream(){
+    if(micStream) return Promise.resolve(micStream);
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return Promise.reject();
+    return navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{ micStream = stream; return stream; });
+  }
+
+  function startRecording(){
+    if(!window.MediaRecorder) return;
+    getMicStream().then(stream=>{
+      recordedChunks = [];
+      try{
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
+        mediaRecorder = mimeType ? new MediaRecorder(stream, {mimeType}) : new MediaRecorder(stream);
+      }catch(e){ mediaRecorder = null; return; }
+      mediaRecorder.ondataavailable = (e)=>{ if(e.data && e.data.size > 0) recordedChunks.push(e.data); };
+      mediaRecorder.start();
+    }).catch(()=>{ mediaRecorder = null; });
+  }
+  function stopRecordingAndShow(){
+    if(!mediaRecorder || mediaRecorder.state === 'inactive') return;
+    mediaRecorder.onstop = ()=>{
+      if(recordedChunks.length === 0) return;
+      if(recordedUrl) URL.revokeObjectURL(recordedUrl);
+      const blob = new Blob(recordedChunks, {type: recordedChunks[0].type || 'audio/webm'});
+      recordedUrl = URL.createObjectURL(blob);
+      audioEl.src = recordedUrl;
+      playbackWrap.style.display = 'block';
+    };
+    try{ mediaRecorder.stop(); }catch(e){}
+  }
+
+  /* ---- Medidor de tono de voz (usa autoCorrelate del núcleo compartido) ---- */
+
+  function resetPitchChart(){
+    pitchSamples = [];
+    pitchPoints = [];
+    pitchLine.setAttribute('points','');
+    pitchAvgEl.textContent = '—';
+    pitchRangeEl.textContent = '—';
+    pitchVarietyEl.textContent = '—';
+  }
+
+  function startPitchMeter(){
+    getMicStream().then(stream=>{
+      const ctx = getActx();
+      if(!ctx) return;
+      if(!pitchAnalyser){
+        pitchSource = ctx.createMediaStreamSource(stream);
+        pitchAnalyser = ctx.createAnalyser();
+        pitchAnalyser.fftSize = 2048;
+        pitchSource.connect(pitchAnalyser);
+      }
+      const buf = new Float32Array(pitchAnalyser.fftSize);
+      function tick(){
+        if(!running){ return; }
+        pitchAnalyser.getFloatTimeDomainData(buf);
+        const freq = autoCorrelate(buf, ctx.sampleRate);
+        if(freq > 0){
+          pitchSamples.push(freq);
+          const x = Math.min(600, pitchPoints.length * 6);
+          const clamped = Math.max(80, Math.min(400, freq));
+          const y = 65 - ((clamped-80)/(400-80))*60;
+          pitchPoints.push([x,y]);
+          if(pitchPoints.length > 100){ pitchPoints.shift(); pitchPoints.forEach((p,i)=> p[0]=i*6); }
+          pitchLine.setAttribute('points', pitchPoints.map(p=>p[0]+','+p[1]).join(' '));
+        }
+        pitchRafId = requestAnimationFrame(tick);
+      }
+      tick();
+    }).catch(()=>{ /* silencioso: si no hay micrófono, el medidor simplemente no se activa */ });
+  }
+
+  function stopPitchMeter(){
+    if(pitchRafId){ cancelAnimationFrame(pitchRafId); pitchRafId = null; }
+  }
+
+  function summarizePitch(){
+    if(pitchSamples.length < 3){ return null; }
+    const avg = Math.round(pitchSamples.reduce((a,b)=>a+b,0)/pitchSamples.length);
+    const min = Math.round(Math.min(...pitchSamples));
+    const max = Math.round(Math.max(...pitchSamples));
+    const range = max - min;
+    pitchAvgEl.textContent = avg;
+    pitchRangeEl.textContent = min + '–' + max;
+    let varietyLabel;
+    if(range < 25){ varietyLabel = 'Plana'; }
+    else if(range < 60){ varietyLabel = 'Moderada'; }
+    else { varietyLabel = 'Expresiva'; }
+    pitchVarietyEl.textContent = varietyLabel;
+    return {avg, min, max, range, varietyLabel};
+  }
+
+  /* ---- Medidor de energía de voz (volumen), sobre el mismo micStream ---- */
+  function startEnergyMeter(){
+    getMicStream().then(stream=>{
+      const ctx = getActx();
+      if(!ctx) return;
+      if(!energyAnalyser){
+        energySource = ctx.createMediaStreamSource(stream);
+        energyAnalyser = ctx.createAnalyser();
+        energyAnalyser.fftSize = 256;
+        energySource.connect(energyAnalyser);
+      }
+      const data = new Uint8Array(energyAnalyser.frequencyBinCount);
+      function tick(){
+        if(!running){ return; }
+        energyAnalyser.getByteFrequencyData(data);
+        let sum = 0;
+        for(let i=0;i<data.length;i++) sum += data[i];
+        const avg = sum / data.length; // 0-255
+        const pct = Math.min(100, Math.round((avg/90)*100));
+        energySamples.push(pct);
+        energyFill.style.width = pct + '%';
+        energyFill.classList.toggle('low', pct < 12);
+        energyFill.classList.toggle('high', pct > 75);
+        energyRafId = requestAnimationFrame(tick);
+      }
+      tick();
+    }).catch(()=>{ /* silencioso: si no hay micrófono, el medidor simplemente no se activa */ });
+  }
+  function stopEnergyMeter(){
+    if(energyRafId){ cancelAnimationFrame(energyRafId); energyRafId = null; }
+    energyFill.style.width = '0%';
+  }
+  function summarizeEnergy(){
+    if(energySamples.length < 3){ return null; }
+    const avg = Math.round(energySamples.reduce((a,b)=>a+b,0)/energySamples.length);
+    return {avg};
+  }
+
+  function setupRecognition(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR) return null;
+    const rec = new SR();
+    rec.lang = 'es-ES'; rec.continuous = false; rec.interimResults = true;
+    let shouldRestart = false;
+    rec.onresult = (e)=>{
+      let text = '';
+      for(let i=0; i<e.results.length; i++){ text += e.results[i][0].transcript; }
+      const escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+      transcriptEl.innerHTML = escaped || '<span class="imp-placeholder">Escuchando…</span>';
+      const isFinal = e.results[e.results.length-1].isFinal;
+      if(isFinal){ evaluateAttempt(text); }
+    };
+    rec.onerror = (e)=>{
+      if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+        micStatus.textContent = 'Micrófono denegado — modo escritura activado';
+        shouldRestart = false;
+        switchToFallback();
+      }
+    };
+    rec.onend = ()=>{
+      if(shouldRestart && running && !usingFallback){
+        setTimeout(()=>{ if(shouldRestart && running && !usingFallback){ try{ rec.start(); }catch(e){} } }, 150);
+      }
+    };
+    rec.__setRestart = (v)=>{ shouldRestart = v; };
+    return rec;
+  }
+
+  function switchToFallback(){
+    usingFallback = true;
+    transcriptEl.contentEditable = 'true';
+    transcriptEl.innerHTML = '';
+    transcriptEl.focus();
+    micStatus.textContent = 'Escribe el trabalenguas y pulsa Enter';
+    transcriptEl.addEventListener('keydown', function handler(e){
+      if(e.code === 'Enter'){
+        e.preventDefault();
+        evaluateAttempt(transcriptEl.innerText);
+      }
+    });
+  }
+
+  function evaluateAttempt(text){
+    const said = normalize(text);
+    const target = normalize(current);
+    // Similaridad simple por palabras coincidentes en orden aproximado
+    const targetWords = target.split(/\s+/);
+    const saidWords = said.split(/\s+/);
+    let matches = 0;
+    let sIdx = 0;
+    targetWords.forEach(tw=>{
+      const found = saidWords.indexOf(tw, sIdx);
+      if(found !== -1){ matches++; sIdx = found+1; }
+    });
+    const accuracy = targetWords.length ? matches/targetWords.length : 0;
+    const success = accuracy >= 0.8;
+    markRound(success);
+    if(!success){ buzzWrong(); }
+
+    if(streakCount >= 3){
+      finishSet(true);
+    }
+  }
+
+  function finishSet(success){
+    running = false;
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.stop(); }catch(e){} }
+    stopRecordingAndShow();
+    stopPitchMeter();
+    stopEnergyMeter();
+    const pitchSummary = summarizePitch();
+    const energySummary = summarizeEnergy();
+    startBtn.disabled = false; stopBtn.disabled = true;
+    endBeep();
+
+    const levelScore = {facil:60, medio:80, dificil:100}[level];
+    const score = success ? levelScore : Math.round(levelScore * 0.4);
+    let note = success
+      ? 'Tres repeticiones seguidas sin trabarte en nivel "' + level + '". Sube de dificultad para seguir exigiendo a tu dicción.'
+      : 'Se cortó la racha. La dicción mejora repitiendo, no forzando la velocidad — baja el ritmo un momento y vuelve a intentarlo.';
+
+    const metrics = [
+      {value: streakCount, label:'Racha lograda'},
+      {value: level, label:'Nivel'},
+      {value: score, label:'Puntaje'}
+    ];
+    if(pitchSummary){
+      metrics.push({value: pitchSummary.avg+'Hz', label:'Tono promedio'});
+      metrics.push({value: pitchSummary.varietyLabel, label:'Variedad tonal'});
+      if(pitchSummary.varietyLabel === 'Plana'){
+        note += ' Tu tono se mantuvo bastante plano — exagera un poco las subidas y bajadas de voz, ayuda a que no suenes monótono.';
+      } else if(pitchSummary.varietyLabel === 'Expresiva'){
+        note += ' Buena variedad de tono — eso hace que se note dónde pones énfasis.';
+      }
+    }
+    if(energySummary){
+      metrics.push({value: energySummary.avg+'%', label:'Energía de voz'});
+      if(energySummary.avg < 20){
+        note += ' Tu energía de voz fue baja — proyecta un poco más, como si le hablaras a alguien al otro lado de la sala.';
+      } else if(energySummary.avg > 70){
+        note += ' Buena proyección de voz — se nota que hablaste con energía.';
+      }
+    }
+
+    showStamp({
+      apparatus: 'trabalenguas',
+      score,
+      metrics,
+      note
+    });
+    resetRounds();
+  }
+
+  function startRound(){
+    if(running) return;
+    running = true;
+    usingFallback = false;
+    startBtn.disabled = true; stopBtn.disabled = false;
+    transcriptEl.contentEditable = 'false';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Escuchando…</span>';
+    playbackWrap.style.display = 'none';
+    startBeep();
+
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.abort(); }catch(e){} }
+    recognition = setupRecognition();
+    if(recognition){
+      recognition.__setRestart(true);
+      try{ recognition.start(); micStatus.textContent = 'Micrófono activo'; }
+      catch(e){ switchToFallback(); micStatus.textContent = 'Modo escritura (voz no disponible)'; }
+    } else {
+      switchToFallback();
+      micStatus.textContent = 'Este navegador no soporta voz — modo escritura activado';
+    }
+    startRecording();
+    resetPitchChart();
+    startPitchMeter();
+    energySamples = [];
+    startEnergyMeter();
+  }
+
+  function stopRound(){
+    if(!running) return;
+    finishSet(false);
+  }
+
+  startBtn.addEventListener('click', startRound);
+  stopBtn.addEventListener('click', stopRound);
+
+  document.addEventListener('keydown', (e)=>{
+    if(window.__activePanel !== 'trabalenguas') return;
+    if(e.code === 'Space' && !transcriptEl.isContentEditable){
+      e.preventDefault();
+      running ? stopRound() : startRound();
+    }
+    if(e.code === 'KeyN' && !running){ newBtn.click(); }
+  });
+})();
+
+/* ================= APARATO 6: SIRENA VOCAL ================= */
+(function(){
+  const patternPicker = document.querySelectorAll('#sir-pattern-picker .dur-btn');
+  const patternLabel = document.getElementById('sir-pattern');
+  const guideLine = document.getElementById('sir-guide-line');
+  const voiceLine = document.getElementById('sir-voice-line');
+  const startBtn = document.getElementById('sir-start');
+  const stopBtn = document.getElementById('sir-stop');
+  const micStatus = document.getElementById('sir-mic-status');
+  const fitEl = document.getElementById('sir-fit');
+  const rangeEl = document.getElementById('sir-range');
+
+  const DURATION = 8; // segundos, ronda corta y repetible
+  const N_POINTS = 120;
+  let pattern = 'sube';
+  let running = false;
+  let micStream = null;
+  let pitchAnalyser = null;
+  let pitchSource = null;
+  let rafId = null;
+  let startTime = 0;
+  let voicePoints = [];
+  let guidePoints = [];
+  let pitchSamples = [];
+
+  const PITCH_MIN = 90, PITCH_MAX = 350; // rango vocal cómodo para graficar
+
+  function pitchToY(freq){
+    const clamped = Math.max(PITCH_MIN, Math.min(PITCH_MAX, freq));
+    return 135 - ((clamped-PITCH_MIN)/(PITCH_MAX-PITCH_MIN))*130;
+  }
+
+  function buildGuide(){
+    guidePoints = [];
+    for(let i=0; i<=N_POINTS; i++){
+      const t = i/N_POINTS;
+      let freqNorm; // 0..1
+      if(pattern === 'sube'){ freqNorm = t; }
+      else if(pattern === 'baja'){ freqNorm = 1-t; }
+      else { freqNorm = Math.sin(t*Math.PI); } // sube y baja (ola)
+      const freq = PITCH_MIN + freqNorm*(PITCH_MAX-PITCH_MIN);
+      const x = t*600;
+      const y = pitchToY(freq);
+      guidePoints.push([x,y]);
+    }
+    guideLine.setAttribute('points', guidePoints.map(p=>p[0]+','+p[1]).join(' '));
+  }
+  buildGuide();
+  patternLabel.textContent = 'Sigue la línea punteada con tu voz durante ' + DURATION + ' segundos';
+
+  patternPicker.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      if(running) return;
+      patternPicker.forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      pattern = b.dataset.pattern;
+      buildGuide();
+    });
+  });
+
+  function getMicStream(){
+    if(micStream) return Promise.resolve(micStream);
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return Promise.reject();
+    return navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{ micStream = stream; return stream; });
+  }
+
+  function startRound(){
+    if(running) return;
+    running = true;
+    voicePoints = [];
+    pitchSamples = [];
+    voiceLine.setAttribute('points','');
+    fitEl.textContent = '—'; rangeEl.textContent = '—';
+    startBtn.disabled = true; stopBtn.disabled = false;
+    startBeep();
+
+    getMicStream().then(stream=>{
+      const ctx = getActx();
+      if(!ctx){ micStatus.textContent = 'Audio no disponible en este navegador'; return; }
+      if(!pitchAnalyser){
+        pitchSource = ctx.createMediaStreamSource(stream);
+        pitchAnalyser = ctx.createAnalyser();
+        pitchAnalyser.fftSize = 2048;
+        pitchSource.connect(pitchAnalyser);
+      }
+      micStatus.textContent = 'Micrófono activo';
+      const buf = new Float32Array(pitchAnalyser.fftSize);
+      startTime = Date.now();
+      function tick(){
+        if(!running) return;
+        const elapsed = (Date.now()-startTime)/1000;
+        if(elapsed >= DURATION){ endRound(); return; }
+        pitchAnalyser.getFloatTimeDomainData(buf);
+        const freq = autoCorrelate(buf, ctx.sampleRate);
+        if(freq > 0){
+          pitchSamples.push({t: elapsed/DURATION, freq});
+          const x = (elapsed/DURATION)*600;
+          const y = pitchToY(freq);
+          voicePoints.push([x,y]);
+          voiceLine.setAttribute('points', voicePoints.map(p=>p[0]+','+p[1]).join(' '));
+        }
+        rafId = requestAnimationFrame(tick);
+      }
+      tick();
+    }).catch(()=>{
+      micStatus.textContent = 'Micrófono no disponible — este ejercicio requiere voz';
+      endRound();
+    });
+  }
+
+  function endRound(){
+    running = false;
+    if(rafId){ cancelAnimationFrame(rafId); rafId = null; }
+    startBtn.disabled = false; stopBtn.disabled = true;
+    endBeep();
+
+    if(pitchSamples.length < 4){
+      micStatus.textContent = 'No se detectó suficiente voz — inténtalo de nuevo, más cerca del micrófono';
+      return;
+    }
+
+    // Ajuste a la guía: comparamos la dirección de cambio de tu voz vs. la esperada en cada tramo
+    let hits = 0, total = 0;
+    for(let i=1; i<pitchSamples.length; i++){
+      const prev = pitchSamples[i-1], cur = pitchSamples[i];
+      let expectedDir;
+      if(pattern === 'sube'){ expectedDir = 1; }
+      else if(pattern === 'baja'){ expectedDir = -1; }
+      else { expectedDir = cur.t < 0.5 ? 1 : -1; }
+      const actualDir = cur.freq - prev.freq;
+      if((expectedDir > 0 && actualDir > -5) || (expectedDir < 0 && actualDir < 5)){ hits++; }
+      total++;
+    }
+    const fitPct = total ? Math.round((hits/total)*100) : 0;
+    const freqs = pitchSamples.map(p=>p.freq);
+    const range = Math.round(Math.max(...freqs) - Math.min(...freqs));
+
+    fitEl.textContent = fitPct + '%';
+    rangeEl.textContent = range + 'Hz';
+
+    const score = Math.round(fitPct*0.7 + Math.min(30, range/5));
+    let note;
+    if(fitPct >= 75) note = 'Buen control de tu tono — lograste moverlo en la dirección que pedía el ejercicio la mayor parte del tiempo.';
+    else if(range < 40) note = 'Tu rango se movió poco — no tengas miedo de exagerar más de lo que se siente natural, en la práctica se nota menos de lo que crees.';
+    else note = 'El tono se movió, pero no siempre en la dirección pedida — repite el mismo patrón un par de veces más para afinar el control.';
+
+    showStamp({
+      apparatus: 'sirena',
+      score,
+      metrics: [
+        {value: fitPct+'%', label:'Ajuste a guía'},
+        {value: range+'Hz', label:'Rango'},
+        {value: pattern, label:'Patrón'}
+      ],
+      note
+    });
+  }
+
+  startBtn.addEventListener('click', startRound);
+  stopBtn.addEventListener('click', endRound);
+
+  document.addEventListener('keydown', (e)=>{
+    if(window.__activePanel !== 'sirena') return;
+    if(e.code === 'Space'){ e.preventDefault(); running ? endRound() : startRound(); }
+  });
+})();
+
+/* ================= APARATO 7: ÉNFASIS MÓVIL ================= */
+(function(){
+  const SENTENCES = [
+    'Yo no dije que él robó el dinero.',
+    'Nunca prometí terminarlo hoy.',
+    'Ella no sabía que la reunión era importante.',
+    'Nosotros no aprobamos ese presupuesto.',
+    'Él dijo que vendría mañana temprano.',
+    'No fui yo quien canceló la orden.',
+    'Ese informe todavía no está listo.',
+    'Ustedes no me avisaron del cambio de turno.'
+  ];
+  let usedSentences = [];
+  function pickSentence(){
+    let pool = SENTENCES.filter(s=>!usedSentences.includes(s));
+    if(pool.length===0){ usedSentences=[]; pool=SENTENCES; }
+    const s = pool[Math.floor(Math.random()*pool.length)];
+    usedSentences.push(s);
+    return s;
+  }
+
+  const sentenceEl = document.getElementById('enf-sentence');
+  const targetWordEl = document.getElementById('enf-target-word');
+  const newBtn = document.getElementById('enf-new');
+  const roundsWrap = document.getElementById('enf-rounds');
+  const transcriptEl = document.getElementById('enf-transcript');
+  const startBtn = document.getElementById('enf-start');
+  const stopBtn = document.getElementById('enf-stop');
+  const micStatus = document.getElementById('enf-mic-status');
+  const voiceLine = document.getElementById('enf-voice-line');
+
+  let currentSentence = '';
+  let words = [];
+  let currentWordIdx = 0;
+  let running = false;
+  let usingFallback = false;
+  let recognition = null;
+  let micStream = null;
+  let pitchAnalyser = null;
+  let pitchSource = null;
+  let pitchRafId = null;
+  let pitchSamples = [];
+  let pitchPoints = [];
+  let wordPitchByIdx = {}; // idx -> avg pitch de esa vuelta
+
+  function loadSentence(){
+    currentSentence = pickSentence();
+    words = currentSentence.replace(/[.,!?]/g,'').split(/\s+/);
+    currentWordIdx = 0;
+    wordPitchByIdx = {};
+    renderRounds();
+    renderSentence();
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Tu transcripción aparecerá aquí mientras lees la frase.</span>';
+    voiceLine.setAttribute('points','');
+  }
+
+  function renderRounds(){
+    roundsWrap.innerHTML = words.map((w,i)=>
+      '<span class="tw-round-dot'+(wordPitchByIdx[i]!==undefined?' done':'')+'" style="width:auto; border-radius:14px; padding:0 8px; font-size:10px;" data-idx="'+i+'">'+(i+1)+'</span>'
+    ).join('');
+  }
+
+  function renderSentence(){
+    const parts = words.map((w,i)=> i===currentWordIdx ? '<mark class="enf-emphasis">'+w+'</mark>' : w);
+    sentenceEl.innerHTML = parts.join(' ');
+    targetWordEl.textContent = '"' + words[currentWordIdx] + '"';
+  }
+
+  newBtn.addEventListener('click', ()=>{
+    if(running) return;
+    loadSentence();
+    micStatus.textContent = '';
+  });
+  loadSentence();
+
+  function getMicStream(){
+    if(micStream) return Promise.resolve(micStream);
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return Promise.reject();
+    return navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{ micStream = stream; return stream; });
+  }
+
+  function setupRecognition(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR) return null;
+    const rec = new SR();
+    rec.lang = 'es-ES'; rec.continuous = false; rec.interimResults = true;
+    let shouldRestart = false;
+    rec.onresult = (e)=>{
+      let text = '';
+      for(let i=0;i<e.results.length;i++){ text += e.results[i][0].transcript; }
+      const escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+      transcriptEl.innerHTML = escaped || '<span class="imp-placeholder">Escuchando…</span>';
+      if(e.results[e.results.length-1].isFinal){ finishReading(); }
+    };
+    rec.onerror = (e)=>{
+      if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+        micStatus.textContent = 'Micrófono denegado — modo escritura activado';
+        shouldRestart = false;
+        switchToFallback();
+      }
+    };
+    rec.onend = ()=>{
+      if(shouldRestart && running && !usingFallback){
+        setTimeout(()=>{ if(shouldRestart && running && !usingFallback){ try{ rec.start(); }catch(e){} } }, 150);
+      }
+    };
+    rec.__setRestart = (v)=>{ shouldRestart = v; };
+    return rec;
+  }
+
+  function switchToFallback(){
+    usingFallback = true;
+    transcriptEl.contentEditable = 'true';
+    transcriptEl.innerHTML = '';
+    transcriptEl.focus();
+    micStatus.textContent = 'Escribe la frase y pulsa Enter';
+    transcriptEl.addEventListener('keydown', function handler(e){
+      if(e.code === 'Enter'){ e.preventDefault(); finishReading(); }
+    });
+  }
+
+  function startPitchCapture(){
+    getMicStream().then(stream=>{
+      const ctx = getActx();
+      if(!ctx) return;
+      if(!pitchAnalyser){
+        pitchSource = ctx.createMediaStreamSource(stream);
+        pitchAnalyser = ctx.createAnalyser();
+        pitchAnalyser.fftSize = 2048;
+        pitchSource.connect(pitchAnalyser);
+      }
+      const buf = new Float32Array(pitchAnalyser.fftSize);
+      pitchSamples = []; pitchPoints = [];
+      function tick(){
+        if(!running) return;
+        pitchAnalyser.getFloatTimeDomainData(buf);
+        const freq = autoCorrelate(buf, ctx.sampleRate);
+        if(freq > 0){
+          pitchSamples.push(freq);
+          const x = Math.min(600, pitchPoints.length*8);
+          const clamped = Math.max(90, Math.min(350, freq));
+          const y = 85 - ((clamped-90)/(350-90))*80;
+          pitchPoints.push([x,y]);
+          voiceLine.setAttribute('points', pitchPoints.map(p=>p[0]+','+p[1]).join(' '));
+        }
+        pitchRafId = requestAnimationFrame(tick);
+      }
+      tick();
+    }).catch(()=>{});
+  }
+  function stopPitchCapture(){
+    if(pitchRafId){ cancelAnimationFrame(pitchRafId); pitchRafId = null; }
+  }
+
+  function startRound(){
+    if(running) return;
+    running = true;
+    usingFallback = false;
+    startBtn.disabled = true; stopBtn.disabled = false;
+    transcriptEl.contentEditable = 'false';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Escuchando…</span>';
+    startBeep();
+
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.abort(); }catch(e){} }
+    recognition = setupRecognition();
+    if(recognition){
+      recognition.__setRestart(true);
+      try{ recognition.start(); micStatus.textContent = 'Micrófono activo'; }
+      catch(e){ switchToFallback(); micStatus.textContent = 'Modo escritura (voz no disponible)'; }
+    } else {
+      switchToFallback();
+      micStatus.textContent = 'Este navegador no soporta voz — modo escritura activado';
+    }
+    startPitchCapture();
+  }
+
+  function finishReading(){
+    if(!running) return;
+    running = false;
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.stop(); }catch(e){} }
+    stopPitchCapture();
+    startBtn.disabled = false; stopBtn.disabled = true;
+    endBeep();
+
+    const avgPitch = pitchSamples.length ? Math.round(pitchSamples.reduce((a,b)=>a+b,0)/pitchSamples.length) : null;
+    const maxPitch = pitchSamples.length ? Math.round(Math.max(...pitchSamples)) : null;
+    if(avgPitch){ wordPitchByIdx[currentWordIdx] = {avg: avgPitch, max: maxPitch}; }
+    renderRounds();
+
+    const doneCount = Object.keys(wordPitchByIdx).length;
+    const allDone = doneCount >= words.length;
+
+    if(!allDone){
+      currentWordIdx++;
+      renderSentence();
+      const score = 55; // ronda intermedia, no cierra tanda
+      showStamp({
+        apparatus: 'enfasis',
+        score,
+        metrics: [
+          {value: avgPitch ? avgPitch+'Hz' : '—', label:'Tono promedio'},
+          {value: maxPitch ? maxPitch+'Hz' : '—', label:'Pico'},
+          {value: doneCount+'/'+words.length, label:'Palabras leídas'}
+        ],
+        note: 'Ahora enfatiza la siguiente palabra marcada y vuelve a leer toda la frase — compara cómo cambia tu pico de tono según dónde pones el peso.'
+      });
+    } else {
+      // Comparar variedad entre los picos logrados por palabra
+      const maxes = Object.values(wordPitchByIdx).map(v=>v.max);
+      const spread = Math.round(Math.max(...maxes) - Math.min(...maxes));
+      const score = Math.min(100, Math.round(spread/1.5));
+      let note;
+      if(spread >= 60) note = 'Se nota una diferencia clara de tono según qué palabra enfatizabas — eso es exactamente lo que hace que el énfasis suene intencional y no plano.';
+      else note = 'El pico de tono cambió poco entre palabras — la próxima vez exagera más la diferencia al enfatizar, aunque al inicio se sienta artificial.';
+
+      showStamp({
+        apparatus: 'enfasis',
+        score,
+        metrics: [
+          {value: spread+'Hz', label:'Diferencia entre picos'},
+          {value: words.length, label:'Palabras probadas'},
+          {value: score, label:'Puntaje'}
+        ],
+        note
+      });
+      loadSentence();
+    }
+  }
+
+  function stopRound(){
+    if(!running) return;
+    running = false;
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.stop(); }catch(e){} }
+    stopPitchCapture();
+    startBtn.disabled = false; stopBtn.disabled = true;
+    micStatus.textContent = '';
+  }
+
+  startBtn.addEventListener('click', startRound);
+  stopBtn.addEventListener('click', stopRound);
+
+  document.addEventListener('keydown', (e)=>{
+    if(window.__activePanel !== 'enfasis') return;
+    if(e.code === 'Space' && !transcriptEl.isContentEditable){ e.preventDefault(); running ? stopRound() : startRound(); }
+    if(e.code === 'KeyN' && !running){ newBtn.click(); }
+  });
+})();
+
+/* ================= APARATO 8: ARSENAL ================= */
+(function(){
+  const ARSENAL = [
+    ['cosa','elemento / factor / componente'],
+    ['bueno','sólido / eficaz / notable'],
+    ['malo','deficiente / defectuoso / insuficiente'],
+    ['muy grande','considerable / voluminoso / colosal'],
+    ['muy rápido','vertiginoso / expedito / acelerado'],
+    ['importante','crucial / determinante / prioritario'],
+    ['problema','contratiempo / obstáculo / falla'],
+    ['dijo','sostuvo / planteó / afirmó / advirtió'],
+    ['hacer','ejecutar / llevar a cabo / realizar'],
+    ['pensar','considerar / evaluar / ponderar'],
+    ['ver','observar / detectar / distinguir'],
+    ['mostrar','evidenciar / exhibir / revelar'],
+    ['ayudar','asistir / facilitar / respaldar'],
+    ['cambiar','transformar / modificar / reorientar'],
+    ['mejorar','optimizar / perfeccionar / refinar'],
+    ['muchas veces','reiteradamente / con frecuencia / a menudo'],
+    ['al final','en última instancia / finalmente / tras ello'],
+    ['creo que','estimo que / considero que / a mi juicio'],
+    ['un poco','ligeramente / en cierta medida / parcialmente'],
+    ['siempre','de manera constante / invariablemente'],
+    ['nunca','en ningún caso / bajo ninguna circunstancia'],
+    ['interesante','sugerente / revelador / llamativo'],
+    ['difícil','arduo / complejo / exigente'],
+    ['fácil','sencillo / accesible / manejable'],
+    ['bonito','elegante / logrado / cuidado']
+  ];
+
+  const WOTD = [
+    {w:'perspicaz', d:'que capta con rapidez y sutileza lo que otros pasan por alto'},
+    {w:'contundente', d:'firme y decisivo, sin lugar a dudas'},
+    {w:'meticuloso', d:'que actúa con extremo cuidado y atención al detalle'},
+    {w:'elocuente', d:'que se expresa con facilidad, claridad y persuasión'},
+    {w:'pragmático', d:'que prioriza lo práctico y funcional sobre lo teórico'},
+    {w:'tácito', d:'que se sobreentiende sin decirse abiertamente'},
+    {w:'resiliente', d:'que se adapta y se recupera frente a la adversidad'},
+    {w:'sagaz', d:'agudo e inteligente para resolver situaciones prácticas'}
+  ];
+
+  function dayIndex(arr){
+    const d = new Date();
+    const seed = d.getFullYear()*372 + d.getMonth()*31 + d.getDate();
+    return seed % arr.length;
+  }
+  const wotd = WOTD[dayIndex(WOTD)];
+  document.getElementById('ars-wotd-word').textContent = wotd.w;
+  document.getElementById('ars-wotd-def').textContent = wotd.d;
+  document.getElementById('ars-wotd-play').addEventListener('click', ()=> speakWord(wotd.w));
+
+  const tableEl = document.getElementById('ars-table');
+  const searchEl = document.getElementById('ars-search');
+
+  function renderTable(filter){
+    const f = (filter||'').toLowerCase().trim();
+    const rows = ARSENAL.filter(([a,b]) => !f || a.toLowerCase().includes(f) || b.toLowerCase().includes(f));
+    if(rows.length === 0){
+      tableEl.innerHTML = '<p class="ars-empty">Sin resultados para "'+filter+'".</p>';
+      return;
+    }
+    tableEl.innerHTML = rows.map(([a,b]) =>
+      '<div class="ars-row">'+
+        '<span class="ars-flojo">'+a+'</span>'+
+        '<span class="ars-arrow">→</span>'+
+        '<span class="ars-preciso">'+b+'</span>'+
+        '<span class="ars-play" data-word="'+b.split(' / ')[0]+'" role="button" tabindex="0" aria-label="Escuchar">▶</span>'+
+      '</div>'
+    ).join('');
+    tableEl.querySelectorAll('.ars-play').forEach(el=>{
+      el.addEventListener('click', ()=> speakWord(el.dataset.word));
+    });
+  }
+  renderTable('');
+  searchEl.addEventListener('input', ()=> renderTable(searchEl.value));
+})();
+</script>
+</body>
+</html>
