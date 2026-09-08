@@ -111,7 +111,7 @@
   /* ---------- Apparatus nav ---------- */
   nav.apparatus-nav{
     display:grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 2px;
     background: var(--rule);
     border: 2px solid var(--ink);
@@ -318,27 +318,25 @@
   .tw-round-dot.done{ background: var(--forest); border-color: var(--forest); color: var(--paper-3); }
   .tw-round-dot.fail{ background: var(--bermellon); border-color: var(--bermellon); color: var(--paper-3); }
 
+  /* ---- Discursos ---- */
+  .dis-text-wrap{ margin: 16px 0; }
+  .dis-text{
+    font-family: var(--display); font-size: 17px; font-weight:500;
+    line-height:1.6; margin: 6px 0 0;
+    background: var(--paper); border-left: 3px solid var(--rule-strong);
+    padding: 14px 16px;
+    max-height: 220px; overflow-y: auto;
+  }
+  .dis-text .dis-author{
+    display:block; margin-top:10px;
+    font-family: var(--mono); font-size:11px; text-transform:uppercase;
+    letter-spacing:0.06em; color: var(--ink-soft); font-style: normal;
+  }
+
   .tw-pitch-wrap{ margin: 16px 0 14px; }
   .tw-pitch-chart{ width:100%; height:70px; display:block; margin-top:6px; background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius); }
   .tw-pitch-line{ fill:none; stroke: var(--forest); stroke-width:1.5; }
   .tw-pitch-stats{ display:flex; gap:22px; margin-top:10px; flex-wrap:wrap; }
-
-  /* ---- Sirena Vocal / Énfasis Móvil ---- */
-  .sir-chart-wrap{ margin: 14px 0; }
-  .sir-chart{
-    width:100%; height:140px; display:block; margin-top:6px;
-    background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius);
-  }
-  .sir-guide-line{ fill:none; stroke: var(--rule-strong); stroke-width:2; stroke-dasharray: 6 5; }
-  .sir-voice-line{ fill:none; stroke: var(--bermellon); stroke-width:2; }
-  .enf-target-word{
-    font-family: var(--display); font-style: italic; font-weight:600;
-    color: var(--bermellon); text-transform: none;
-  }
-  .tw-text mark.enf-emphasis{
-    background: rgba(178,58,46,0.14); color: var(--bermellon-dark);
-    font-weight:700; border-radius:2px; padding: 0 3px;
-  }
 
   .imp-topic-actions{ display:flex; gap:8px; flex-wrap:wrap; }
   .imp-compare-badge{
@@ -407,11 +405,6 @@
     font-family: var(--display); font-size: 15px; line-height:1.5;
   }
 
-  /* ---- Tabú ---- */
-  .tabu-card{ background: var(--paper); border: 2px solid var(--ink); padding: 16px; }
-  .tabu-secret{ font-family: var(--display); font-weight:700; font-size:26px; margin:0; }
-  .tabu-transcript-strike{ background: rgba(178,58,46,0.22); color: var(--bermellon-dark); font-weight:600; border-radius:2px; padding:0 3px; }
-
   /* ---- Arsenal ---- */
   .ars-row{
     display:grid; grid-template-columns: 1fr 24px 1fr 32px;
@@ -436,7 +429,7 @@
   <header class="masthead">
     <div>
       <h1 class="masthead-title">PALESTRA<span class="accent">.</span></h1>
-      <p class="masthead-sub">Gimnasio verbal — ocho aparatos, sesiones de 60 segundos</p>
+      <p class="masthead-sub">Gimnasio verbal — seis aparatos, sesiones de 60 segundos</p>
     </div>
     <div class="masthead-stats" id="masthead-stats">
       <div><span class="mstat-num" id="stat-racha">0</span><span class="mstat-label">Racha (días)</span></div>
@@ -450,11 +443,9 @@
     <button class="apparatus-btn active" data-panel="improviso"><span class="apparatus-num">01 · VOZ</span><span class="apparatus-name">Improviso</span></button>
     <button class="apparatus-btn" data-panel="tormenta"><span class="apparatus-num">02 · ESCRITO</span><span class="apparatus-name">Tormenta</span></button>
     <button class="apparatus-btn" data-panel="precision"><span class="apparatus-num">03 · ESCRITO</span><span class="apparatus-name">Precisión</span></button>
-    <button class="apparatus-btn" data-panel="tabu"><span class="apparatus-num">04 · VOZ</span><span class="apparatus-name">Tabú</span></button>
-    <button class="apparatus-btn" data-panel="trabalenguas"><span class="apparatus-num">05 · VOZ</span><span class="apparatus-name">Trabalenguas</span></button>
-    <button class="apparatus-btn" data-panel="sirena"><span class="apparatus-num">06 · VOZ</span><span class="apparatus-name">Sirena Vocal</span></button>
-    <button class="apparatus-btn" data-panel="enfasis"><span class="apparatus-num">07 · VOZ</span><span class="apparatus-name">Énfasis Móvil</span></button>
-    <button class="apparatus-btn" data-panel="arsenal"><span class="apparatus-num">08 · REF.</span><span class="apparatus-name">Arsenal</span></button>
+    <button class="apparatus-btn" data-panel="trabalenguas"><span class="apparatus-num">04 · VOZ</span><span class="apparatus-name">Trabalenguas</span></button>
+    <button class="apparatus-btn" data-panel="discursos"><span class="apparatus-num">05 · VOZ</span><span class="apparatus-name">Discursos</span></button>
+    <button class="apparatus-btn" data-panel="arsenal"><span class="apparatus-num">06 · REF.</span><span class="apparatus-name">Arsenal</span></button>
   </nav>
 
   <main id="main">
@@ -615,51 +606,10 @@
       </div>
     </section>
 
-    <section class="panel" id="panel-tabu">
-      <div class="panel-head">
-        <div>
-          <h2 class="panel-title">04 · Tabú</h2>
-          <p class="panel-desc">Describe la palabra secreta en voz alta durante 60 segundos sin decir ninguna de las palabras prohibidas. Si se te escapa una, suena un zumbido y resta puntos.</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="tabu-card" id="tabu-card">
-          <span class="imp-label">Palabra secreta</span>
-          <p class="tabu-secret" id="tabu-secret">Pulsa "Nueva palabra"</p>
-          <span class="imp-label" style="margin-top:10px; display:block;">Prohibidas</span>
-          <div class="tor-chips" id="tabu-forbidden"></div>
-        </div>
-
-        <div class="imp-stage" style="margin-top:18px;">
-          <div class="imp-timer-wrap">
-            <svg viewBox="0 0 120 120" class="imp-ring" aria-hidden="true">
-              <circle cx="60" cy="60" r="52" class="ring-bg"/>
-              <circle cx="60" cy="60" r="52" class="ring-fg" id="tabu-ring-fg"/>
-            </svg>
-            <span class="imp-timer-num" id="tabu-timer-num">60</span>
-          </div>
-          <div class="imp-live-stats">
-            <div class="imp-stat"><span class="imp-stat-num" id="tabu-strikes">0</span><span class="imp-stat-label">Escapes</span></div>
-          </div>
-        </div>
-
-        <div class="imp-transcript" id="tabu-transcript" aria-live="polite">
-          <span class="imp-placeholder">Tu transcripción en vivo aparecerá aquí durante la ronda.</span>
-        </div>
-
-        <div class="imp-controls">
-          <button class="btn primary" id="tabu-new">Nueva palabra (N)</button>
-          <button class="btn primary" id="tabu-start" disabled>Empezar (ESPACIO)</button>
-          <span class="imp-mic-status" id="tabu-mic-status"></span>
-        </div>
-      </div>
-    </section>
-
     <section class="panel" id="panel-trabalenguas">
       <div class="panel-head">
         <div>
-          <h2 class="panel-title">05 · Trabalenguas</h2>
+          <h2 class="panel-title">04 · Trabalenguas</h2>
           <p class="panel-desc">Repite el trabalenguas cada vez más rápido sin trabarte. Entrena dicción, articulación y variedad de tono — complementa a Improviso, que entrena fluidez de ideas.</p>
         </div>
       </div>
@@ -726,87 +676,65 @@
       </div>
     </section>
 
-    <section class="panel" id="panel-sirena">
+    <section class="panel" id="panel-discursos">
       <div class="panel-head">
         <div>
-          <h2 class="panel-title">06 · Sirena Vocal</h2>
-          <p class="panel-desc">Sostén un sonido y sube y baja el tono de forma controlada, como una sirena. Entrena el rango y el control dinámico de tu voz — la base de sonar expresivo en vez de plano.</p>
+          <h2 class="panel-title">05 · Discursos</h2>
+          <p class="panel-desc">Lee en voz alta fragmentos largos de discursos motivadores, cine y textos bíblicos, sin trabarte y con buen tono. Entrena resistencia de dicción y proyección en textos extensos — misma mecánica que Trabalenguas.</p>
         </div>
       </div>
 
       <div class="card">
         <div class="imp-row">
           <div class="imp-topic-box">
-            <span class="imp-label">Patrón a seguir</span>
-            <p class="tw-text" id="sir-pattern">Pulsa "Empezar" y sigue la guía con la voz</p>
+            <span class="imp-label">Categoría</span>
+            <p class="tw-text" id="dis-category-label">Pulsa "Nuevo texto" para empezar</p>
           </div>
-          <div class="imp-duration-picker" id="sir-pattern-picker">
-            <button class="dur-btn active" data-pattern="sube">Solo sube</button>
-            <button class="dur-btn" data-pattern="baja">Solo baja</button>
-            <button class="dur-btn" data-pattern="ola">Sube y baja</button>
+          <div class="imp-duration-picker" id="dis-cat-picker">
+            <button class="dur-btn active" data-cat="motivacion">Motivación</button>
+            <button class="dur-btn" data-cat="cine">Cine</button>
+            <button class="dur-btn" data-cat="biblia">Biblia</button>
+            <button class="dur-btn" data-cat="gladiador">Gladiador</button>
           </div>
         </div>
 
-        <div class="sir-chart-wrap">
-          <span class="imp-label">Guía (línea punteada) vs. tu voz (línea sólida)</span>
-          <svg id="sir-chart" class="sir-chart" viewBox="0 0 600 140" preserveAspectRatio="none" aria-hidden="true">
-            <line x1="0" y1="70" x2="600" y2="70" class="ritmo-baseline"/>
-            <polyline id="sir-guide-line" points="" class="sir-guide-line"/>
-            <polyline id="sir-voice-line" points="" class="sir-voice-line"/>
+        <div class="dis-text-wrap">
+          <span class="imp-label">Texto a leer</span>
+          <p class="dis-text" id="dis-text">Pulsa "Nuevo texto" para elegir un fragmento</p>
+        </div>
+
+        <div class="tw-pitch-wrap">
+          <span class="imp-label">Tono de voz (Hz)</span>
+          <svg id="dis-pitch-chart" class="tw-pitch-chart" viewBox="0 0 600 70" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="0" y1="35" x2="600" y2="35" class="ritmo-baseline"/>
+            <polyline id="dis-pitch-line" points="" class="tw-pitch-line"/>
           </svg>
+          <div class="tw-pitch-stats" id="dis-pitch-stats">
+            <div class="imp-stat"><span class="imp-stat-num" id="dis-pitch-avg">—</span><span class="imp-stat-label">Promedio Hz</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="dis-pitch-range">—</span><span class="imp-stat-label">Rango Hz</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="dis-pitch-variety">—</span><span class="imp-stat-label">Variedad</span></div>
+          </div>
         </div>
 
-        <div class="imp-live-stats" style="margin: 14px 0;">
-          <div class="imp-stat"><span class="imp-stat-num" id="sir-fit">—</span><span class="imp-stat-label">Ajuste a la guía</span></div>
-          <div class="imp-stat"><span class="imp-stat-num" id="sir-range">—</span><span class="imp-stat-label">Rango alcanzado</span></div>
+        <div class="imp-energy-wrap">
+          <span class="imp-label">Energía de voz</span>
+          <div class="imp-energy-bar"><div class="imp-energy-fill" id="dis-energy-fill"></div></div>
+        </div>
+
+        <div class="imp-transcript" id="dis-transcript" aria-live="polite">
+          <span class="imp-placeholder">Tu transcripción en vivo aparecerá aquí mientras lees el texto.</span>
+        </div>
+
+        <div class="imp-playback" id="dis-playback" style="display:none;">
+          <span class="imp-label">Reescúchate</span>
+          <audio id="dis-audio" controls style="width:100%; margin-top:6px;"></audio>
         </div>
 
         <div class="imp-controls">
-          <button class="btn primary" id="sir-start">Empezar (ESPACIO)</button>
-          <button class="btn ghost" id="sir-stop" disabled>Detener</button>
-          <span class="imp-mic-status" id="sir-mic-status"></span>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel" id="panel-enfasis">
-      <div class="panel-head">
-        <div>
-          <h2 class="panel-title">07 · Énfasis Móvil</h2>
-          <p class="panel-desc">Lee la misma frase varias veces cambiando cuál palabra enfatizas. Verás cómo tu pitch reacciona distinto según dónde pones el peso — así se controla el énfasis a voluntad.</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="imp-row">
-          <div class="imp-topic-box">
-            <span class="imp-label">Frase — palabra a enfatizar en <span class="enf-target-word" id="enf-target-word">—</span></span>
-            <p class="tw-text" id="enf-sentence">Pulsa "Nueva frase" para empezar</p>
-          </div>
-          <button class="btn ghost" id="enf-new">Nueva frase (N)</button>
-        </div>
-
-        <div class="tw-rounds-wrap">
-          <span class="imp-label">Palabra enfatizada en esta vuelta</span>
-          <div class="tw-rounds" id="enf-rounds"></div>
-        </div>
-
-        <div class="sir-chart-wrap">
-          <span class="imp-label">Tu tono al leer esta vez</span>
-          <svg id="enf-chart" class="sir-chart" viewBox="0 0 600 90" preserveAspectRatio="none" aria-hidden="true">
-            <line x1="0" y1="45" x2="600" y2="45" class="ritmo-baseline"/>
-            <polyline id="enf-voice-line" points="" class="tw-pitch-line"/>
-          </svg>
-        </div>
-
-        <div class="imp-transcript" id="enf-transcript" aria-live="polite">
-          <span class="imp-placeholder">Tu transcripción aparecerá aquí mientras lees la frase.</span>
-        </div>
-
-        <div class="imp-controls">
-          <button class="btn primary" id="enf-start">Leer esta vuelta (ESPACIO)</button>
-          <button class="btn ghost" id="enf-stop" disabled>Detener</button>
-          <span class="imp-mic-status" id="enf-mic-status"></span>
+          <button class="btn ghost" id="dis-new">Nuevo texto (N)</button>
+          <button class="btn primary" id="dis-start">Empezar lectura (ESPACIO)</button>
+          <button class="btn ghost" id="dis-stop" disabled>Terminé de leer</button>
+          <span class="imp-mic-status" id="dis-mic-status"></span>
         </div>
       </div>
     </section>
@@ -814,7 +742,7 @@
     <section class="panel" id="panel-arsenal">
       <div class="panel-head">
         <div>
-          <h2 class="panel-title">08 · Arsenal</h2>
+          <h2 class="panel-title">06 · Arsenal</h2>
           <p class="panel-desc">Tabla de referencia: términos flojos y su versión precisa. Busca, escucha la pronunciación y revisa la palabra del día.</p>
         </div>
       </div>
@@ -879,10 +807,8 @@
         <button class="hist-filter-btn" data-app="improviso">Improviso</button>
         <button class="hist-filter-btn" data-app="tormenta">Tormenta</button>
         <button class="hist-filter-btn" data-app="precision">Precisión</button>
-        <button class="hist-filter-btn" data-app="tabu">Tabú</button>
         <button class="hist-filter-btn" data-app="trabalenguas">Trabalenguas</button>
-        <button class="hist-filter-btn" data-app="sirena">Sirena Vocal</button>
-        <button class="hist-filter-btn" data-app="enfasis">Énfasis Móvil</button>
+        <button class="hist-filter-btn" data-app="discursos">Discursos</button>
       </div>
 
       <div class="history-list" id="history-list"></div>
@@ -1180,21 +1106,13 @@ const LEVEL_TABLE = {
     {min:0, name:'BORRADOR'}, {min:20, name:'APRENDIZ'}, {min:45, name:'ARTESANO'},
     {min:70, name:'CINCEL'}, {min:88, name:'ORFEBRE'}
   ],
-  tabu: [
-    {min:0, name:'MUDO'}, {min:20, name:'TARTAMUDO'}, {min:40, name:'FLUIDO'},
-    {min:65, name:'INGENIOSO'}, {min:85, name:'VIRTUOSO'}
-  ],
   trabalenguas: [
     {min:0, name:'TRABALENGUAS'}, {min:30, name:'LENGUA DE TRAPO'}, {min:50, name:'DICCIÓN CLARA'},
     {min:75, name:'LOCUTOR'}, {min:95, name:'AFILALENGUAS'}
   ],
-  sirena: [
-    {min:0, name:'VOZ PLANA'}, {min:30, name:'AFINANDO'}, {min:55, name:'CONTROL VOCAL'},
-    {min:75, name:'SIRENA'}, {min:90, name:'CANTANTE'}
-  ],
-  enfasis: [
-    {min:0, name:'MONOCORDE'}, {min:30, name:'MATIZANDO'}, {min:55, name:'CON PESO'},
-    {min:75, name:'INTENCIONAL'}, {min:90, name:'MAESTRO DEL ÉNFASIS'}
+  discursos: [
+    {min:0, name:'PRIMER ENSAYO'}, {min:30, name:'APRENDIZ DE ORADOR'}, {min:55, name:'VOZ FIRME'},
+    {min:75, name:'ORADOR DE PESO'}, {min:90, name:'MAESTRO DEL DISCURSO'}
   ]
 };
 function levelFor(apparatus, score){
@@ -1286,7 +1204,7 @@ document.getElementById('stamp-done').addEventListener('click', ()=> document.ge
     });
   }
 
-  const APP_LABELS = {improviso:'Improviso', tormenta:'Tormenta', precision:'Precisión', tabu:'Tabú', trabalenguas:'Trabalenguas', sirena:'Sirena Vocal', enfasis:'Énfasis Móvil'};
+  const APP_LABELS = {improviso:'Improviso', tormenta:'Tormenta', precision:'Precisión', trabalenguas:'Trabalenguas', discursos:'Discursos'};
 
   function renderList(){
     const rows = store.rounds.filter(r => activeFilter==='todos' || r.apparatus===activeFilter);
@@ -2134,217 +2052,7 @@ activatePanel('improviso');
   });
 })();
 
-/* ================= APARATO 4: TABÚ ================= */
-(function(){
-  const TABU_SET = [
-    {secret:'liderazgo', forbidden:['líder','equipo','guiar','jefe','dirigir']},
-    {secret:'reunión', forbidden:['juntarse','sala','agenda','equipo','hablar']},
-    {secret:'fracaso', forbidden:['error','perder','mal','fallar','equivocarse']},
-    {secret:'presupuesto', forbidden:['dinero','plata','gastar','costo','soles']},
-    {secret:'motivación', forbidden:['ganas','ánimo','impulso','querer','inspirar']},
-    {secret:'plazo', forbidden:['fecha','tiempo','entrega','límite','vencer']},
-    {secret:'calidad', forbidden:['bueno','bien hecho','estándar','defecto','norma']},
-    {secret:'competencia', forbidden:['rival','mercado','otro','empresa','ganar']},
-    {secret:'eficiencia', forbidden:['rápido','ahorrar','optimizar','tiempo','productivo']},
-    {secret:'confianza', forbidden:['creer','seguro','fiar','duda','seguridad']},
-    {secret:'mina', forbidden:['minería','cobre','excavar','yacimiento','extraer']},
-    {secret:'turno', forbidden:['horario','trabajo','día','noche','cambio']},
-    {secret:'ascenso', forbidden:['subir','puesto','mejor','cargo','promoción']},
-    {secret:'estrés', forbidden:['presión','nervioso','cansado','ansiedad','agobio']},
-    {secret:'negociación', forbidden:['acuerdo','pedir','ceder','trato','conversar']}
-  ];
-  let usedTabu = [];
-  function pickTabu(){
-    let pool = TABU_SET.filter(t=>!usedTabu.includes(t.secret));
-    if(pool.length===0){ usedTabu=[]; pool=TABU_SET; }
-    const t = pool[Math.floor(Math.random()*pool.length)];
-    usedTabu.push(t.secret);
-    return t;
-  }
-
-  const secretEl = document.getElementById('tabu-secret');
-  const forbiddenEl = document.getElementById('tabu-forbidden');
-  const newBtn = document.getElementById('tabu-new');
-  const startBtn = document.getElementById('tabu-start');
-  const timerNum = document.getElementById('tabu-timer-num');
-  const ringFg = document.getElementById('tabu-ring-fg');
-  const strikesEl = document.getElementById('tabu-strikes');
-  const transcriptEl = document.getElementById('tabu-transcript');
-  const micStatus = document.getElementById('tabu-mic-status');
-  const RING_CIRC = 326.7;
-  const DURATION = 60;
-
-  let current = null;
-  let running = false;
-  let timeLeft = DURATION;
-  let tick = null;
-  let strikes = 0;
-  let recognition = null;
-  let usingFallback = false;
-  let flaggedWords = new Set();
-
-  function renderChips(){
-    forbiddenEl.innerHTML = current.forbidden.map(w=>'<span class="tor-chip">'+w+'</span>').join('');
-  }
-
-  newBtn.addEventListener('click', ()=>{
-    if(running) return;
-    current = pickTabu();
-    secretEl.textContent = current.secret;
-    renderChips();
-    startBtn.disabled = false;
-    strikes = 0; strikesEl.textContent = 0;
-    transcriptEl.contentEditable = 'false';
-    transcriptEl.innerHTML = '<span class="imp-placeholder">Tu transcripción en vivo aparecerá aquí durante la ronda.</span>';
-    micStatus.textContent = '';
-  });
-
-  function normalize(s){ return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,''); }
-
-  function checkForbidden(text){
-    const norm = normalize(text);
-    let hit = false;
-    current.forbidden.concat([current.secret]).forEach(w=>{
-      const nw = normalize(w);
-      if(norm.includes(nw) && !flaggedWords.has(nw+':'+Math.floor(Date.now()/2000))){
-        hit = true;
-        strikes++;
-        strikesEl.textContent = strikes;
-        buzzWrong();
-        flaggedWords.add(nw+':'+Math.floor(Date.now()/2000));
-      }
-    });
-    return hit;
-  }
-
-  function highlightTranscript(text){
-    let escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;');
-    const all = current.forbidden.concat([current.secret]).sort((a,b)=>b.length-a.length)
-      .map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
-    const re = new RegExp('\\b('+all.join('|')+')\\b','gi');
-    escaped = escaped.replace(re, m=>'<span class="tabu-transcript-strike">'+m+'</span>');
-    transcriptEl.innerHTML = escaped || '<span class="imp-placeholder">Escuchando…</span>';
-    transcriptEl.scrollTop = transcriptEl.scrollHeight;
-  }
-
-  function setupRecognition(){
-    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if(!SR) return null;
-    const rec = new SR();
-    rec.lang = 'es-ES'; rec.continuous = true; rec.interimResults = true;
-    let fullFinal = '';
-    let shouldRestart = false;
-    rec.onresult = (e)=>{
-      let interim = '';
-      for(let i=e.resultIndex; i<e.results.length; i++){
-        const res = e.results[i];
-        if(res.isFinal){ fullFinal += res[0].transcript + ' '; checkForbidden(res[0].transcript); }
-        else{ interim += res[0].transcript; }
-      }
-      highlightTranscript(fullFinal + interim);
-    };
-    rec.onerror = (e)=>{
-      if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
-        micStatus.textContent = 'Micrófono denegado — modo escritura activado';
-        shouldRestart = false;
-        switchToFallback();
-      }
-    };
-    rec.onend = ()=>{
-      if(shouldRestart && running && !usingFallback){
-        setTimeout(()=>{
-          if(shouldRestart && running && !usingFallback){ try{ rec.start(); }catch(e){} }
-        }, 80);
-      }
-    };
-    rec.__setRestart = (v)=>{ shouldRestart = v; };
-    return rec;
-  }
-
-  function switchToFallback(){
-    usingFallback = true;
-    transcriptEl.contentEditable = 'true';
-    transcriptEl.innerHTML = '';
-    transcriptEl.focus();
-    let lastLen = 0;
-    transcriptEl.addEventListener('input', ()=>{
-      const text = transcriptEl.innerText;
-      if(text.length > lastLen){ checkForbidden(text.slice(Math.max(0,lastLen-15))); }
-      lastLen = text.length;
-    });
-  }
-
-  function startRound(){
-    if(running || !current) return;
-    running = true;
-    strikes = 0; strikesEl.textContent = 0; flaggedWords = new Set();
-    timeLeft = DURATION;
-    timerNum.textContent = timeLeft;
-    ringFg.style.strokeDashoffset = 0;
-    transcriptEl.contentEditable = 'false';
-    transcriptEl.innerHTML = '<span class="imp-placeholder">Escuchando…</span>';
-    startBtn.disabled = true; newBtn.disabled = true;
-    startBeep();
-
-    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.abort(); }catch(e){} }
-    recognition = setupRecognition();
-    if(recognition){
-      recognition.__setRestart(true);
-      try{ recognition.start(); micStatus.textContent = 'Micrófono activo'; }
-      catch(e){ switchToFallback(); micStatus.textContent = 'Modo escritura'; }
-    } else {
-      switchToFallback();
-      micStatus.textContent = 'Este navegador no soporta voz — modo escritura activado';
-    }
-
-    tick = setInterval(()=>{
-      timeLeft--;
-      timerNum.textContent = Math.max(timeLeft,0);
-      ringFg.style.strokeDashoffset = RING_CIRC * (1 - timeLeft/DURATION);
-      if(timeLeft <= 3 && timeLeft > 0) countdownBeep();
-      if(timeLeft <= 0) endRound();
-    }, 1000);
-  }
-
-  function endRound(){
-    running = false;
-    clearInterval(tick);
-    startBtn.disabled = false; newBtn.disabled = false;
-    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.stop(); }catch(e){} }
-    endBeep();
-
-    const score = Math.round(Math.max(0, 100 - strikes*22));
-    let note;
-    if(strikes === 0) note = 'Ni un escape. Encontraste el rodeo perfecto para explicar algo sin usar las palabras obvias.';
-    else if(strikes <= 2) note = 'Casi limpio. Se te escapó lo evidente una o dos veces — normal cuando el concepto es muy directo.';
-    else note = 'Se te escaparon varias. Cuando falta la palabra exacta, tiendes a usarla igual — practica parafrasear con ejemplos en vez de sinónimos cercanos.';
-
-    showStamp({
-      apparatus:'tabu',
-      score,
-      metrics:[
-        {value: strikes, label:'Escapes'},
-        {value: current.secret, label:'Palabra'},
-        {value: score, label:'Puntaje'}
-      ],
-      note
-    });
-    startBtn.disabled = true;
-  }
-
-  startBtn.addEventListener('click', startRound);
-
-  document.addEventListener('keydown', (e)=>{
-    if(window.__activePanel !== 'tabu') return;
-    if(e.code === 'Space' && !transcriptEl.isContentEditable){
-      e.preventDefault();
-      if(!running && current) startRound();
-    }
-    if(e.code === 'KeyN' && !running){ newBtn.click(); }
-  });
-})();
-
-/* ================= APARATO 5: TRABALENGUAS ================= */
+/* ================= APARATO 4: TRABALENGUAS ================= */
 (function(){
   const TWISTERS = {
     facil: [
@@ -2792,65 +2500,119 @@ activatePanel('improviso');
   });
 })();
 
-/* ================= APARATO 6: SIRENA VOCAL ================= */
+/* ================= APARATO 5: DISCURSOS ================= */
 (function(){
-  const patternPicker = document.querySelectorAll('#sir-pattern-picker .dur-btn');
-  const patternLabel = document.getElementById('sir-pattern');
-  const guideLine = document.getElementById('sir-guide-line');
-  const voiceLine = document.getElementById('sir-voice-line');
-  const startBtn = document.getElementById('sir-start');
-  const stopBtn = document.getElementById('sir-stop');
-  const micStatus = document.getElementById('sir-mic-status');
-  const fitEl = document.getElementById('sir-fit');
-  const rangeEl = document.getElementById('sir-range');
+  const TEXTS = {
+    motivacion: [
+      {author:'Marcelo Bielsa', text:'Si un jugador no da lo que puede dar, aunque gane, para mí no gana nada. Y si un jugador da todo lo que tiene, aunque pierda, no ha perdido nada. Lo único que no se puede comprar ni imitar es el sentimiento genuino, la entrega total, la lucha sin condiciones hasta el último segundo.'},
+      {author:'Marcelo Bielsa', text:'Los títulos duran poco en las vitrinas y mucho menos en la memoria. Lo que perdura es la impresión que se deja en la gente, la huella de haber competido con dignidad, de haber intentado siempre, sin resignarse jamás a la comodidad de lo fácil.'},
+      {author:'Discurso motivacional', text:'No te compares con nadie en este mundo. Si lo haces, estás insultando a tu propio ser. Cada uno de nosotros nació con una capacidad única. Confía en ti, cree en tus posibilidades y da el primer paso, aunque no veas la escalera completa.'},
+      {author:'Discurso motivacional', text:'El éxito no se mide por lo que has logrado, sino por los obstáculos que has superado para conseguirlo. Nadie que valga la pena llegó lejos sin caerse antes. La diferencia entre quien gana y quien se rinde es una sola decisión: levantarse una vez más.'},
+      {author:'Winston Churchill (paráfrasis)', text:'Nunca, nunca, nunca te rindas. Nunca cedas ante la fuerza, nunca cedas ante el poder aparentemente abrumador del enemigo. El éxito no es definitivo, el fracaso no es fatal, lo que cuenta es el coraje de continuar.'}
+    ],
+    cine: [
+      {author:'Corazón Valiente', text:'Sí, luchamos con cada aliento que tenemos, luchamos por nuestra libertad. Puede que muramos hoy, pero moriremos siendo libres. Y si mueren aquí, morirán como hombres libres, en su propia tierra, defendiendo lo único que nadie tiene derecho a arrebatarles.'},
+      {author:'El discurso del rey (paráfrasis)', text:'En esta hora grave, quizá la más fatídica de nuestra historia, os hablo desde el corazón. Con firme confianza en que el bien prevalecerá, con serenidad y valor, encaramos el camino que tenemos por delante.'},
+      {author:'En busca de la felicidad (paráfrasis)', text:'No dejes que nadie te diga que no puedes hacer algo. Ni siquiera yo. Si tienes un sueño, tienes que protegerlo. La gente que no puede lograr algo por sí misma, te dirá que tú tampoco puedes. Si quieres algo, ve por ello. Punto.'},
+      {author:'Rocky Balboa (paráfrasis)', text:'La vida no se trata de cuán fuerte puedes golpear, sino de cuánto puedes resistir siendo golpeado y aun así seguir avanzando. Así es como se gana. Nadie va a golpear tan fuerte como la vida, pero no se trata de golpear fuerte, se trata de cuánto puedes soportar y seguir avanzando.'},
+      {author:'Invictus (paráfrasis)', text:'No importa cuán estrecha sea la puerta, cuán cargada de castigos la sentencia, soy el amo de mi destino, soy el capitán de mi alma. La cabeza ensangrentada, pero erguida, sin rendirme jamás ante el miedo.'}
+    ],
+    biblia: [
+      {author:'Josué 1:9', text:'Mira que te mando que te esfuerces y seas valiente; no temas ni desmayes, porque Jehová tu Dios estará contigo en dondequiera que vayas. No temas, porque yo estoy contigo en todo momento y en todo lugar.'},
+      {author:'Salmo 23', text:'Jehová es mi pastor, nada me faltará. En lugares de delicados pastos me hará descansar, junto a aguas de reposo me pastoreará. Confortará mi alma, me guiará por sendas de justicia por amor de su nombre.'},
+      {author:'Filipenses 4:13', text:'Todo lo puedo en Cristo que me fortalece. Por nada estéis afanosos, sino sean conocidas vuestras peticiones delante de Dios en toda oración y ruego, con acción de gracias, y la paz que sobrepasa todo entendimiento guardará vuestros corazones.'},
+      {author:'Isaías 41:10', text:'No temas, porque yo estoy contigo; no desmayes, porque yo soy tu Dios que te esfuerzo; siempre te ayudaré, siempre te sustentaré con la diestra de mi justicia, porque yo estoy contigo en todo tiempo y lugar.'},
+      {author:'Proverbios 3:5-6', text:'Fíate de Jehová de todo tu corazón, y no te apoyes en tu propia prudencia. Reconócelo en todos tus caminos, y él enderezará tus veredas. No seas sabio en tu propia opinión, teme a Jehová y apártate del mal.'}
+    ],
+    gladiador: [
+      {author:'Gladiador (paráfrasis)', text:'Mi nombre es Máximo Décimo Meridio, comandante de los ejércitos del norte, general de las legiones félix, leal servidor del verdadero emperador, Marco Aurelio. Padre de un hijo asesinado, esposo de una esposa asesinada, y me vengaré, en esta vida o en la otra.'},
+      {author:'Gladiador (paráfrasis)', text:'Lo que hacemos en vida, repercute en la eternidad. Hermanos, dentro de tres semanas cosecharé mi huerto. Pensad en ello cuando estéis en aquel oscuro y sombrío lugar, y cuando os encontréis en aquel prado bajo el sol, agradeced que estáis vivos.'},
+      {author:'Gladiador (paráfrasis)', text:'¿No lo entendéis? Habrá una batalla, y en ella moriréis. En cuanto a lo que ocurra después, es un misterio. Uníos, sobrevivid, y os prometo la libertad. ¿Estáis conmigo? ¡Fuertes venceremos, unidos venceremos, hermanos venceremos!'},
+      {author:'Gladiador (paráfrasis)', text:'La fuerza y el honor son lo único que nos queda cuando todo lo demás nos ha sido arrebatado. Un soldado sabe obedecer las órdenes que se le den. Muere a las órdenes de otros, o mata a las órdenes de otros, y de una manera u otra, la sombra siempre existirá.'},
+      {author:'Gladiador (paráfrasis)', text:'Es la voluntad de los dioses la que decide quién vive y quién muere en la arena, pero el que verdaderamente decide es quien tiene el coraje de mirar a la muerte a los ojos y no arrodillarse ante ella, sino combatirla hasta el último aliento.'}
+    ]
+  };
 
-  const DURATION = 8; // segundos, ronda corta y repetible
-  const N_POINTS = 120;
-  let pattern = 'sube';
+  let category = 'motivacion';
+  let usedByCategory = {motivacion:[], cine:[], biblia:[], gladiador:[]};
+
+  function pickText(){
+    const pool = TEXTS[category];
+    let used = usedByCategory[category];
+    let candidates = pool.filter(t=>!used.includes(t));
+    if(candidates.length===0){ used.length = 0; candidates = pool; }
+    const t = candidates[Math.floor(Math.random()*candidates.length)];
+    used.push(t);
+    return t;
+  }
+
+  const catLabel = document.getElementById('dis-category-label');
+  const catButtons = document.querySelectorAll('#dis-cat-picker .dur-btn');
+  const textEl = document.getElementById('dis-text');
+  const newBtn = document.getElementById('dis-new');
+  const startBtn = document.getElementById('dis-start');
+  const stopBtn = document.getElementById('dis-stop');
+  const micStatus = document.getElementById('dis-mic-status');
+  const transcriptEl = document.getElementById('dis-transcript');
+  const playbackWrap = document.getElementById('dis-playback');
+  const audioEl = document.getElementById('dis-audio');
+  const pitchLine = document.getElementById('dis-pitch-line');
+  const pitchAvgEl = document.getElementById('dis-pitch-avg');
+  const pitchRangeEl = document.getElementById('dis-pitch-range');
+  const pitchVarietyEl = document.getElementById('dis-pitch-variety');
+  const energyFill = document.getElementById('dis-energy-fill');
+
+  let current = null;
   let running = false;
+  let usingFallback = false;
+  let recognition = null;
   let micStream = null;
-  let pitchAnalyser = null;
-  let pitchSource = null;
-  let rafId = null;
-  let startTime = 0;
-  let voicePoints = [];
-  let guidePoints = [];
-  let pitchSamples = [];
+  let mediaRecorder = null;
+  let recordedChunks = [];
+  let recordedUrl = null;
 
-  const PITCH_MIN = 90, PITCH_MAX = 350; // rango vocal cómodo para graficar
+  let pitchAnalyser = null, pitchSource = null, pitchRafId = null;
+  let pitchSamples = [], pitchPoints = [];
+  let energyAnalyser = null, energySource = null, energyRafId = null;
+  let energySamples = [];
 
-  function pitchToY(freq){
-    const clamped = Math.max(PITCH_MIN, Math.min(PITCH_MAX, freq));
-    return 135 - ((clamped-PITCH_MIN)/(PITCH_MAX-PITCH_MIN))*130;
+  const CAT_LABELS = {motivacion:'Motivación', cine:'Cine', biblia:'Biblia', gladiador:'Gladiador'};
+
+  function loadText(){
+    current = pickText();
+    textEl.innerHTML = current.text + '<span class="dis-author">— ' + current.author + '</span>';
+    catLabel.textContent = 'Categoría: ' + CAT_LABELS[category];
+    resetPitchChart();
+    energyFill.style.width = '0%';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Tu transcripción en vivo aparecerá aquí mientras lees el texto.</span>';
+    playbackWrap.style.display = 'none';
+    micStatus.textContent = '';
   }
 
-  function buildGuide(){
-    guidePoints = [];
-    for(let i=0; i<=N_POINTS; i++){
-      const t = i/N_POINTS;
-      let freqNorm; // 0..1
-      if(pattern === 'sube'){ freqNorm = t; }
-      else if(pattern === 'baja'){ freqNorm = 1-t; }
-      else { freqNorm = Math.sin(t*Math.PI); } // sube y baja (ola)
-      const freq = PITCH_MIN + freqNorm*(PITCH_MAX-PITCH_MIN);
-      const x = t*600;
-      const y = pitchToY(freq);
-      guidePoints.push([x,y]);
-    }
-    guideLine.setAttribute('points', guidePoints.map(p=>p[0]+','+p[1]).join(' '));
-  }
-  buildGuide();
-  patternLabel.textContent = 'Sigue la línea punteada con tu voz durante ' + DURATION + ' segundos';
+  newBtn.addEventListener('click', ()=>{
+    if(running) return;
+    loadText();
+  });
 
-  patternPicker.forEach(b=>{
+  catButtons.forEach(b=>{
     b.addEventListener('click', ()=>{
       if(running) return;
-      patternPicker.forEach(x=>x.classList.remove('active'));
+      catButtons.forEach(x=>x.classList.remove('active'));
       b.classList.add('active');
-      pattern = b.dataset.pattern;
-      buildGuide();
+      category = b.dataset.cat;
+      loadText();
     });
   });
+
+  loadText();
+
+  function resetPitchChart(){
+    pitchSamples = []; pitchPoints = [];
+    pitchLine.setAttribute('points','');
+    pitchAvgEl.textContent = '—';
+    pitchRangeEl.textContent = '—';
+    pitchVarietyEl.textContent = '—';
+  }
 
   function getMicStream(){
     if(micStream) return Promise.resolve(micStream);
@@ -2858,200 +2620,132 @@ activatePanel('improviso');
     return navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{ micStream = stream; return stream; });
   }
 
-  function startRound(){
-    if(running) return;
-    running = true;
-    voicePoints = [];
-    pitchSamples = [];
-    voiceLine.setAttribute('points','');
-    fitEl.textContent = '—'; rangeEl.textContent = '—';
-    startBtn.disabled = true; stopBtn.disabled = false;
-    startBeep();
+  function startRecording(){
+    if(!window.MediaRecorder) return;
+    getMicStream().then(stream=>{
+      recordedChunks = [];
+      try{
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
+        mediaRecorder = mimeType ? new MediaRecorder(stream, {mimeType}) : new MediaRecorder(stream);
+      }catch(e){ mediaRecorder = null; return; }
+      mediaRecorder.ondataavailable = (e)=>{ if(e.data && e.data.size > 0) recordedChunks.push(e.data); };
+      mediaRecorder.start();
+    }).catch(()=>{ mediaRecorder = null; });
+  }
+  function stopRecordingAndShow(){
+    if(!mediaRecorder || mediaRecorder.state === 'inactive') return;
+    mediaRecorder.onstop = ()=>{
+      if(recordedChunks.length === 0) return;
+      if(recordedUrl) URL.revokeObjectURL(recordedUrl);
+      const blob = new Blob(recordedChunks, {type: recordedChunks[0].type || 'audio/webm'});
+      recordedUrl = URL.createObjectURL(blob);
+      audioEl.src = recordedUrl;
+      playbackWrap.style.display = 'block';
+    };
+    try{ mediaRecorder.stop(); }catch(e){}
+  }
 
+  function startPitchMeter(){
     getMicStream().then(stream=>{
       const ctx = getActx();
-      if(!ctx){ micStatus.textContent = 'Audio no disponible en este navegador'; return; }
+      if(!ctx) return;
       if(!pitchAnalyser){
         pitchSource = ctx.createMediaStreamSource(stream);
         pitchAnalyser = ctx.createAnalyser();
         pitchAnalyser.fftSize = 2048;
         pitchSource.connect(pitchAnalyser);
       }
-      micStatus.textContent = 'Micrófono activo';
       const buf = new Float32Array(pitchAnalyser.fftSize);
-      startTime = Date.now();
       function tick(){
         if(!running) return;
-        const elapsed = (Date.now()-startTime)/1000;
-        if(elapsed >= DURATION){ endRound(); return; }
         pitchAnalyser.getFloatTimeDomainData(buf);
         const freq = autoCorrelate(buf, ctx.sampleRate);
         if(freq > 0){
-          pitchSamples.push({t: elapsed/DURATION, freq});
-          const x = (elapsed/DURATION)*600;
-          const y = pitchToY(freq);
-          voicePoints.push([x,y]);
-          voiceLine.setAttribute('points', voicePoints.map(p=>p[0]+','+p[1]).join(' '));
+          pitchSamples.push(freq);
+          const x = Math.min(600, pitchPoints.length*6);
+          const clamped = Math.max(80, Math.min(400, freq));
+          const y = 65 - ((clamped-80)/(400-80))*60;
+          pitchPoints.push([x,y]);
+          if(pitchPoints.length > 100){ pitchPoints.shift(); pitchPoints.forEach((p,i)=> p[0]=i*6); }
+          pitchLine.setAttribute('points', pitchPoints.map(p=>p[0]+','+p[1]).join(' '));
         }
-        rafId = requestAnimationFrame(tick);
+        pitchRafId = requestAnimationFrame(tick);
       }
       tick();
-    }).catch(()=>{
-      micStatus.textContent = 'Micrófono no disponible — este ejercicio requiere voz';
-      endRound();
-    });
+    }).catch(()=>{});
+  }
+  function stopPitchMeter(){ if(pitchRafId){ cancelAnimationFrame(pitchRafId); pitchRafId = null; } }
+
+  function summarizePitch(){
+    if(pitchSamples.length < 3) return null;
+    const avg = Math.round(pitchSamples.reduce((a,b)=>a+b,0)/pitchSamples.length);
+    const min = Math.round(Math.min(...pitchSamples));
+    const max = Math.round(Math.max(...pitchSamples));
+    const range = max - min;
+    pitchAvgEl.textContent = avg;
+    pitchRangeEl.textContent = min + '–' + max;
+    let varietyLabel = range < 25 ? 'Plana' : (range < 60 ? 'Moderada' : 'Expresiva');
+    pitchVarietyEl.textContent = varietyLabel;
+    return {avg, min, max, range, varietyLabel};
   }
 
-  function endRound(){
-    running = false;
-    if(rafId){ cancelAnimationFrame(rafId); rafId = null; }
-    startBtn.disabled = false; stopBtn.disabled = true;
-    endBeep();
-
-    if(pitchSamples.length < 4){
-      micStatus.textContent = 'No se detectó suficiente voz — inténtalo de nuevo, más cerca del micrófono';
-      return;
-    }
-
-    // Ajuste a la guía: comparamos la dirección de cambio de tu voz vs. la esperada en cada tramo
-    let hits = 0, total = 0;
-    for(let i=1; i<pitchSamples.length; i++){
-      const prev = pitchSamples[i-1], cur = pitchSamples[i];
-      let expectedDir;
-      if(pattern === 'sube'){ expectedDir = 1; }
-      else if(pattern === 'baja'){ expectedDir = -1; }
-      else { expectedDir = cur.t < 0.5 ? 1 : -1; }
-      const actualDir = cur.freq - prev.freq;
-      if((expectedDir > 0 && actualDir > -5) || (expectedDir < 0 && actualDir < 5)){ hits++; }
-      total++;
-    }
-    const fitPct = total ? Math.round((hits/total)*100) : 0;
-    const freqs = pitchSamples.map(p=>p.freq);
-    const range = Math.round(Math.max(...freqs) - Math.min(...freqs));
-
-    fitEl.textContent = fitPct + '%';
-    rangeEl.textContent = range + 'Hz';
-
-    const score = Math.round(fitPct*0.7 + Math.min(30, range/5));
-    let note;
-    if(fitPct >= 75) note = 'Buen control de tu tono — lograste moverlo en la dirección que pedía el ejercicio la mayor parte del tiempo.';
-    else if(range < 40) note = 'Tu rango se movió poco — no tengas miedo de exagerar más de lo que se siente natural, en la práctica se nota menos de lo que crees.';
-    else note = 'El tono se movió, pero no siempre en la dirección pedida — repite el mismo patrón un par de veces más para afinar el control.';
-
-    showStamp({
-      apparatus: 'sirena',
-      score,
-      metrics: [
-        {value: fitPct+'%', label:'Ajuste a guía'},
-        {value: range+'Hz', label:'Rango'},
-        {value: pattern, label:'Patrón'}
-      ],
-      note
-    });
+  function startEnergyMeter(){
+    getMicStream().then(stream=>{
+      const ctx = getActx();
+      if(!ctx) return;
+      if(!energyAnalyser){
+        energySource = ctx.createMediaStreamSource(stream);
+        energyAnalyser = ctx.createAnalyser();
+        energyAnalyser.fftSize = 256;
+        energySource.connect(energyAnalyser);
+      }
+      const data = new Uint8Array(energyAnalyser.frequencyBinCount);
+      function tick(){
+        if(!running) return;
+        energyAnalyser.getByteFrequencyData(data);
+        let sum = 0;
+        for(let i=0;i<data.length;i++) sum += data[i];
+        const avg = sum/data.length;
+        const pct = Math.min(100, Math.round((avg/90)*100));
+        energySamples.push(pct);
+        energyFill.style.width = pct + '%';
+        energyFill.classList.toggle('low', pct < 12);
+        energyFill.classList.toggle('high', pct > 75);
+        energyRafId = requestAnimationFrame(tick);
+      }
+      tick();
+    }).catch(()=>{});
   }
-
-  startBtn.addEventListener('click', startRound);
-  stopBtn.addEventListener('click', endRound);
-
-  document.addEventListener('keydown', (e)=>{
-    if(window.__activePanel !== 'sirena') return;
-    if(e.code === 'Space'){ e.preventDefault(); running ? endRound() : startRound(); }
-  });
-})();
-
-/* ================= APARATO 7: ÉNFASIS MÓVIL ================= */
-(function(){
-  const SENTENCES = [
-    'Yo no dije que él robó el dinero.',
-    'Nunca prometí terminarlo hoy.',
-    'Ella no sabía que la reunión era importante.',
-    'Nosotros no aprobamos ese presupuesto.',
-    'Él dijo que vendría mañana temprano.',
-    'No fui yo quien canceló la orden.',
-    'Ese informe todavía no está listo.',
-    'Ustedes no me avisaron del cambio de turno.'
-  ];
-  let usedSentences = [];
-  function pickSentence(){
-    let pool = SENTENCES.filter(s=>!usedSentences.includes(s));
-    if(pool.length===0){ usedSentences=[]; pool=SENTENCES; }
-    const s = pool[Math.floor(Math.random()*pool.length)];
-    usedSentences.push(s);
-    return s;
-  }
-
-  const sentenceEl = document.getElementById('enf-sentence');
-  const targetWordEl = document.getElementById('enf-target-word');
-  const newBtn = document.getElementById('enf-new');
-  const roundsWrap = document.getElementById('enf-rounds');
-  const transcriptEl = document.getElementById('enf-transcript');
-  const startBtn = document.getElementById('enf-start');
-  const stopBtn = document.getElementById('enf-stop');
-  const micStatus = document.getElementById('enf-mic-status');
-  const voiceLine = document.getElementById('enf-voice-line');
-
-  let currentSentence = '';
-  let words = [];
-  let currentWordIdx = 0;
-  let running = false;
-  let usingFallback = false;
-  let recognition = null;
-  let micStream = null;
-  let pitchAnalyser = null;
-  let pitchSource = null;
-  let pitchRafId = null;
-  let pitchSamples = [];
-  let pitchPoints = [];
-  let wordPitchByIdx = {}; // idx -> avg pitch de esa vuelta
-
-  function loadSentence(){
-    currentSentence = pickSentence();
-    words = currentSentence.replace(/[.,!?]/g,'').split(/\s+/);
-    currentWordIdx = 0;
-    wordPitchByIdx = {};
-    renderRounds();
-    renderSentence();
-    transcriptEl.innerHTML = '<span class="imp-placeholder">Tu transcripción aparecerá aquí mientras lees la frase.</span>';
-    voiceLine.setAttribute('points','');
-  }
-
-  function renderRounds(){
-    roundsWrap.innerHTML = words.map((w,i)=>
-      '<span class="tw-round-dot'+(wordPitchByIdx[i]!==undefined?' done':'')+'" style="width:auto; border-radius:14px; padding:0 8px; font-size:10px;" data-idx="'+i+'">'+(i+1)+'</span>'
-    ).join('');
-  }
-
-  function renderSentence(){
-    const parts = words.map((w,i)=> i===currentWordIdx ? '<mark class="enf-emphasis">'+w+'</mark>' : w);
-    sentenceEl.innerHTML = parts.join(' ');
-    targetWordEl.textContent = '"' + words[currentWordIdx] + '"';
-  }
-
-  newBtn.addEventListener('click', ()=>{
-    if(running) return;
-    loadSentence();
-    micStatus.textContent = '';
-  });
-  loadSentence();
-
-  function getMicStream(){
-    if(micStream) return Promise.resolve(micStream);
-    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return Promise.reject();
-    return navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{ micStream = stream; return stream; });
+  function stopEnergyMeter(){ if(energyRafId){ cancelAnimationFrame(energyRafId); energyRafId = null; } energyFill.style.width='0%'; }
+  function summarizeEnergy(){
+    if(energySamples.length < 3) return null;
+    return {avg: Math.round(energySamples.reduce((a,b)=>a+b,0)/energySamples.length)};
   }
 
   function setupRecognition(){
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if(!SR) return null;
     const rec = new SR();
-    rec.lang = 'es-ES'; rec.continuous = false; rec.interimResults = true;
+    rec.lang = 'es-ES'; rec.continuous = true; rec.interimResults = true;
+    let fullFinal = '';
     let shouldRestart = false;
+    let fillerCount = 0;
     rec.onresult = (e)=>{
-      let text = '';
-      for(let i=0;i<e.results.length;i++){ text += e.results[i][0].transcript; }
-      const escaped = text.replace(/&/g,'&amp;').replace(/</g,'&lt;');
-      transcriptEl.innerHTML = escaped || '<span class="imp-placeholder">Escuchando…</span>';
-      if(e.results[e.results.length-1].isFinal){ finishReading(); }
+      let interim = '';
+      for(let i=e.resultIndex; i<e.results.length; i++){
+        const res = e.results[i];
+        if(res.isFinal){
+          fullFinal += res[0].transcript + ' ';
+          const words = res[0].transcript.trim().split(/\s+/).filter(Boolean);
+          const re = muletillaRegex();
+          words.forEach(w=>{ if(re.test(w)){ fillerCount++; } re.lastIndex=0; });
+        } else { interim += res[0].transcript; }
+      }
+      const escaped = (fullFinal+interim).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+      const marked = escaped.replace(muletillaRegex(), m=>'<mark class="filler">'+m+'</mark>');
+      transcriptEl.innerHTML = marked || '<span class="imp-placeholder">Escuchando…</span>';
+      transcriptEl.scrollTop = transcriptEl.scrollHeight;
+      rec.__fillerCount = fillerCount;
     };
     rec.onerror = (e)=>{
       if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
@@ -3062,7 +2756,7 @@ activatePanel('improviso');
     };
     rec.onend = ()=>{
       if(shouldRestart && running && !usingFallback){
-        setTimeout(()=>{ if(shouldRestart && running && !usingFallback){ try{ rec.start(); }catch(e){} } }, 150);
+        setTimeout(()=>{ if(shouldRestart && running && !usingFallback){ try{ rec.start(); }catch(e){} } }, 80);
       }
     };
     rec.__setRestart = (v)=>{ shouldRestart = v; };
@@ -3074,140 +2768,111 @@ activatePanel('improviso');
     transcriptEl.contentEditable = 'true';
     transcriptEl.innerHTML = '';
     transcriptEl.focus();
-    micStatus.textContent = 'Escribe la frase y pulsa Enter';
-    transcriptEl.addEventListener('keydown', function handler(e){
-      if(e.code === 'Enter'){ e.preventDefault(); finishReading(); }
-    });
-  }
-
-  function startPitchCapture(){
-    getMicStream().then(stream=>{
-      const ctx = getActx();
-      if(!ctx) return;
-      if(!pitchAnalyser){
-        pitchSource = ctx.createMediaStreamSource(stream);
-        pitchAnalyser = ctx.createAnalyser();
-        pitchAnalyser.fftSize = 2048;
-        pitchSource.connect(pitchAnalyser);
-      }
-      const buf = new Float32Array(pitchAnalyser.fftSize);
-      pitchSamples = []; pitchPoints = [];
-      function tick(){
-        if(!running) return;
-        pitchAnalyser.getFloatTimeDomainData(buf);
-        const freq = autoCorrelate(buf, ctx.sampleRate);
-        if(freq > 0){
-          pitchSamples.push(freq);
-          const x = Math.min(600, pitchPoints.length*8);
-          const clamped = Math.max(90, Math.min(350, freq));
-          const y = 85 - ((clamped-90)/(350-90))*80;
-          pitchPoints.push([x,y]);
-          voiceLine.setAttribute('points', pitchPoints.map(p=>p[0]+','+p[1]).join(' '));
-        }
-        pitchRafId = requestAnimationFrame(tick);
-      }
-      tick();
-    }).catch(()=>{});
-  }
-  function stopPitchCapture(){
-    if(pitchRafId){ cancelAnimationFrame(pitchRafId); pitchRafId = null; }
+    micStatus.textContent = 'Escribe el texto mientras lo lees en voz alta, y pulsa "Terminé de leer" al acabar';
   }
 
   function startRound(){
-    if(running) return;
+    if(running || !current) return;
     running = true;
     usingFallback = false;
-    startBtn.disabled = true; stopBtn.disabled = false;
+    startBtn.disabled = true; stopBtn.disabled = false; newBtn.disabled = true;
     transcriptEl.contentEditable = 'false';
     transcriptEl.innerHTML = '<span class="imp-placeholder">Escuchando…</span>';
+    playbackWrap.style.display = 'none';
     startBeep();
 
     if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.abort(); }catch(e){} }
     recognition = setupRecognition();
     if(recognition){
       recognition.__setRestart(true);
-      try{ recognition.start(); micStatus.textContent = 'Micrófono activo'; }
+      try{ recognition.start(); micStatus.textContent = 'Micrófono activo — lee el texto completo'; }
       catch(e){ switchToFallback(); micStatus.textContent = 'Modo escritura (voz no disponible)'; }
     } else {
       switchToFallback();
       micStatus.textContent = 'Este navegador no soporta voz — modo escritura activado';
     }
-    startPitchCapture();
+
+    startRecording();
+    resetPitchChart();
+    startPitchMeter();
+    energySamples = [];
+    startEnergyMeter();
   }
 
-  function finishReading(){
+  function endRound(){
     if(!running) return;
     running = false;
     if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.stop(); }catch(e){} }
-    stopPitchCapture();
-    startBtn.disabled = false; stopBtn.disabled = true;
+    stopRecordingAndShow();
+    stopPitchMeter();
+    stopEnergyMeter();
+    startBtn.disabled = false; stopBtn.disabled = true; newBtn.disabled = false;
     endBeep();
 
-    const avgPitch = pitchSamples.length ? Math.round(pitchSamples.reduce((a,b)=>a+b,0)/pitchSamples.length) : null;
-    const maxPitch = pitchSamples.length ? Math.round(Math.max(...pitchSamples)) : null;
-    if(avgPitch){ wordPitchByIdx[currentWordIdx] = {avg: avgPitch, max: maxPitch}; }
-    renderRounds();
+    const fillerCount = (recognition && recognition.__fillerCount) || 0;
+    const pitchSummary = summarizePitch();
+    const energySummary = summarizeEnergy();
+    const wordCount = current.text.trim().split(/\s+/).length;
+    const fillerRate = wordCount ? fillerCount/wordCount : 0;
 
-    const doneCount = Object.keys(wordPitchByIdx).length;
-    const allDone = doneCount >= words.length;
-
-    if(!allDone){
-      currentWordIdx++;
-      renderSentence();
-      const score = 55; // ronda intermedia, no cierra tanda
-      showStamp({
-        apparatus: 'enfasis',
-        score,
-        metrics: [
-          {value: avgPitch ? avgPitch+'Hz' : '—', label:'Tono promedio'},
-          {value: maxPitch ? maxPitch+'Hz' : '—', label:'Pico'},
-          {value: doneCount+'/'+words.length, label:'Palabras leídas'}
-        ],
-        note: 'Ahora enfatiza la siguiente palabra marcada y vuelve a leer toda la frase — compara cómo cambia tu pico de tono según dónde pones el peso.'
-      });
-    } else {
-      // Comparar variedad entre los picos logrados por palabra
-      const maxes = Object.values(wordPitchByIdx).map(v=>v.max);
-      const spread = Math.round(Math.max(...maxes) - Math.min(...maxes));
-      const score = Math.min(100, Math.round(spread/1.5));
-      let note;
-      if(spread >= 60) note = 'Se nota una diferencia clara de tono según qué palabra enfatizabas — eso es exactamente lo que hace que el énfasis suene intencional y no plano.';
-      else note = 'El pico de tono cambió poco entre palabras — la próxima vez exagera más la diferencia al enfatizar, aunque al inicio se sienta artificial.';
-
-      showStamp({
-        apparatus: 'enfasis',
-        score,
-        metrics: [
-          {value: spread+'Hz', label:'Diferencia entre picos'},
-          {value: words.length, label:'Palabras probadas'},
-          {value: score, label:'Puntaje'}
-        ],
-        note
-      });
-      loadSentence();
+    let score = Math.round(Math.max(0, 100 - fillerRate*100*1.5));
+    if(pitchSummary){
+      if(pitchSummary.varietyLabel === 'Expresiva'){ score = Math.min(100, score+10); }
+      else if(pitchSummary.varietyLabel === 'Plana'){ score = Math.max(0, score-10); }
     }
-  }
 
-  function stopRound(){
-    if(!running) return;
-    running = false;
-    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.stop(); }catch(e){} }
-    stopPitchCapture();
-    startBtn.disabled = false; stopBtn.disabled = true;
-    micStatus.textContent = '';
+    const metrics = [
+      {value: fillerCount, label:'Muletillas'},
+      {value: CAT_LABELS[category], label:'Categoría'},
+      {value: score, label:'Puntaje'}
+    ];
+    let note = fillerCount === 0
+      ? 'Leíste el texto completo sin muletillas detectadas — así de limpia debe sonar una lectura preparada.'
+      : (fillerRate > 0.03
+        ? 'Se colaron varias muletillas mientras leías — en textos largos suelen aparecer cuando pierdes el hilo visual; sigue el texto con el dedo o la vista más de cerca.'
+        : 'Lectura bastante limpia, con alguna muletilla suelta — normal en textos largos, mejora con la repetición.');
+
+    if(pitchSummary){
+      metrics.push({value: pitchSummary.avg+'Hz', label:'Tono promedio'});
+      metrics.push({value: pitchSummary.varietyLabel, label:'Variedad tonal'});
+      if(pitchSummary.varietyLabel === 'Plana'){
+        note += ' Tu tono se mantuvo plano en un texto que pide dramatismo — exagera las subidas en las frases clave, como haría un locutor.';
+      } else if(pitchSummary.varietyLabel === 'Expresiva'){
+        note += ' Buena variedad de tono para un texto de este tipo — se nota la intención dramática.';
+      }
+    }
+    if(energySummary){
+      metrics.push({value: energySummary.avg+'%', label:'Energía de voz'});
+      if(energySummary.avg < 20){
+        note += ' Proyecta más — estos textos piden volumen y presencia, no un tono de conversación casual.';
+      } else if(energySummary.avg > 70){
+        note += ' Buena proyección de voz — encaja con el tono del texto.';
+      }
+    }
+
+    showStamp({
+      apparatus: 'discursos',
+      score,
+      metrics,
+      note
+    });
+    loadText();
   }
 
   startBtn.addEventListener('click', startRound);
-  stopBtn.addEventListener('click', stopRound);
+  stopBtn.addEventListener('click', endRound);
 
   document.addEventListener('keydown', (e)=>{
-    if(window.__activePanel !== 'enfasis') return;
-    if(e.code === 'Space' && !transcriptEl.isContentEditable){ e.preventDefault(); running ? stopRound() : startRound(); }
+    if(window.__activePanel !== 'discursos') return;
+    if(e.code === 'Space' && !transcriptEl.isContentEditable){
+      e.preventDefault();
+      running ? endRound() : startRound();
+    }
     if(e.code === 'KeyN' && !running){ newBtn.click(); }
   });
 })();
 
-/* ================= APARATO 8: ARSENAL ================= */
+/* ================= APARATO 6: ARSENAL ================= */
 (function(){
   const ARSENAL = [
     ['cosa','elemento / factor / componente'],
