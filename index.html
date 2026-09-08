@@ -375,6 +375,8 @@
   }
 
   /* ---- Tormenta ---- */
+  .tor-input-row{ display:flex; gap:8px; margin-bottom:12px; }
+  .tor-input-row input{ flex:1; font-size:16px; padding:12px 14px; }
   .tor-chips{ display:flex; flex-wrap:wrap; gap:6px; min-height: 32px; }
   .tor-chip{
     font-family: var(--mono); font-size:12px;
@@ -563,7 +565,10 @@
           </div>
         </div>
 
-        <input type="text" id="tor-input" placeholder="Escribe una palabra y pulsa Enter o espacio…" style="width:100%; font-size:16px; padding:12px 14px; margin-bottom:12px;" disabled>
+        <div class="tor-input-row">
+          <input type="text" id="tor-input" placeholder="Escribe una palabra…" disabled>
+          <button class="btn primary" id="tor-add" disabled>Agregar</button>
+        </div>
 
         <div class="tor-chips" id="tor-chips"></div>
 
@@ -1851,6 +1856,7 @@ activatePanel('improviso');
   const ringFg = document.getElementById('tor-ring-fg');
   const countEl = document.getElementById('tor-count');
   const inputEl = document.getElementById('tor-input');
+  const addBtn = document.getElementById('tor-add');
   const chipsEl = document.getElementById('tor-chips');
   const missingWrap = document.getElementById('tor-missing-wrap');
   const missingEl = document.getElementById('tor-missing');
@@ -1887,13 +1893,33 @@ activatePanel('improviso');
     chipsEl.appendChild(chip);
   }
 
+  function commitCurrentWord(){
+    const val = inputEl.value;
+    if(val.trim()){ addWord(val); }
+    inputEl.value = '';
+  }
+
+  // Desktop: Enter o Espacio en el teclado físico confirman la palabra.
   inputEl.addEventListener('keydown', (e)=>{
-    if(e.code === 'Enter' || e.code === 'Space'){
+    if(e.code === 'Enter' || e.code === 'Space' || e.key === 'Enter' || e.key === ' '){
       e.preventDefault();
-      addWord(inputEl.value);
-      inputEl.value = '';
+      commitCurrentWord();
     }
   });
+
+  // Móvil (Android/iOS): muchos teclados no disparan keydown de forma fiable
+  // para Espacio (usan keyCode 229 de composición). El evento 'input' sí
+  // refleja el texto real, así que detectamos el espacio ahí como respaldo.
+  inputEl.addEventListener('input', ()=>{
+    if(inputEl.value.endsWith(' ')){
+      const word = inputEl.value.trim();
+      inputEl.value = '';
+      if(word){ addWord(word); }
+    }
+  });
+
+  // Botón visible: funciona en cualquier dispositivo sin depender de teclas.
+  addBtn.addEventListener('click', commitCurrentWord);
 
   function startRound(){
     if(running) return;
@@ -1906,6 +1932,7 @@ activatePanel('improviso');
     ringFg.style.strokeDashoffset = 0;
     missingWrap.style.display = 'none';
     inputEl.disabled = false;
+    addBtn.disabled = false;
     inputEl.value = '';
     inputEl.focus();
     startBtn.disabled = true;
@@ -1925,6 +1952,7 @@ activatePanel('improviso');
     running = false;
     clearInterval(tick);
     inputEl.disabled = true;
+    addBtn.disabled = true;
     startBtn.disabled = false;
     newCatBtn.disabled = false;
     endBeep();
