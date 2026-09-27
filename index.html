@@ -111,7 +111,7 @@
   /* ---------- Apparatus nav ---------- */
   nav.apparatus-nav{
     display:grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 2px;
     background: var(--rule);
     border: 2px solid var(--ink);
@@ -458,7 +458,7 @@
   <header class="masthead">
     <div>
       <h1 class="masthead-title">PALESTRA<span class="accent">.</span></h1>
-      <p class="masthead-sub">Gimnasio verbal — ocho aparatos, sesiones de 60 segundos</p>
+      <p class="masthead-sub">Gimnasio verbal — diez aparatos, sesiones de 60 segundos</p>
     </div>
     <div class="masthead-stats" id="masthead-stats">
       <div><span class="mstat-num" id="stat-racha">0</span><span class="mstat-label">Racha (días)</span></div>
@@ -476,7 +476,9 @@
     <button class="apparatus-btn" data-panel="discursos"><span class="apparatus-num">05 · VOZ</span><span class="apparatus-name">Discursos</span></button>
     <button class="apparatus-btn" data-panel="persuasion"><span class="apparatus-num">06 · VOZ</span><span class="apparatus-name">Persuasión</span></button>
     <button class="apparatus-btn" data-panel="traduccion"><span class="apparatus-num">07 · VOZ</span><span class="apparatus-name">Traducción Oral</span></button>
-    <button class="apparatus-btn" data-panel="arsenal"><span class="apparatus-num">08 · REF.</span><span class="apparatus-name">Arsenal</span></button>
+    <button class="apparatus-btn" data-panel="social"><span class="apparatus-num">08 · VOZ</span><span class="apparatus-name">Presencia Social</span></button>
+    <button class="apparatus-btn" data-panel="mitexto"><span class="apparatus-num">09 · VOZ</span><span class="apparatus-name">Mi Texto</span></button>
+    <button class="apparatus-btn" data-panel="arsenal"><span class="apparatus-num">10 · REF.</span><span class="apparatus-name">Arsenal</span></button>
   </nav>
 
   <main id="main">
@@ -925,10 +927,128 @@
       </div>
     </section>
 
+    <section class="panel" id="panel-social">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">08 · Presencia Social</h2>
+          <p class="panel-desc">Escenarios sociales reales — presentarte, generar conversación, hablar de ti con seguridad. El ejemplo marca el tono; adáptalo con tus propias palabras, no lo recites literal. Lo que más se nota en persona no es la frase exacta, sino la calma y el interés genuino con que la dices.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="imp-row">
+          <div class="imp-topic-box">
+            <span class="imp-label">Escenario</span>
+            <p class="tw-text" id="soc-scenario-title">Pulsa "Nuevo escenario" para empezar</p>
+          </div>
+          <button class="btn ghost" id="soc-new">Nuevo escenario (N)</button>
+        </div>
+
+        <div class="dis-text-wrap">
+          <span class="imp-label">Ejemplo de tono — adáptalo a tu manera de hablar, no lo leas literal</span>
+          <p class="dis-text" id="soc-example" style="max-height:none;"></p>
+        </div>
+
+        <div class="tw-pitch-wrap">
+          <span class="imp-label">Tono de voz (Hz)</span>
+          <svg id="soc-pitch-chart" class="tw-pitch-chart" viewBox="0 0 600 70" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="0" y1="35" x2="600" y2="35" class="ritmo-baseline"/>
+            <polyline id="soc-pitch-line" points="" class="tw-pitch-line"/>
+          </svg>
+          <div class="tw-pitch-stats" id="soc-pitch-stats">
+            <div class="imp-stat"><span class="imp-stat-num" id="soc-pitch-avg">—</span><span class="imp-stat-label">Promedio Hz</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="soc-pitch-variety">—</span><span class="imp-stat-label">Variedad</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="soc-muletillas">0</span><span class="imp-stat-label">Muletillas</span></div>
+          </div>
+        </div>
+
+        <div class="imp-energy-wrap">
+          <span class="imp-label">Energía de voz</span>
+          <div class="imp-energy-bar"><div class="imp-energy-fill" id="soc-energy-fill"></div></div>
+        </div>
+
+        <div class="imp-transcript" id="soc-transcript" aria-live="polite">
+          <span class="imp-placeholder">Habla con tus propias palabras sobre el escenario — tu transcripción aparecerá aquí.</span>
+        </div>
+
+        <div class="imp-playback" id="soc-playback" style="display:none;">
+          <span class="imp-label">Reescúchate</span>
+          <audio id="soc-audio" controls style="width:100%; margin-top:6px;"></audio>
+        </div>
+
+        <div class="imp-controls">
+          <button class="btn primary" id="soc-start">Empezar (ESPACIO)</button>
+          <button class="btn ghost" id="soc-stop" disabled>Terminé</button>
+          <span class="imp-mic-status" id="soc-mic-status"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-mitexto">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">09 · Mi Texto</h2>
+          <p class="panel-desc">Pega tu propio texto o speech, léelo en voz alta, grábate y reescúchate. Ve tu tono, energía y muletillas exactamente igual que en los demás aparatos, pero con tu propio contenido.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="imp-row" id="mtx-input-row">
+          <div class="imp-topic-box" style="width:100%;">
+            <span class="imp-label">Pega o escribe tu texto aquí</span>
+            <textarea id="mtx-input" rows="5" style="width:100%; margin-top:6px;" placeholder="Pega aquí tu speech, discurso o texto a practicar…"></textarea>
+          </div>
+        </div>
+        <div class="imp-controls" style="margin-top:10px;">
+          <button class="btn primary" id="mtx-load">Cargar texto</button>
+          <button class="btn ghost" id="mtx-edit" style="display:none;">Editar texto</button>
+        </div>
+
+        <div class="dis-text-wrap" id="mtx-text-wrap" style="display:none;">
+          <span class="imp-label">Tu texto a leer</span>
+          <p class="dis-text" id="mtx-text"></p>
+        </div>
+
+        <div class="tw-pitch-wrap" id="mtx-pitch-wrap" style="display:none;">
+          <span class="imp-label">Tono de voz (Hz)</span>
+          <svg id="mtx-pitch-chart" class="tw-pitch-chart" viewBox="0 0 600 70" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="0" y1="35" x2="600" y2="35" class="ritmo-baseline"/>
+            <polyline id="mtx-pitch-line" points="" class="tw-pitch-line"/>
+          </svg>
+          <div class="tw-pitch-stats" id="mtx-pitch-stats">
+            <div class="imp-stat"><span class="imp-stat-num" id="mtx-pitch-avg">—</span><span class="imp-stat-label">Promedio Hz</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="mtx-pitch-range">—</span><span class="imp-stat-label">Rango Hz</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="mtx-pitch-variety">—</span><span class="imp-stat-label">Variedad</span></div>
+          </div>
+        </div>
+
+        <div class="imp-energy-wrap" id="mtx-energy-wrap" style="display:none;">
+          <span class="imp-label">Energía de voz</span>
+          <div class="imp-energy-bar"><div class="imp-energy-fill" id="mtx-energy-fill"></div></div>
+        </div>
+
+        <div class="imp-transcript" id="mtx-transcript" style="display:none;" aria-live="polite">
+          <span class="imp-placeholder">Tu transcripción en vivo aparecerá aquí mientras lees.</span>
+        </div>
+
+        <div class="imp-playback" id="mtx-playback" style="display:none;">
+          <span class="imp-label">Reescúchate</span>
+          <audio id="mtx-audio" controls style="width:100%; margin-top:6px;"></audio>
+          <button class="btn ghost" id="mtx-download-audio" style="margin-top:8px;">Descargar audio</button>
+        </div>
+
+        <div class="imp-controls" id="mtx-controls" style="display:none;">
+          <button class="btn primary" id="mtx-start">Empezar lectura (ESPACIO)</button>
+          <button class="btn ghost" id="mtx-stop" disabled>Terminé de leer</button>
+          <span class="imp-mic-status" id="mtx-mic-status"></span>
+        </div>
+      </div>
+    </section>
+
     <section class="panel" id="panel-arsenal">
       <div class="panel-head">
         <div>
-          <h2 class="panel-title">08 · Arsenal</h2>
+          <h2 class="panel-title">10 · Arsenal</h2>
           <p class="panel-desc">Tabla de referencia: términos flojos y su versión precisa. Busca, escucha la pronunciación y revisa la palabra del día.</p>
         </div>
       </div>
@@ -997,6 +1117,8 @@
         <button class="hist-filter-btn" data-app="discursos">Discursos</button>
         <button class="hist-filter-btn" data-app="persuasion">Persuasión</button>
         <button class="hist-filter-btn" data-app="traduccion">Traducción Oral</button>
+        <button class="hist-filter-btn" data-app="social">Presencia Social</button>
+        <button class="hist-filter-btn" data-app="mitexto">Mi Texto</button>
       </div>
 
       <div class="history-list" id="history-list"></div>
@@ -1309,6 +1431,14 @@ const LEVEL_TABLE = {
   traduccion: [
     {min:0, name:'BEGINNER'}, {min:30, name:'GETTING THERE'}, {min:55, name:'FLUENT ENOUGH'},
     {min:75, name:'SHARP TONGUE'}, {min:90, name:'BILINGUAL'}
+  ],
+  social: [
+    {min:0, name:'TÍMIDO'}, {min:30, name:'ROMPIENDO EL HIELO'}, {min:55, name:'CON SOLTURA'},
+    {min:75, name:'MAGNÉTICO'}, {min:90, name:'CARISMÁTICO'}
+  ],
+  mitexto: [
+    {min:0, name:'PRIMER ENSAYO'}, {min:30, name:'TOMANDO FORMA'}, {min:55, name:'VOZ FIRME'},
+    {min:75, name:'BIEN PREPARADO'}, {min:90, name:'LISTO PARA EL ESCENARIO'}
   ]
 };
 function levelFor(apparatus, score){
@@ -1400,7 +1530,7 @@ document.getElementById('stamp-done').addEventListener('click', ()=> document.ge
     });
   }
 
-  const APP_LABELS = {improviso:'Improviso', tormenta:'Tormenta', precision:'Precisión', trabalenguas:'Trabalenguas', discursos:'Discursos', persuasion:'Persuasión', traduccion:'Traducción Oral'};
+  const APP_LABELS = {improviso:'Improviso', tormenta:'Tormenta', precision:'Precisión', trabalenguas:'Trabalenguas', discursos:'Discursos', persuasion:'Persuasión', traduccion:'Traducción Oral', social:'Presencia Social', mitexto:'Mi Texto'};
 
   function renderList(){
     const rows = store.rounds.filter(r => activeFilter==='todos' || r.apparatus===activeFilter);
@@ -3825,7 +3955,676 @@ activatePanel('improviso');
   });
 })();
 
-/* ================= APARATO 8: ARSENAL ================= */
+/* ================= APARATO 8: PRESENCIA SOCIAL ================= */
+(function(){
+  // Escenarios de comunicación social real. El "ejemplo" marca tono y estructura,
+  // no un guion a memorizar — la app anima explícitamente a adaptarlo con palabras propias.
+  const SCENARIOS = [
+    {title:'Presentarte en un grupo nuevo',
+     example:'Hola, soy Sergio. Vi que estaban hablando de [tema] — la verdad me interesa mucho, ¿qué opinan ustedes? Cuéntenme más, porque yo tengo una visión distinta y quiero escuchar la de ustedes primero.'},
+    {title:'Abrir conversación con alguien que acabas de conocer',
+     example:'Oye, perdón que interrumpa, pero me quedé pensando en lo que dijiste hace un rato sobre [tema]. ¿Por qué llegaste a esa conclusión? Me da curiosidad cómo piensas.'},
+    {title:'Hablar de ti mismo sin sonar que te vendes',
+     example:'Trabajo en producción industrial, aunque la verdad estoy en un momento de transición hacia otra industria que me interesa más. Es un proceso lento, pero prefiero eso a quedarme cómodo donde no quiero estar.'},
+    {title:'Generar curiosidad sin dar toda la información de golpe',
+     example:'Tengo una historia curiosa sobre eso, pero te la cuento con calma porque si te la resumo en dos frases pierde la gracia. ¿Tienes un rato?'},
+    {title:'Invitar a alguien a un plan con seguridad',
+     example:'Voy a ir a [lugar] el [día] — si te late, avísame y coordinamos. Si no puedes esta vez, seguro hay otra oportunidad.'},
+    {title:'Sostener una conversación cuando hay un silencio incómodo',
+     example:'Se hizo un silencio raro ahí, jaja. Cuéntame, ¿qué es lo último que te sacó una carcajada de verdad?'},
+    {title:'Mostrar interés genuino sin sonar interrogatorio',
+     example:'Me llamó la atención lo que contaste de [tema] — ¿siempre te gustó eso, o fue algo que descubriste después?'},
+    {title:'Terminar una conversación dejando una buena impresión',
+     example:'Me encantó esta conversación, en serio. Tengo que irme, pero me gustaría seguir hablando de esto en otro momento — ¿cómo te ubico?'},
+    {title:'Responder con humor a una broma o pulla ligera',
+     example:'Jaja, buena esa. Pero mira quién habla — el que llegó quince minutos tarde diciendo que "el tráfico".'},
+    {title:'Hablar de un tema con pasión sin acaparar la conversación',
+     example:'Podría hablar de esto horas, así que mejor freno acá antes de aburrirte — pero dime, ¿a ti qué te apasiona a ese nivel?'}
+  ];
+  let usedScenarios = [];
+  function pickScenario(){
+    let pool = SCENARIOS.filter(s=>!usedScenarios.includes(s));
+    if(pool.length===0){ usedScenarios=[]; pool=SCENARIOS; }
+    const s = pool[Math.floor(Math.random()*pool.length)];
+    usedScenarios.push(s);
+    return s;
+  }
+
+  const titleEl = document.getElementById('soc-scenario-title');
+  const exampleEl = document.getElementById('soc-example');
+  const newBtn = document.getElementById('soc-new');
+  const startBtn = document.getElementById('soc-start');
+  const stopBtn = document.getElementById('soc-stop');
+  const micStatus = document.getElementById('soc-mic-status');
+  const transcriptEl = document.getElementById('soc-transcript');
+  const playbackWrap = document.getElementById('soc-playback');
+  const audioEl = document.getElementById('soc-audio');
+  const pitchLine = document.getElementById('soc-pitch-line');
+  const pitchAvgEl = document.getElementById('soc-pitch-avg');
+  const pitchVarietyEl = document.getElementById('soc-pitch-variety');
+  const muletillasEl = document.getElementById('soc-muletillas');
+  const energyFill = document.getElementById('soc-energy-fill');
+
+  let current = null;
+  let running = false;
+  let usingFallback = false;
+  let recognition = null;
+  let fillerCount = 0;
+  let micStream = null;
+  let mediaRecorder = null;
+  let recordedChunks = [];
+  let recordedUrl = null;
+
+  let pitchAnalyser = null, pitchSource = null, pitchRafId = null;
+  let pitchSamples = [], pitchPoints = [];
+  let energyAnalyser = null, energySource = null, energyRafId = null;
+  let energySamples = [];
+
+  function loadScenario(){
+    current = pickScenario();
+    titleEl.textContent = current.title;
+    exampleEl.textContent = current.example;
+    resetPitchChart();
+    energyFill.style.width = '0%';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Habla con tus propias palabras sobre el escenario — tu transcripción aparecerá aquí.</span>';
+    playbackWrap.style.display = 'none';
+    micStatus.textContent = '';
+  }
+  newBtn.addEventListener('click', ()=>{ if(!running) loadScenario(); });
+  loadScenario();
+
+  function resetPitchChart(){
+    pitchSamples = []; pitchPoints = [];
+    pitchLine.setAttribute('points','');
+    pitchAvgEl.textContent = '—';
+    pitchVarietyEl.textContent = '—';
+    muletillasEl.textContent = 0;
+  }
+
+  function getMicStream(){
+    if(micStream) return Promise.resolve(micStream);
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return Promise.reject();
+    return navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{ micStream = stream; return stream; });
+  }
+
+  function startRecording(){
+    if(!window.MediaRecorder) return;
+    getMicStream().then(stream=>{
+      recordedChunks = [];
+      try{
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
+        mediaRecorder = mimeType ? new MediaRecorder(stream, {mimeType}) : new MediaRecorder(stream);
+      }catch(e){ mediaRecorder = null; return; }
+      mediaRecorder.ondataavailable = (e)=>{ if(e.data && e.data.size > 0) recordedChunks.push(e.data); };
+      mediaRecorder.start();
+    }).catch(()=>{ mediaRecorder = null; });
+  }
+  function stopRecordingAndShow(){
+    if(!mediaRecorder || mediaRecorder.state === 'inactive') return;
+    mediaRecorder.onstop = ()=>{
+      if(recordedChunks.length === 0) return;
+      if(recordedUrl) URL.revokeObjectURL(recordedUrl);
+      const blob = new Blob(recordedChunks, {type: recordedChunks[0].type || 'audio/webm'});
+      recordedUrl = URL.createObjectURL(blob);
+      audioEl.src = recordedUrl;
+      playbackWrap.style.display = 'block';
+    };
+    try{ mediaRecorder.stop(); }catch(e){}
+  }
+
+  function startPitchMeter(){
+    getMicStream().then(stream=>{
+      const ctx = getActx();
+      if(!ctx) return;
+      if(!pitchAnalyser){
+        pitchSource = ctx.createMediaStreamSource(stream);
+        pitchAnalyser = ctx.createAnalyser();
+        pitchAnalyser.fftSize = 2048;
+        pitchSource.connect(pitchAnalyser);
+      }
+      const buf = new Float32Array(pitchAnalyser.fftSize);
+      function tick(){
+        if(!running) return;
+        pitchAnalyser.getFloatTimeDomainData(buf);
+        const freq = autoCorrelate(buf, ctx.sampleRate);
+        if(freq > 0){
+          pitchSamples.push(freq);
+          const x = Math.min(600, pitchPoints.length*6);
+          const clamped = Math.max(80, Math.min(400, freq));
+          const y = 65 - ((clamped-80)/(400-80))*60;
+          pitchPoints.push([x,y]);
+          if(pitchPoints.length > 100){ pitchPoints.shift(); pitchPoints.forEach((p,i)=> p[0]=i*6); }
+          pitchLine.setAttribute('points', pitchPoints.map(p=>p[0]+','+p[1]).join(' '));
+        }
+        pitchRafId = requestAnimationFrame(tick);
+      }
+      tick();
+    }).catch(()=>{});
+  }
+  function stopPitchMeter(){ if(pitchRafId){ cancelAnimationFrame(pitchRafId); pitchRafId = null; } }
+  function summarizePitch(){
+    if(pitchSamples.length < 3) return null;
+    const avg = Math.round(pitchSamples.reduce((a,b)=>a+b,0)/pitchSamples.length);
+    const min = Math.round(Math.min(...pitchSamples));
+    const max = Math.round(Math.max(...pitchSamples));
+    const range = max-min;
+    pitchAvgEl.textContent = avg;
+    const varietyLabel = range < 25 ? 'Plana' : (range < 60 ? 'Moderada' : 'Expresiva');
+    pitchVarietyEl.textContent = varietyLabel;
+    return {avg, range, varietyLabel};
+  }
+
+  function startEnergyMeter(){
+    getMicStream().then(stream=>{
+      const ctx = getActx();
+      if(!ctx) return;
+      if(!energyAnalyser){
+        energySource = ctx.createMediaStreamSource(stream);
+        energyAnalyser = ctx.createAnalyser();
+        energyAnalyser.fftSize = 256;
+        energySource.connect(energyAnalyser);
+      }
+      const data = new Uint8Array(energyAnalyser.frequencyBinCount);
+      function tick(){
+        if(!running) return;
+        energyAnalyser.getByteFrequencyData(data);
+        let sum = 0;
+        for(let i=0;i<data.length;i++) sum += data[i];
+        const avg = sum/data.length;
+        const pct = Math.min(100, Math.round((avg/90)*100));
+        energySamples.push(pct);
+        energyFill.style.width = pct + '%';
+        energyFill.classList.toggle('low', pct < 12);
+        energyFill.classList.toggle('high', pct > 75);
+        energyRafId = requestAnimationFrame(tick);
+      }
+      tick();
+    }).catch(()=>{});
+  }
+  function stopEnergyMeter(){ if(energyRafId){ cancelAnimationFrame(energyRafId); energyRafId = null; } energyFill.style.width='0%'; }
+  function summarizeEnergy(){
+    if(energySamples.length < 3) return null;
+    return {avg: Math.round(energySamples.reduce((a,b)=>a+b,0)/energySamples.length)};
+  }
+
+  function setupRecognition(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR) return null;
+    const rec = new SR();
+    rec.lang = 'es-ES'; rec.continuous = true; rec.interimResults = true;
+    let fullFinal = '';
+    let shouldRestart = false;
+    rec.onresult = (e)=>{
+      let interim = '';
+      for(let i=e.resultIndex; i<e.results.length; i++){
+        const res = e.results[i];
+        if(res.isFinal){
+          fullFinal += res[0].transcript + ' ';
+          const words = res[0].transcript.trim().split(/\s+/).filter(Boolean);
+          const re = muletillaRegex();
+          words.forEach(w=>{ if(re.test(w)){ fillerCount++; } re.lastIndex=0; });
+          muletillasEl.textContent = fillerCount;
+        } else { interim += res[0].transcript; }
+      }
+      const escaped = (fullFinal+interim).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+      const marked = escaped.replace(muletillaRegex(), m=>'<mark class="filler">'+m+'</mark>');
+      transcriptEl.innerHTML = marked || '<span class="imp-placeholder">Escuchando…</span>';
+      transcriptEl.scrollTop = transcriptEl.scrollHeight;
+    };
+    rec.onerror = (e)=>{
+      if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+        micStatus.textContent = 'Micrófono denegado — modo escritura activado';
+        shouldRestart = false;
+        switchToFallback();
+      }
+    };
+    rec.onend = ()=>{
+      if(shouldRestart && running && !usingFallback){
+        setTimeout(()=>{ if(shouldRestart && running && !usingFallback){ try{ rec.start(); }catch(e){} } }, 80);
+      }
+    };
+    rec.__setRestart = (v)=>{ shouldRestart = v; };
+    return rec;
+  }
+
+  function switchToFallback(){
+    usingFallback = true;
+    transcriptEl.contentEditable = 'true';
+    transcriptEl.innerHTML = '';
+    transcriptEl.focus();
+    micStatus.textContent = 'Escribe mientras hablas, y pulsa "Terminé" al acabar';
+  }
+
+  function startRound(){
+    if(running || !current) return;
+    running = true;
+    usingFallback = false;
+    fillerCount = 0;
+    startBtn.disabled = true; stopBtn.disabled = false; newBtn.disabled = true;
+    transcriptEl.contentEditable = 'false';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Escuchando…</span>';
+    playbackWrap.style.display = 'none';
+    startBeep();
+
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.abort(); }catch(e){} }
+    recognition = setupRecognition();
+    if(recognition){
+      recognition.__setRestart(true);
+      try{ recognition.start(); micStatus.textContent = 'Micrófono activo — habla con naturalidad, como si la otra persona estuviera ahí'; }
+      catch(e){ switchToFallback(); micStatus.textContent = 'Modo escritura (voz no disponible)'; }
+    } else {
+      switchToFallback();
+      micStatus.textContent = 'Este navegador no soporta voz — modo escritura activado';
+    }
+
+    startRecording();
+    resetPitchChart();
+    startPitchMeter();
+    energySamples = [];
+    startEnergyMeter();
+  }
+
+  function endRound(){
+    if(!running) return;
+    running = false;
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.stop(); }catch(e){} }
+    stopRecordingAndShow();
+    stopPitchMeter();
+    stopEnergyMeter();
+    startBtn.disabled = false; stopBtn.disabled = true; newBtn.disabled = false;
+    endBeep();
+
+    const pitchSummary = summarizePitch();
+    const energySummary = summarizeEnergy();
+
+    let score = Math.round(Math.max(0, 100 - fillerCount*6));
+    if(pitchSummary){
+      if(pitchSummary.varietyLabel === 'Expresiva'){ score = Math.min(100, score+10); }
+      else if(pitchSummary.varietyLabel === 'Plana'){ score = Math.max(0, score-10); }
+    }
+    if(energySummary && energySummary.avg < 15){ score = Math.max(0, score-15); }
+
+    const metrics = [
+      {value: fillerCount, label:'Muletillas'},
+      {value: score, label:'Puntaje'}
+    ];
+    if(pitchSummary){
+      metrics.push({value: pitchSummary.avg+'Hz', label:'Tono promedio'});
+      metrics.push({value: pitchSummary.varietyLabel, label:'Variedad tonal'});
+    }
+    if(energySummary){ metrics.push({value: energySummary.avg+'%', label:'Energía de voz'}); }
+
+    let note = fillerCount <= 2
+      ? 'Hablaste con soltura, sin muchas muletillas — eso ya transmite seguridad por sí solo.'
+      : 'Varias muletillas — en una conversación real esto se nota como duda. No es que falten palabras, es que faltó pausar en vez de rellenar el silencio.';
+
+    if(energySummary && energySummary.avg < 20){
+      note += ' Tu energía de voz fue baja — en interacciones sociales, un volumen más firme (no gritar, solo presencia) comunica más seguridad que el contenido mismo.';
+    }
+    if(pitchSummary && pitchSummary.varietyLabel === 'Plana'){
+      note += ' Tu tono fue bastante plano — una voz con más variación natural suena más interesante y menos ensayada.';
+    } else if(pitchSummary && pitchSummary.varietyLabel === 'Expresiva'){
+      note += ' Buena variedad de tono — eso ayuda mucho a sonar genuino en vez de robotizado.';
+    }
+    note += ' Recuerda: la meta no es la frase perfecta, es sonar como alguien cómodo con quién es.';
+
+    showStamp({
+      apparatus: 'social',
+      score,
+      metrics,
+      note
+    });
+    loadScenario();
+  }
+
+  startBtn.addEventListener('click', startRound);
+  stopBtn.addEventListener('click', endRound);
+
+  document.addEventListener('keydown', (e)=>{
+    if(window.__activePanel !== 'social') return;
+    if(e.code === 'Space' && !transcriptEl.isContentEditable){
+      e.preventDefault();
+      running ? endRound() : startRound();
+    }
+    if(e.code === 'KeyN' && !running){ newBtn.click(); }
+  });
+})();
+
+/* ================= APARATO 9: MI TEXTO ================= */
+(function(){
+  const inputEl = document.getElementById('mtx-input');
+  const loadBtn = document.getElementById('mtx-load');
+  const editBtn = document.getElementById('mtx-edit');
+  const textWrap = document.getElementById('mtx-text-wrap');
+  const textEl = document.getElementById('mtx-text');
+  const pitchWrap = document.getElementById('mtx-pitch-wrap');
+  const energyWrap = document.getElementById('mtx-energy-wrap');
+  const transcriptEl = document.getElementById('mtx-transcript');
+  const controlsEl = document.getElementById('mtx-controls');
+  const startBtn = document.getElementById('mtx-start');
+  const stopBtn = document.getElementById('mtx-stop');
+  const micStatus = document.getElementById('mtx-mic-status');
+  const playbackWrap = document.getElementById('mtx-playback');
+  const audioEl = document.getElementById('mtx-audio');
+  const downloadAudioBtn = document.getElementById('mtx-download-audio');
+  const pitchLine = document.getElementById('mtx-pitch-line');
+  const pitchAvgEl = document.getElementById('mtx-pitch-avg');
+  const pitchRangeEl = document.getElementById('mtx-pitch-range');
+  const pitchVarietyEl = document.getElementById('mtx-pitch-variety');
+  const energyFill = document.getElementById('mtx-energy-fill');
+
+  let myText = '';
+  let running = false;
+  let usingFallback = false;
+  let recognition = null;
+  let fillerCount = 0;
+  let micStream = null;
+  let mediaRecorder = null;
+  let recordedChunks = [];
+  let recordedUrl = null;
+
+  let pitchAnalyser = null, pitchSource = null, pitchRafId = null;
+  let pitchSamples = [], pitchPoints = [];
+  let energyAnalyser = null, energySource = null, energyRafId = null;
+  let energySamples = [];
+
+  loadBtn.addEventListener('click', ()=>{
+    const val = inputEl.value.trim();
+    if(!val) return;
+    myText = val;
+    textEl.textContent = myText;
+    document.getElementById('mtx-input-row').style.display = 'none';
+    loadBtn.style.display = 'none';
+    editBtn.style.display = 'inline-block';
+    textWrap.style.display = 'block';
+    pitchWrap.style.display = 'block';
+    energyWrap.style.display = 'block';
+    transcriptEl.style.display = 'block';
+    controlsEl.style.display = 'flex';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Tu transcripción en vivo aparecerá aquí mientras lees.</span>';
+    playbackWrap.style.display = 'none';
+    resetPitchChart();
+    energyFill.style.width = '0%';
+  });
+
+  editBtn.addEventListener('click', ()=>{
+    if(running) return;
+    document.getElementById('mtx-input-row').style.display = 'flex';
+    loadBtn.style.display = 'inline-block';
+    editBtn.style.display = 'none';
+    textWrap.style.display = 'none';
+    pitchWrap.style.display = 'none';
+    energyWrap.style.display = 'none';
+    transcriptEl.style.display = 'none';
+    controlsEl.style.display = 'none';
+    playbackWrap.style.display = 'none';
+  });
+
+  function resetPitchChart(){
+    pitchSamples = []; pitchPoints = [];
+    pitchLine.setAttribute('points','');
+    pitchAvgEl.textContent = '—';
+    pitchRangeEl.textContent = '—';
+    pitchVarietyEl.textContent = '—';
+  }
+
+  function getMicStream(){
+    if(micStream) return Promise.resolve(micStream);
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return Promise.reject();
+    return navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{ micStream = stream; return stream; });
+  }
+
+  function startRecording(){
+    if(!window.MediaRecorder) return;
+    getMicStream().then(stream=>{
+      recordedChunks = [];
+      try{
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
+        mediaRecorder = mimeType ? new MediaRecorder(stream, {mimeType}) : new MediaRecorder(stream);
+      }catch(e){ mediaRecorder = null; return; }
+      mediaRecorder.ondataavailable = (e)=>{ if(e.data && e.data.size > 0) recordedChunks.push(e.data); };
+      mediaRecorder.start();
+    }).catch(()=>{ mediaRecorder = null; });
+  }
+  function stopRecordingAndShow(){
+    if(!mediaRecorder || mediaRecorder.state === 'inactive') return;
+    mediaRecorder.onstop = ()=>{
+      if(recordedChunks.length === 0) return;
+      if(recordedUrl) URL.revokeObjectURL(recordedUrl);
+      const blob = new Blob(recordedChunks, {type: recordedChunks[0].type || 'audio/webm'});
+      recordedUrl = URL.createObjectURL(blob);
+      audioEl.src = recordedUrl;
+      playbackWrap.style.display = 'block';
+      downloadAudioBtn.onclick = ()=>{
+        const a = document.createElement('a');
+        a.href = recordedUrl;
+        a.download = 'mitexto-' + Date.now() + '.webm';
+        a.click();
+      };
+    };
+    try{ mediaRecorder.stop(); }catch(e){}
+  }
+
+  function startPitchMeter(){
+    getMicStream().then(stream=>{
+      const ctx = getActx();
+      if(!ctx) return;
+      if(!pitchAnalyser){
+        pitchSource = ctx.createMediaStreamSource(stream);
+        pitchAnalyser = ctx.createAnalyser();
+        pitchAnalyser.fftSize = 2048;
+        pitchSource.connect(pitchAnalyser);
+      }
+      const buf = new Float32Array(pitchAnalyser.fftSize);
+      function tick(){
+        if(!running) return;
+        pitchAnalyser.getFloatTimeDomainData(buf);
+        const freq = autoCorrelate(buf, ctx.sampleRate);
+        if(freq > 0){
+          pitchSamples.push(freq);
+          const x = Math.min(600, pitchPoints.length*6);
+          const clamped = Math.max(80, Math.min(400, freq));
+          const y = 65 - ((clamped-80)/(400-80))*60;
+          pitchPoints.push([x,y]);
+          if(pitchPoints.length > 100){ pitchPoints.shift(); pitchPoints.forEach((p,i)=> p[0]=i*6); }
+          pitchLine.setAttribute('points', pitchPoints.map(p=>p[0]+','+p[1]).join(' '));
+        }
+        pitchRafId = requestAnimationFrame(tick);
+      }
+      tick();
+    }).catch(()=>{});
+  }
+  function stopPitchMeter(){ if(pitchRafId){ cancelAnimationFrame(pitchRafId); pitchRafId = null; } }
+  function summarizePitch(){
+    if(pitchSamples.length < 3) return null;
+    const avg = Math.round(pitchSamples.reduce((a,b)=>a+b,0)/pitchSamples.length);
+    const min = Math.round(Math.min(...pitchSamples));
+    const max = Math.round(Math.max(...pitchSamples));
+    const range = max-min;
+    pitchAvgEl.textContent = avg;
+    pitchRangeEl.textContent = min + '–' + max;
+    const varietyLabel = range < 25 ? 'Plana' : (range < 60 ? 'Moderada' : 'Expresiva');
+    pitchVarietyEl.textContent = varietyLabel;
+    return {avg, min, max, range, varietyLabel};
+  }
+
+  function startEnergyMeter(){
+    getMicStream().then(stream=>{
+      const ctx = getActx();
+      if(!ctx) return;
+      if(!energyAnalyser){
+        energySource = ctx.createMediaStreamSource(stream);
+        energyAnalyser = ctx.createAnalyser();
+        energyAnalyser.fftSize = 256;
+        energySource.connect(energyAnalyser);
+      }
+      const data = new Uint8Array(energyAnalyser.frequencyBinCount);
+      function tick(){
+        if(!running) return;
+        energyAnalyser.getByteFrequencyData(data);
+        let sum = 0;
+        for(let i=0;i<data.length;i++) sum += data[i];
+        const avg = sum/data.length;
+        const pct = Math.min(100, Math.round((avg/90)*100));
+        energySamples.push(pct);
+        energyFill.style.width = pct + '%';
+        energyFill.classList.toggle('low', pct < 12);
+        energyFill.classList.toggle('high', pct > 75);
+        energyRafId = requestAnimationFrame(tick);
+      }
+      tick();
+    }).catch(()=>{});
+  }
+  function stopEnergyMeter(){ if(energyRafId){ cancelAnimationFrame(energyRafId); energyRafId = null; } energyFill.style.width='0%'; }
+  function summarizeEnergy(){
+    if(energySamples.length < 3) return null;
+    return {avg: Math.round(energySamples.reduce((a,b)=>a+b,0)/energySamples.length)};
+  }
+
+  function setupRecognition(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR) return null;
+    const rec = new SR();
+    rec.lang = 'es-ES'; rec.continuous = true; rec.interimResults = true;
+    let fullFinal = '';
+    let shouldRestart = false;
+    rec.onresult = (e)=>{
+      let interim = '';
+      for(let i=e.resultIndex; i<e.results.length; i++){
+        const res = e.results[i];
+        if(res.isFinal){
+          fullFinal += res[0].transcript + ' ';
+          const words = res[0].transcript.trim().split(/\s+/).filter(Boolean);
+          const re = muletillaRegex();
+          words.forEach(w=>{ if(re.test(w)){ fillerCount++; } re.lastIndex=0; });
+        } else { interim += res[0].transcript; }
+      }
+      const escaped = (fullFinal+interim).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+      const marked = escaped.replace(muletillaRegex(), m=>'<mark class="filler">'+m+'</mark>');
+      transcriptEl.innerHTML = marked || '<span class="imp-placeholder">Escuchando…</span>';
+      transcriptEl.scrollTop = transcriptEl.scrollHeight;
+    };
+    rec.onerror = (e)=>{
+      if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+        micStatus.textContent = 'Micrófono denegado — modo escritura activado';
+        shouldRestart = false;
+        switchToFallback();
+      }
+    };
+    rec.onend = ()=>{
+      if(shouldRestart && running && !usingFallback){
+        setTimeout(()=>{ if(shouldRestart && running && !usingFallback){ try{ rec.start(); }catch(e){} } }, 80);
+      }
+    };
+    rec.__setRestart = (v)=>{ shouldRestart = v; };
+    return rec;
+  }
+
+  function switchToFallback(){
+    usingFallback = true;
+    transcriptEl.contentEditable = 'true';
+    transcriptEl.innerHTML = '';
+    transcriptEl.focus();
+    micStatus.textContent = 'Escribe mientras lees en voz alta, y pulsa "Terminé de leer" al acabar';
+  }
+
+  function startRound(){
+    if(running || !myText) return;
+    running = true;
+    usingFallback = false;
+    fillerCount = 0;
+    startBtn.disabled = true; stopBtn.disabled = false;
+    transcriptEl.contentEditable = 'false';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Escuchando…</span>';
+    playbackWrap.style.display = 'none';
+    startBeep();
+
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.abort(); }catch(e){} }
+    recognition = setupRecognition();
+    if(recognition){
+      recognition.__setRestart(true);
+      try{ recognition.start(); micStatus.textContent = 'Micrófono activo — lee tu texto completo'; }
+      catch(e){ switchToFallback(); micStatus.textContent = 'Modo escritura (voz no disponible)'; }
+    } else {
+      switchToFallback();
+      micStatus.textContent = 'Este navegador no soporta voz — modo escritura activado';
+    }
+
+    startRecording();
+    resetPitchChart();
+    startPitchMeter();
+    energySamples = [];
+    startEnergyMeter();
+  }
+
+  function endRound(){
+    if(!running) return;
+    running = false;
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.stop(); }catch(e){} }
+    stopRecordingAndShow();
+    stopPitchMeter();
+    stopEnergyMeter();
+    startBtn.disabled = false; stopBtn.disabled = true;
+    endBeep();
+
+    const pitchSummary = summarizePitch();
+    const energySummary = summarizeEnergy();
+    const wordCount = myText.trim().split(/\s+/).length;
+    const fillerRate = wordCount ? fillerCount/wordCount : 0;
+
+    let score = Math.round(Math.max(0, 100 - fillerRate*100*1.5));
+    if(pitchSummary){
+      if(pitchSummary.varietyLabel === 'Expresiva'){ score = Math.min(100, score+10); }
+      else if(pitchSummary.varietyLabel === 'Plana'){ score = Math.max(0, score-10); }
+    }
+
+    const metrics = [
+      {value: fillerCount, label:'Muletillas'},
+      {value: score, label:'Puntaje'}
+    ];
+    let note = fillerCount === 0
+      ? 'Lectura limpia de tu propio texto, sin muletillas detectadas.'
+      : (fillerRate > 0.03
+        ? 'Se colaron varias muletillas — repite la lectura un par de veces más hasta que el texto te salga con más soltura.'
+        : 'Lectura bastante limpia, con alguna muletilla suelta.');
+
+    if(pitchSummary){
+      metrics.push({value: pitchSummary.avg+'Hz', label:'Tono promedio'});
+      metrics.push({value: pitchSummary.varietyLabel, label:'Variedad tonal'});
+      if(pitchSummary.varietyLabel === 'Plana'){
+        note += ' Tu tono se mantuvo plano — marca más las pausas y los puntos clave de tu propio texto con cambios de tono.';
+      } else if(pitchSummary.varietyLabel === 'Expresiva'){
+        note += ' Buena variedad de tono para este texto.';
+      }
+    }
+    if(energySummary){
+      metrics.push({value: energySummary.avg+'%', label:'Energía de voz'});
+      if(energySummary.avg < 20){
+        note += ' Proyecta un poco más — sobre todo si este texto lo vas a usar frente a otras personas.';
+      }
+    }
+
+    showStamp({
+      apparatus: 'mitexto',
+      score,
+      metrics,
+      note
+    });
+  }
+
+  startBtn.addEventListener('click', startRound);
+  stopBtn.addEventListener('click', endRound);
+
+  document.addEventListener('keydown', (e)=>{
+    if(window.__activePanel !== 'mitexto') return;
+    if(e.code === 'Space' && !transcriptEl.isContentEditable && document.activeElement !== inputEl){
+      e.preventDefault();
+      running ? endRound() : startRound();
+    }
+  });
+})();
+
+/* ================= APARATO 10: ARSENAL ================= */
 (function(){
   const ARSENAL = [
     ['cosa','elemento / factor / componente'],
