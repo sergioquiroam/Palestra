@@ -111,7 +111,7 @@
   /* ---------- Apparatus nav ---------- */
   nav.apparatus-nav{
     display:grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 2px;
     background: var(--rule);
     border: 2px solid var(--ink);
@@ -333,6 +333,35 @@
     letter-spacing:0.06em; color: var(--ink-soft); font-style: normal;
   }
 
+  /* ---- Persuasión ---- */
+  .per-selfeval{
+    margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--rule);
+  }
+  .per-selfeval-row{
+    display:flex; justify-content:space-between; align-items:center;
+    gap: 10px; margin-top: 12px; flex-wrap: wrap;
+  }
+  .per-selfeval-label{ font-size: 14px; }
+  .per-selfeval-scale{ display:flex; gap:6px; }
+  .per-selfeval-scale button{
+    width:32px; height:32px; border-radius:50%;
+    border: 1.5px solid var(--rule-strong);
+    font-family: var(--mono); font-size:13px; color: var(--ink-soft);
+    background: var(--paper-3);
+  }
+  .per-selfeval-scale button.selected{
+    background: var(--bermellon); border-color: var(--bermellon); color: var(--paper-3);
+  }
+
+  /* ---- Traducción Oral ---- */
+  .tra-reference{
+    margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--rule);
+  }
+  .tra-reference-text{
+    font-family: var(--display); font-style: italic; font-size: 15px;
+    color: var(--forest); margin: 6px 0 0; line-height:1.5;
+  }
+
   .tw-pitch-wrap{ margin: 16px 0 14px; }
   .tw-pitch-chart{ width:100%; height:70px; display:block; margin-top:6px; background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius); }
   .tw-pitch-line{ fill:none; stroke: var(--forest); stroke-width:1.5; }
@@ -429,7 +458,7 @@
   <header class="masthead">
     <div>
       <h1 class="masthead-title">PALESTRA<span class="accent">.</span></h1>
-      <p class="masthead-sub">Gimnasio verbal — seis aparatos, sesiones de 60 segundos</p>
+      <p class="masthead-sub">Gimnasio verbal — ocho aparatos, sesiones de 60 segundos</p>
     </div>
     <div class="masthead-stats" id="masthead-stats">
       <div><span class="mstat-num" id="stat-racha">0</span><span class="mstat-label">Racha (días)</span></div>
@@ -445,7 +474,9 @@
     <button class="apparatus-btn" data-panel="precision"><span class="apparatus-num">03 · ESCRITO</span><span class="apparatus-name">Precisión</span></button>
     <button class="apparatus-btn" data-panel="trabalenguas"><span class="apparatus-num">04 · VOZ</span><span class="apparatus-name">Trabalenguas</span></button>
     <button class="apparatus-btn" data-panel="discursos"><span class="apparatus-num">05 · VOZ</span><span class="apparatus-name">Discursos</span></button>
-    <button class="apparatus-btn" data-panel="arsenal"><span class="apparatus-num">06 · REF.</span><span class="apparatus-name">Arsenal</span></button>
+    <button class="apparatus-btn" data-panel="persuasion"><span class="apparatus-num">06 · VOZ</span><span class="apparatus-name">Persuasión</span></button>
+    <button class="apparatus-btn" data-panel="traduccion"><span class="apparatus-num">07 · VOZ</span><span class="apparatus-name">Traducción Oral</span></button>
+    <button class="apparatus-btn" data-panel="arsenal"><span class="apparatus-num">08 · REF.</span><span class="apparatus-name">Arsenal</span></button>
   </nav>
 
   <main id="main">
@@ -739,10 +770,165 @@
       </div>
     </section>
 
+    <section class="panel" id="panel-persuasion">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">06 · Persuasión</h2>
+          <p class="panel-desc">Practica discursos reales para convencer — a ti mismo, a tu jefe, a un compañero. Grábate, y al terminar autoevalúate por criterio y tópico, para ver si mejoras con el tiempo.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="imp-row">
+          <div class="imp-topic-box">
+            <span class="imp-label">Destinatario</span>
+            <p class="tw-text" id="per-audience-label">Elige a quién quieres convencer</p>
+          </div>
+          <div class="imp-duration-picker" id="per-audience-picker">
+            <button class="dur-btn active" data-aud="autoconviccion">A mí mismo</button>
+            <button class="dur-btn" data-aud="jefe">A mi jefe</button>
+            <button class="dur-btn" data-aud="companero">A un compañero</button>
+          </div>
+        </div>
+
+        <div class="imp-row" style="margin-top:14px;">
+          <div class="imp-topic-box">
+            <span class="imp-label">Situación a defender</span>
+            <p class="dis-text" id="per-prompt" style="max-height:none;">Pulsa "Nuevo tópico" para empezar</p>
+          </div>
+          <button class="btn ghost" id="per-new">Nuevo tópico (N)</button>
+        </div>
+
+        <div class="tw-pitch-wrap">
+          <span class="imp-label">Tono de voz (Hz)</span>
+          <svg id="per-pitch-chart" class="tw-pitch-chart" viewBox="0 0 600 70" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="0" y1="35" x2="600" y2="35" class="ritmo-baseline"/>
+            <polyline id="per-pitch-line" points="" class="tw-pitch-line"/>
+          </svg>
+          <div class="tw-pitch-stats" id="per-pitch-stats">
+            <div class="imp-stat"><span class="imp-stat-num" id="per-pitch-avg">—</span><span class="imp-stat-label">Promedio Hz</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="per-pitch-range">—</span><span class="imp-stat-label">Rango Hz</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="per-muletillas">0</span><span class="imp-stat-label">Muletillas</span></div>
+          </div>
+        </div>
+
+        <div class="imp-energy-wrap">
+          <span class="imp-label">Energía de voz</span>
+          <div class="imp-energy-bar"><div class="imp-energy-fill" id="per-energy-fill"></div></div>
+        </div>
+
+        <div class="imp-transcript" id="per-transcript" aria-live="polite">
+          <span class="imp-placeholder">Tu transcripción en vivo aparecerá aquí mientras hablas.</span>
+        </div>
+
+        <div class="imp-playback" id="per-playback" style="display:none;">
+          <span class="imp-label">Reescúchate</span>
+          <audio id="per-audio" controls style="width:100%; margin-top:6px;"></audio>
+          <button class="btn ghost" id="per-download-audio" style="margin-top:8px;">Descargar audio</button>
+        </div>
+
+        <div class="imp-controls">
+          <button class="btn primary" id="per-start">Empezar (ESPACIO)</button>
+          <button class="btn ghost" id="per-stop" disabled>Terminé de hablar</button>
+          <span class="imp-mic-status" id="per-mic-status"></span>
+        </div>
+
+        <div class="per-selfeval" id="per-selfeval" style="display:none;">
+          <span class="imp-label">Autoevalúate — ¿qué tan convincente sonaste?</span>
+          <div class="per-selfeval-row" data-key="claridad">
+            <span class="per-selfeval-label">Claridad del argumento</span>
+            <div class="per-selfeval-scale" data-key="claridad">
+              <button data-val="1">1</button><button data-val="2">2</button><button data-val="3">3</button><button data-val="4">4</button><button data-val="5">5</button>
+            </div>
+          </div>
+          <div class="per-selfeval-row">
+            <span class="per-selfeval-label">Seguridad al hablar</span>
+            <div class="per-selfeval-scale" data-key="seguridad">
+              <button data-val="1">1</button><button data-val="2">2</button><button data-val="3">3</button><button data-val="4">4</button><button data-val="5">5</button>
+            </div>
+          </div>
+          <div class="per-selfeval-row">
+            <span class="per-selfeval-label">Qué tan convincente crees que fuiste</span>
+            <div class="per-selfeval-scale" data-key="convincente">
+              <button data-val="1">1</button><button data-val="2">2</button><button data-val="3">3</button><button data-val="4">4</button><button data-val="5">5</button>
+            </div>
+          </div>
+          <button class="btn primary" id="per-submit-eval" style="margin-top:14px;" disabled>Guardar autoevaluación</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-traduccion">
+      <div class="panel-head">
+        <div>
+          <h2 class="panel-title">07 · Traducción Oral</h2>
+          <p class="panel-desc">Te doy un texto en español — dilo en inglés, en voz alta, sin trabarte y con buen tono. Comparo lo que dijiste contra una traducción de referencia y evalúo tu dicción.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="imp-row">
+          <div class="imp-topic-box">
+            <span class="imp-label">Nivel</span>
+            <p class="tw-text" id="tra-level-label">Elige un nivel</p>
+          </div>
+          <div class="imp-duration-picker" id="tra-level-picker">
+            <button class="dur-btn active" data-level="facil">Fácil</button>
+            <button class="dur-btn" data-level="medio">Medio</button>
+            <button class="dur-btn" data-level="dificil">Difícil</button>
+          </div>
+        </div>
+
+        <div class="dis-text-wrap">
+          <span class="imp-label">Di esto en inglés</span>
+          <p class="dis-text" id="tra-source" style="max-height:none;">Pulsa "Nuevo texto" para empezar</p>
+        </div>
+
+        <div class="tw-pitch-wrap">
+          <span class="imp-label">Tono de voz (Hz)</span>
+          <svg id="tra-pitch-chart" class="tw-pitch-chart" viewBox="0 0 600 70" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="0" y1="35" x2="600" y2="35" class="ritmo-baseline"/>
+            <polyline id="tra-pitch-line" points="" class="tw-pitch-line"/>
+          </svg>
+          <div class="tw-pitch-stats" id="tra-pitch-stats">
+            <div class="imp-stat"><span class="imp-stat-num" id="tra-pitch-avg">—</span><span class="imp-stat-label">Promedio Hz</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="tra-pitch-range">—</span><span class="imp-stat-label">Rango Hz</span></div>
+            <div class="imp-stat"><span class="imp-stat-num" id="tra-accuracy">—</span><span class="imp-stat-label">Precisión</span></div>
+          </div>
+        </div>
+
+        <div class="imp-energy-wrap">
+          <span class="imp-label">Energía de voz</span>
+          <div class="imp-energy-bar"><div class="imp-energy-fill" id="tra-energy-fill"></div></div>
+        </div>
+
+        <div class="imp-transcript" id="tra-transcript" aria-live="polite">
+          <span class="imp-placeholder">Tu traducción hablada en inglés aparecerá aquí.</span>
+        </div>
+
+        <div class="imp-playback" id="tra-playback" style="display:none;">
+          <span class="imp-label">Reescúchate</span>
+          <audio id="tra-audio" controls style="width:100%; margin-top:6px;"></audio>
+        </div>
+
+        <div class="tra-reference" id="tra-reference" style="display:none;">
+          <span class="imp-label">Traducción de referencia</span>
+          <p class="tra-reference-text" id="tra-reference-text"></p>
+        </div>
+
+        <div class="imp-controls">
+          <button class="btn ghost" id="tra-new">Nuevo texto (N)</button>
+          <button class="btn primary" id="tra-start">Empezar (ESPACIO)</button>
+          <button class="btn ghost" id="tra-stop" disabled>Terminé</button>
+          <span class="imp-mic-status" id="tra-mic-status"></span>
+        </div>
+      </div>
+    </section>
+
     <section class="panel" id="panel-arsenal">
       <div class="panel-head">
         <div>
-          <h2 class="panel-title">06 · Arsenal</h2>
+          <h2 class="panel-title">08 · Arsenal</h2>
           <p class="panel-desc">Tabla de referencia: términos flojos y su versión precisa. Busca, escucha la pronunciación y revisa la palabra del día.</p>
         </div>
       </div>
@@ -809,6 +995,8 @@
         <button class="hist-filter-btn" data-app="precision">Precisión</button>
         <button class="hist-filter-btn" data-app="trabalenguas">Trabalenguas</button>
         <button class="hist-filter-btn" data-app="discursos">Discursos</button>
+        <button class="hist-filter-btn" data-app="persuasion">Persuasión</button>
+        <button class="hist-filter-btn" data-app="traduccion">Traducción Oral</button>
       </div>
 
       <div class="history-list" id="history-list"></div>
@@ -1113,6 +1301,14 @@ const LEVEL_TABLE = {
   discursos: [
     {min:0, name:'PRIMER ENSAYO'}, {min:30, name:'APRENDIZ DE ORADOR'}, {min:55, name:'VOZ FIRME'},
     {min:75, name:'ORADOR DE PESO'}, {min:90, name:'MAESTRO DEL DISCURSO'}
+  ],
+  persuasion: [
+    {min:0, name:'POCO CONVINCENTE'}, {min:30, name:'TOMANDO FORMA'}, {min:55, name:'ARGUMENTO SÓLIDO'},
+    {min:75, name:'PERSUASIVO'}, {min:90, name:'NEGOCIADOR NATO'}
+  ],
+  traduccion: [
+    {min:0, name:'BEGINNER'}, {min:30, name:'GETTING THERE'}, {min:55, name:'FLUENT ENOUGH'},
+    {min:75, name:'SHARP TONGUE'}, {min:90, name:'BILINGUAL'}
   ]
 };
 function levelFor(apparatus, score){
@@ -1204,7 +1400,7 @@ document.getElementById('stamp-done').addEventListener('click', ()=> document.ge
     });
   }
 
-  const APP_LABELS = {improviso:'Improviso', tormenta:'Tormenta', precision:'Precisión', trabalenguas:'Trabalenguas', discursos:'Discursos'};
+  const APP_LABELS = {improviso:'Improviso', tormenta:'Tormenta', precision:'Precisión', trabalenguas:'Trabalenguas', discursos:'Discursos', persuasion:'Persuasión', traduccion:'Traducción Oral'};
 
   function renderList(){
     const rows = store.rounds.filter(r => activeFilter==='todos' || r.apparatus===activeFilter);
@@ -2872,7 +3068,764 @@ activatePanel('improviso');
   });
 })();
 
-/* ================= APARATO 6: ARSENAL ================= */
+/* ================= APARATO 6: PERSUASIÓN ================= */
+(function(){
+  const PROMPTS = {
+    autoconviccion: [
+      'Convéncete a ti mismo de que vale la pena madrugar mañana para hacer ejercicio antes del trabajo, aunque hoy no tengas ganas.',
+      'Convéncete de seguir adelante con tu transición hacia el sector minero, aunque el proceso esté tomando más tiempo del esperado.',
+      'Convéncete de decir que no a una tarea extra esta semana, para proteger tu tiempo con tu familia.',
+      'Convéncete de que el error que cometiste en el trabajo no define tu capacidad, y que puedes corregirlo.',
+      'Convéncete de invertir una hora esta semana en preparar tu próxima entrevista, en vez de posponerlo otra vez.',
+      'Convéncete de tomar un descanso real este fin de semana, sin culpa, aunque queden pendientes.'
+    ],
+    jefe: [
+      'Convence a tu jefe de que te dé más autonomía en la toma de decisiones sobre tu área, sin necesidad de aprobación en cada paso.',
+      'Convence a tu jefe de invertir en una mejora de proceso que reducirá reprocesos, aunque implique un costo inicial.',
+      'Convence a tu jefe de que te asigne un proyecto más desafiante, como preparación para un ascenso.',
+      'Convence a tu jefe de que necesitas una semana adicional de plazo para un entregable importante, sin que parezca una excusa.',
+      'Convence a tu jefe de que la carga de trabajo actual de tu equipo requiere una persona más, con datos concretos.',
+      'Convence a tu jefe de que un cambio en el turno o el proceso mejorará la seguridad del área, aunque implique resistencia al cambio.'
+    ],
+    companero: [
+      'Convence a un compañero de que cambie su forma de hacer una tarea, porque está generando cuellos de botella para el resto del equipo.',
+      'Convence a un compañero de que te ayude con una tarea urgente hoy, aunque él también esté saturado.',
+      'Convence a un compañero de que adopte una nueva herramienta o método de trabajo que tú ya probaste y funciona.',
+      'Convence a un compañero de que hable directamente con otra persona del equipo para resolver un conflicto, en vez de evitarlo.',
+      'Convence a un compañero de que se postule junto contigo a un proyecto interno, resaltando lo que ambos ganarían.',
+      'Convence a un compañero de que comparta contigo cómo resolvió un problema técnico, sin que sienta que le restas mérito.'
+    ]
+  };
+  let usedByAudience = {autoconviccion:[], jefe:[], companero:[]};
+  let audience = 'autoconviccion';
+
+  function pickPrompt(){
+    const pool = PROMPTS[audience];
+    let used = usedByAudience[audience];
+    let candidates = pool.filter(p=>!used.includes(p));
+    if(candidates.length===0){ used.length = 0; candidates = pool; }
+    const p = candidates[Math.floor(Math.random()*candidates.length)];
+    used.push(p);
+    return p;
+  }
+
+  const AUD_LABELS = {autoconviccion:'A mí mismo', jefe:'A mi jefe', companero:'A un compañero'};
+
+  const audienceLabel = document.getElementById('per-audience-label');
+  const audiencePicker = document.querySelectorAll('#per-audience-picker .dur-btn');
+  const promptEl = document.getElementById('per-prompt');
+  const newBtn = document.getElementById('per-new');
+  const startBtn = document.getElementById('per-start');
+  const stopBtn = document.getElementById('per-stop');
+  const micStatus = document.getElementById('per-mic-status');
+  const transcriptEl = document.getElementById('per-transcript');
+  const playbackWrap = document.getElementById('per-playback');
+  const audioEl = document.getElementById('per-audio');
+  const downloadAudioBtn = document.getElementById('per-download-audio');
+  const pitchLine = document.getElementById('per-pitch-line');
+  const pitchAvgEl = document.getElementById('per-pitch-avg');
+  const pitchRangeEl = document.getElementById('per-pitch-range');
+  const muletillasEl = document.getElementById('per-muletillas');
+  const energyFill = document.getElementById('per-energy-fill');
+  const selfEvalWrap = document.getElementById('per-selfeval');
+  const submitEvalBtn = document.getElementById('per-submit-eval');
+
+  let currentPrompt = '';
+  let running = false;
+  let usingFallback = false;
+  let recognition = null;
+  let fillerCount = 0;
+  let micStream = null;
+  let mediaRecorder = null;
+  let recordedChunks = [];
+  let recordedUrl = null;
+
+  let pitchAnalyser = null, pitchSource = null, pitchRafId = null;
+  let pitchSamples = [], pitchPoints = [];
+  let energyAnalyser = null, energySource = null, energyRafId = null;
+  let energySamples = [];
+
+  let selfEval = {claridad: null, seguridad: null, convincente: null};
+  let pendingScore = 0, pendingMetrics = [], pendingNote = '';
+
+  function loadPrompt(){
+    currentPrompt = pickPrompt();
+    promptEl.textContent = currentPrompt;
+    audienceLabel.textContent = 'Destinatario: ' + AUD_LABELS[audience];
+    resetPitchChart();
+    energyFill.style.width = '0%';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Tu transcripción en vivo aparecerá aquí mientras hablas.</span>';
+    playbackWrap.style.display = 'none';
+    selfEvalWrap.style.display = 'none';
+    resetSelfEval();
+    micStatus.textContent = '';
+  }
+
+  newBtn.addEventListener('click', ()=>{ if(!running) loadPrompt(); });
+  audiencePicker.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      if(running) return;
+      audiencePicker.forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      audience = b.dataset.aud;
+      loadPrompt();
+    });
+  });
+  loadPrompt();
+
+  function resetPitchChart(){
+    pitchSamples = []; pitchPoints = [];
+    pitchLine.setAttribute('points','');
+    pitchAvgEl.textContent = '—';
+    pitchRangeEl.textContent = '—';
+    muletillasEl.textContent = 0;
+  }
+
+  function resetSelfEval(){
+    selfEval = {claridad: null, seguridad: null, convincente: null};
+    selfEvalWrap.querySelectorAll('.per-selfeval-scale button').forEach(b=> b.classList.remove('selected'));
+    submitEvalBtn.disabled = true;
+  }
+
+  selfEvalWrap.querySelectorAll('.per-selfeval-scale').forEach(scale=>{
+    const key = scale.dataset.key;
+    scale.querySelectorAll('button').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        selfEval[key] = parseInt(btn.dataset.val, 10);
+        scale.querySelectorAll('button').forEach(b=> b.classList.remove('selected'));
+        btn.classList.add('selected');
+        const allSet = selfEval.claridad && selfEval.seguridad && selfEval.convincente;
+        submitEvalBtn.disabled = !allSet;
+      });
+    });
+  });
+
+  function getMicStream(){
+    if(micStream) return Promise.resolve(micStream);
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return Promise.reject();
+    return navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{ micStream = stream; return stream; });
+  }
+
+  function startRecording(){
+    if(!window.MediaRecorder) return;
+    getMicStream().then(stream=>{
+      recordedChunks = [];
+      try{
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
+        mediaRecorder = mimeType ? new MediaRecorder(stream, {mimeType}) : new MediaRecorder(stream);
+      }catch(e){ mediaRecorder = null; return; }
+      mediaRecorder.ondataavailable = (e)=>{ if(e.data && e.data.size > 0) recordedChunks.push(e.data); };
+      mediaRecorder.start();
+    }).catch(()=>{ mediaRecorder = null; });
+  }
+  function stopRecordingAndShow(){
+    if(!mediaRecorder || mediaRecorder.state === 'inactive') return;
+    mediaRecorder.onstop = ()=>{
+      if(recordedChunks.length === 0) return;
+      if(recordedUrl) URL.revokeObjectURL(recordedUrl);
+      const blob = new Blob(recordedChunks, {type: recordedChunks[0].type || 'audio/webm'});
+      recordedUrl = URL.createObjectURL(blob);
+      audioEl.src = recordedUrl;
+      playbackWrap.style.display = 'block';
+      downloadAudioBtn.onclick = ()=>{
+        const a = document.createElement('a');
+        a.href = recordedUrl;
+        a.download = 'persuasion-' + Date.now() + '.webm';
+        a.click();
+      };
+    };
+    try{ mediaRecorder.stop(); }catch(e){}
+  }
+
+  function startPitchMeter(){
+    getMicStream().then(stream=>{
+      const ctx = getActx();
+      if(!ctx) return;
+      if(!pitchAnalyser){
+        pitchSource = ctx.createMediaStreamSource(stream);
+        pitchAnalyser = ctx.createAnalyser();
+        pitchAnalyser.fftSize = 2048;
+        pitchSource.connect(pitchAnalyser);
+      }
+      const buf = new Float32Array(pitchAnalyser.fftSize);
+      function tick(){
+        if(!running) return;
+        pitchAnalyser.getFloatTimeDomainData(buf);
+        const freq = autoCorrelate(buf, ctx.sampleRate);
+        if(freq > 0){
+          pitchSamples.push(freq);
+          const x = Math.min(600, pitchPoints.length*6);
+          const clamped = Math.max(80, Math.min(400, freq));
+          const y = 65 - ((clamped-80)/(400-80))*60;
+          pitchPoints.push([x,y]);
+          if(pitchPoints.length > 100){ pitchPoints.shift(); pitchPoints.forEach((p,i)=> p[0]=i*6); }
+          pitchLine.setAttribute('points', pitchPoints.map(p=>p[0]+','+p[1]).join(' '));
+        }
+        pitchRafId = requestAnimationFrame(tick);
+      }
+      tick();
+    }).catch(()=>{});
+  }
+  function stopPitchMeter(){ if(pitchRafId){ cancelAnimationFrame(pitchRafId); pitchRafId = null; } }
+  function summarizePitch(){
+    if(pitchSamples.length < 3) return null;
+    const avg = Math.round(pitchSamples.reduce((a,b)=>a+b,0)/pitchSamples.length);
+    const min = Math.round(Math.min(...pitchSamples));
+    const max = Math.round(Math.max(...pitchSamples));
+    pitchAvgEl.textContent = avg;
+    pitchRangeEl.textContent = min + '–' + max;
+    return {avg, min, max, range: max-min};
+  }
+
+  function startEnergyMeter(){
+    getMicStream().then(stream=>{
+      const ctx = getActx();
+      if(!ctx) return;
+      if(!energyAnalyser){
+        energySource = ctx.createMediaStreamSource(stream);
+        energyAnalyser = ctx.createAnalyser();
+        energyAnalyser.fftSize = 256;
+        energySource.connect(energyAnalyser);
+      }
+      const data = new Uint8Array(energyAnalyser.frequencyBinCount);
+      function tick(){
+        if(!running) return;
+        energyAnalyser.getByteFrequencyData(data);
+        let sum = 0;
+        for(let i=0;i<data.length;i++) sum += data[i];
+        const avg = sum/data.length;
+        const pct = Math.min(100, Math.round((avg/90)*100));
+        energySamples.push(pct);
+        energyFill.style.width = pct + '%';
+        energyFill.classList.toggle('low', pct < 12);
+        energyFill.classList.toggle('high', pct > 75);
+        energyRafId = requestAnimationFrame(tick);
+      }
+      tick();
+    }).catch(()=>{});
+  }
+  function stopEnergyMeter(){ if(energyRafId){ cancelAnimationFrame(energyRafId); energyRafId = null; } energyFill.style.width='0%'; }
+  function summarizeEnergy(){
+    if(energySamples.length < 3) return null;
+    return {avg: Math.round(energySamples.reduce((a,b)=>a+b,0)/energySamples.length)};
+  }
+
+  function setupRecognition(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR) return null;
+    const rec = new SR();
+    rec.lang = 'es-ES'; rec.continuous = true; rec.interimResults = true;
+    let fullFinal = '';
+    let shouldRestart = false;
+    rec.onresult = (e)=>{
+      let interim = '';
+      for(let i=e.resultIndex; i<e.results.length; i++){
+        const res = e.results[i];
+        if(res.isFinal){
+          fullFinal += res[0].transcript + ' ';
+          const words = res[0].transcript.trim().split(/\s+/).filter(Boolean);
+          const re = muletillaRegex();
+          words.forEach(w=>{ if(re.test(w)){ fillerCount++; } re.lastIndex=0; });
+          muletillasEl.textContent = fillerCount;
+        } else { interim += res[0].transcript; }
+      }
+      const escaped = (fullFinal+interim).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+      const marked = escaped.replace(muletillaRegex(), m=>'<mark class="filler">'+m+'</mark>');
+      transcriptEl.innerHTML = marked || '<span class="imp-placeholder">Escuchando…</span>';
+      transcriptEl.scrollTop = transcriptEl.scrollHeight;
+    };
+    rec.onerror = (e)=>{
+      if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+        micStatus.textContent = 'Micrófono denegado — modo escritura activado';
+        shouldRestart = false;
+        switchToFallback();
+      }
+    };
+    rec.onend = ()=>{
+      if(shouldRestart && running && !usingFallback){
+        setTimeout(()=>{ if(shouldRestart && running && !usingFallback){ try{ rec.start(); }catch(e){} } }, 80);
+      }
+    };
+    rec.__setRestart = (v)=>{ shouldRestart = v; };
+    return rec;
+  }
+
+  function switchToFallback(){
+    usingFallback = true;
+    transcriptEl.contentEditable = 'true';
+    transcriptEl.innerHTML = '';
+    transcriptEl.focus();
+    micStatus.textContent = 'Escribe mientras hablas, y pulsa "Terminé de hablar" al acabar';
+  }
+
+  function startRound(){
+    if(running) return;
+    running = true;
+    usingFallback = false;
+    fillerCount = 0;
+    startBtn.disabled = true; stopBtn.disabled = false; newBtn.disabled = true;
+    transcriptEl.contentEditable = 'false';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Escuchando…</span>';
+    playbackWrap.style.display = 'none';
+    selfEvalWrap.style.display = 'none';
+    resetSelfEval();
+    startBeep();
+
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.abort(); }catch(e){} }
+    recognition = setupRecognition();
+    if(recognition){
+      recognition.__setRestart(true);
+      try{ recognition.start(); micStatus.textContent = 'Micrófono activo — habla como si tuvieras a la persona enfrente'; }
+      catch(e){ switchToFallback(); micStatus.textContent = 'Modo escritura (voz no disponible)'; }
+    } else {
+      switchToFallback();
+      micStatus.textContent = 'Este navegador no soporta voz — modo escritura activado';
+    }
+
+    startRecording();
+    resetPitchChart();
+    startPitchMeter();
+    energySamples = [];
+    startEnergyMeter();
+  }
+
+  function endRound(){
+    if(!running) return;
+    running = false;
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.stop(); }catch(e){} }
+    stopRecordingAndShow();
+    stopPitchMeter();
+    stopEnergyMeter();
+    startBtn.disabled = false; stopBtn.disabled = true; newBtn.disabled = false;
+    endBeep();
+
+    const pitchSummary = summarizePitch();
+    const energySummary = summarizeEnergy();
+
+    pendingMetrics = [
+      {value: AUD_LABELS[audience], label:'Destinatario'},
+      {value: fillerCount, label:'Muletillas'}
+    ];
+    if(pitchSummary){ pendingMetrics.push({value: pitchSummary.avg+'Hz', label:'Tono promedio'}); }
+    if(energySummary){ pendingMetrics.push({value: energySummary.avg+'%', label:'Energía de voz'}); }
+
+    let baseScore = Math.round(Math.max(0, 100 - fillerCount*5));
+    if(energySummary && energySummary.avg < 20){ baseScore = Math.max(0, baseScore-10); }
+    pendingScore = baseScore;
+    pendingNote = fillerCount <= 2
+      ? 'Discurso limpio, con pocas muletillas — así se nota preparación.'
+      : 'Varias muletillas mientras defendías tu punto — cuando faltan las palabras exactas, se llenan los huecos con "eh" o "este". Piensa el argumento antes de hablar, no mientras hablas.';
+
+    // Mostrar autoevaluación antes de sellar la ronda
+    selfEvalWrap.style.display = 'block';
+  }
+
+  submitEvalBtn.addEventListener('click', ()=>{
+    const finalMetrics = pendingMetrics.concat([
+      {value: selfEval.claridad, label:'Autoeval: claridad'},
+      {value: selfEval.seguridad, label:'Autoeval: seguridad'},
+      {value: selfEval.convincente, label:'Autoeval: convincente'}
+    ]);
+    const avgSelf = (selfEval.claridad + selfEval.seguridad + selfEval.convincente) / 3;
+    const finalScore = Math.round(pendingScore*0.5 + (avgSelf/5)*100*0.5);
+    let finalNote = pendingNote;
+    if(avgSelf >= 4){ finalNote += ' Te autoevaluaste alto — buena señal de confianza en tu propio argumento.'; }
+    else if(avgSelf <= 2.5){ finalNote += ' Te autoevaluaste bajo — vuelve a intentar el mismo tópico una vez más, sabiendo ya cómo te salió.'; }
+
+    showStamp({
+      apparatus: 'persuasion',
+      score: finalScore,
+      metrics: finalMetrics,
+      note: finalNote
+    });
+
+    selfEvalWrap.style.display = 'none';
+    loadPrompt();
+  });
+
+  startBtn.addEventListener('click', startRound);
+  stopBtn.addEventListener('click', endRound);
+
+  document.addEventListener('keydown', (e)=>{
+    if(window.__activePanel !== 'persuasion') return;
+    if(e.code === 'Space' && !transcriptEl.isContentEditable){
+      e.preventDefault();
+      running ? endRound() : startRound();
+    }
+    if(e.code === 'KeyN' && !running){ newBtn.click(); }
+  });
+})();
+
+/* ================= APARATO 7: TRADUCCIÓN ORAL ================= */
+(function(){
+  const ITEMS = {
+    facil: [
+      {es:'Buenos días, ¿cómo estás hoy?', en:'good morning how are you today'},
+      {es:'Me gustaría un café, por favor.', en:'i would like a coffee please'},
+      {es:'¿Dónde está el baño?', en:'where is the bathroom'},
+      {es:'Mi nombre es Sergio y trabajo en una planta industrial.', en:'my name is sergio and i work at an industrial plant'},
+      {es:'Hoy hace mucho calor en Arequipa.', en:'it is very hot in arequipa today'},
+      {es:'Necesito hablar con mi jefe mañana temprano.', en:'i need to talk to my boss early tomorrow'},
+      {es:'¿Cuánto cuesta esto?', en:'how much does this cost'},
+      {es:'Voy a llegar un poco tarde a la reunión.', en:'i am going to be a little late to the meeting'}
+    ],
+    medio: [
+      {es:'Estamos trabajando para mejorar la eficiencia del proceso de clasificación de fibra.', en:'we are working to improve the efficiency of the fiber classification process'},
+      {es:'Necesito que revises este informe antes de que lo enviemos al cliente.', en:'i need you to review this report before we send it to the client'},
+      {es:'El equipo logró reducir los reprocesos en un quince por ciento este trimestre.', en:'the team managed to reduce rework by fifteen percent this quarter'},
+      {es:'Si tenemos éxito con este proyecto, podríamos aplicarlo en otras áreas de la planta.', en:'if we succeed with this project we could apply it to other areas of the plant'},
+      {es:'Quisiera programar una reunión para discutir el presupuesto del próximo año.', en:'i would like to schedule a meeting to discuss next years budget'},
+      {es:'Estoy buscando una oportunidad en el sector minero como superintendente de planta.', en:'i am looking for an opportunity in the mining sector as a plant superintendent'},
+      {es:'La seguridad del personal siempre debe ser la prioridad número uno.', en:'the safety of personnel should always be the number one priority'}
+    ],
+    dificil: [
+      {es:'A pesar de los desafíos que enfrentamos durante la implementación, el equipo se mantuvo comprometido con los objetivos trazados desde el principio.', en:'despite the challenges we faced during implementation the team remained committed to the goals set from the beginning'},
+      {es:'La transformación digital de nuestros procesos productivos requiere no solo tecnología, sino también un cambio profundo en la cultura organizacional.', en:'the digital transformation of our production processes requires not only technology but also a deep change in organizational culture'},
+      {es:'Creo firmemente que la combinación de experiencia operativa y formación técnica me permitirá aportar valor real a su organización.', en:'i firmly believe that the combination of operational experience and technical training will allow me to add real value to your organization'},
+      {es:'Es fundamental que alineemos las expectativas de todas las partes interesadas antes de avanzar con la siguiente fase del proyecto.', en:'it is essential that we align the expectations of all stakeholders before moving forward with the next phase of the project'},
+      {es:'Nuestro objetivo no es solamente cumplir con los indicadores, sino construir una cultura de mejora continua sostenible en el tiempo.', en:'our goal is not only to meet the indicators but to build a culture of continuous improvement that is sustainable over time'}
+    ]
+  };
+  let level = 'facil';
+  let usedByLevel = {facil:[], medio:[], dificil:[]};
+
+  function pickItem(){
+    const pool = ITEMS[level];
+    let used = usedByLevel[level];
+    let candidates = pool.filter(i=>!used.includes(i));
+    if(candidates.length===0){ used.length = 0; candidates = pool; }
+    const item = candidates[Math.floor(Math.random()*candidates.length)];
+    used.push(item);
+    return item;
+  }
+
+  const levelLabel = document.getElementById('tra-level-label');
+  const levelPicker = document.querySelectorAll('#tra-level-picker .dur-btn');
+  const sourceEl = document.getElementById('tra-source');
+  const newBtn = document.getElementById('tra-new');
+  const startBtn = document.getElementById('tra-start');
+  const stopBtn = document.getElementById('tra-stop');
+  const micStatus = document.getElementById('tra-mic-status');
+  const transcriptEl = document.getElementById('tra-transcript');
+  const playbackWrap = document.getElementById('tra-playback');
+  const audioEl = document.getElementById('tra-audio');
+  const pitchLine = document.getElementById('tra-pitch-line');
+  const pitchAvgEl = document.getElementById('tra-pitch-avg');
+  const pitchRangeEl = document.getElementById('tra-pitch-range');
+  const accuracyEl = document.getElementById('tra-accuracy');
+  const energyFill = document.getElementById('tra-energy-fill');
+  const referenceWrap = document.getElementById('tra-reference');
+  const referenceText = document.getElementById('tra-reference-text');
+
+  const LEVEL_LABELS = {facil:'Fácil', medio:'Medio', dificil:'Difícil'};
+
+  let currentItem = null;
+  let running = false;
+  let usingFallback = false;
+  let recognition = null;
+  let spokenText = '';
+  let micStream = null;
+  let mediaRecorder = null;
+  let recordedChunks = [];
+  let recordedUrl = null;
+
+  let pitchAnalyser = null, pitchSource = null, pitchRafId = null;
+  let pitchSamples = [], pitchPoints = [];
+  let energyAnalyser = null, energySource = null, energyRafId = null;
+  let energySamples = [];
+
+  function normalize(s){
+    return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[.,!?]/g,'').trim();
+  }
+
+  function loadItem(){
+    currentItem = pickItem();
+    sourceEl.textContent = currentItem.es;
+    levelLabel.textContent = 'Nivel: ' + LEVEL_LABELS[level];
+    resetPitchChart();
+    energyFill.style.width = '0%';
+    accuracyEl.textContent = '—';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Tu traducción hablada en inglés aparecerá aquí.</span>';
+    playbackWrap.style.display = 'none';
+    referenceWrap.style.display = 'none';
+    micStatus.textContent = '';
+  }
+
+  newBtn.addEventListener('click', ()=>{ if(!running) loadItem(); });
+  levelPicker.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      if(running) return;
+      levelPicker.forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      level = b.dataset.level;
+      loadItem();
+    });
+  });
+  loadItem();
+
+  function resetPitchChart(){
+    pitchSamples = []; pitchPoints = [];
+    pitchLine.setAttribute('points','');
+    pitchAvgEl.textContent = '—';
+    pitchRangeEl.textContent = '—';
+  }
+
+  function getMicStream(){
+    if(micStream) return Promise.resolve(micStream);
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return Promise.reject();
+    return navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{ micStream = stream; return stream; });
+  }
+
+  function startRecording(){
+    if(!window.MediaRecorder) return;
+    getMicStream().then(stream=>{
+      recordedChunks = [];
+      try{
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : '';
+        mediaRecorder = mimeType ? new MediaRecorder(stream, {mimeType}) : new MediaRecorder(stream);
+      }catch(e){ mediaRecorder = null; return; }
+      mediaRecorder.ondataavailable = (e)=>{ if(e.data && e.data.size > 0) recordedChunks.push(e.data); };
+      mediaRecorder.start();
+    }).catch(()=>{ mediaRecorder = null; });
+  }
+  function stopRecordingAndShow(){
+    if(!mediaRecorder || mediaRecorder.state === 'inactive') return;
+    mediaRecorder.onstop = ()=>{
+      if(recordedChunks.length === 0) return;
+      if(recordedUrl) URL.revokeObjectURL(recordedUrl);
+      const blob = new Blob(recordedChunks, {type: recordedChunks[0].type || 'audio/webm'});
+      recordedUrl = URL.createObjectURL(blob);
+      audioEl.src = recordedUrl;
+      playbackWrap.style.display = 'block';
+    };
+    try{ mediaRecorder.stop(); }catch(e){}
+  }
+
+  function startPitchMeter(){
+    getMicStream().then(stream=>{
+      const ctx = getActx();
+      if(!ctx) return;
+      if(!pitchAnalyser){
+        pitchSource = ctx.createMediaStreamSource(stream);
+        pitchAnalyser = ctx.createAnalyser();
+        pitchAnalyser.fftSize = 2048;
+        pitchSource.connect(pitchAnalyser);
+      }
+      const buf = new Float32Array(pitchAnalyser.fftSize);
+      function tick(){
+        if(!running) return;
+        pitchAnalyser.getFloatTimeDomainData(buf);
+        const freq = autoCorrelate(buf, ctx.sampleRate);
+        if(freq > 0){
+          pitchSamples.push(freq);
+          const x = Math.min(600, pitchPoints.length*6);
+          const clamped = Math.max(80, Math.min(400, freq));
+          const y = 65 - ((clamped-80)/(400-80))*60;
+          pitchPoints.push([x,y]);
+          if(pitchPoints.length > 100){ pitchPoints.shift(); pitchPoints.forEach((p,i)=> p[0]=i*6); }
+          pitchLine.setAttribute('points', pitchPoints.map(p=>p[0]+','+p[1]).join(' '));
+        }
+        pitchRafId = requestAnimationFrame(tick);
+      }
+      tick();
+    }).catch(()=>{});
+  }
+  function stopPitchMeter(){ if(pitchRafId){ cancelAnimationFrame(pitchRafId); pitchRafId = null; } }
+  function summarizePitch(){
+    if(pitchSamples.length < 3) return null;
+    const avg = Math.round(pitchSamples.reduce((a,b)=>a+b,0)/pitchSamples.length);
+    const min = Math.round(Math.min(...pitchSamples));
+    const max = Math.round(Math.max(...pitchSamples));
+    pitchAvgEl.textContent = avg;
+    pitchRangeEl.textContent = min + '–' + max;
+    return {avg, min, max, range: max-min};
+  }
+
+  function startEnergyMeter(){
+    getMicStream().then(stream=>{
+      const ctx = getActx();
+      if(!ctx) return;
+      if(!energyAnalyser){
+        energySource = ctx.createMediaStreamSource(stream);
+        energyAnalyser = ctx.createAnalyser();
+        energyAnalyser.fftSize = 256;
+        energySource.connect(energyAnalyser);
+      }
+      const data = new Uint8Array(energyAnalyser.frequencyBinCount);
+      function tick(){
+        if(!running) return;
+        energyAnalyser.getByteFrequencyData(data);
+        let sum = 0;
+        for(let i=0;i<data.length;i++) sum += data[i];
+        const avg = sum/data.length;
+        const pct = Math.min(100, Math.round((avg/90)*100));
+        energySamples.push(pct);
+        energyFill.style.width = pct + '%';
+        energyFill.classList.toggle('low', pct < 12);
+        energyFill.classList.toggle('high', pct > 75);
+        energyRafId = requestAnimationFrame(tick);
+      }
+      tick();
+    }).catch(()=>{});
+  }
+  function stopEnergyMeter(){ if(energyRafId){ cancelAnimationFrame(energyRafId); energyRafId = null; } energyFill.style.width='0%'; }
+  function summarizeEnergy(){
+    if(energySamples.length < 3) return null;
+    return {avg: Math.round(energySamples.reduce((a,b)=>a+b,0)/energySamples.length)};
+  }
+
+  function setupRecognition(){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR) return null;
+    const rec = new SR();
+    rec.lang = 'en-US'; // clave: escuchamos en inglés, no en español
+    rec.continuous = true;
+    rec.interimResults = true;
+    let fullFinal = '';
+    let shouldRestart = false;
+    rec.onresult = (e)=>{
+      let interim = '';
+      for(let i=e.resultIndex; i<e.results.length; i++){
+        const res = e.results[i];
+        if(res.isFinal){ fullFinal += res[0].transcript + ' '; }
+        else { interim += res[0].transcript; }
+      }
+      spokenText = fullFinal;
+      const escaped = (fullFinal+interim).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+      transcriptEl.innerHTML = escaped || '<span class="imp-placeholder">Escuchando…</span>';
+      transcriptEl.scrollTop = transcriptEl.scrollHeight;
+    };
+    rec.onerror = (e)=>{
+      if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
+        micStatus.textContent = 'Micrófono denegado — modo escritura activado';
+        shouldRestart = false;
+        switchToFallback();
+      }
+    };
+    rec.onend = ()=>{
+      if(shouldRestart && running && !usingFallback){
+        setTimeout(()=>{ if(shouldRestart && running && !usingFallback){ try{ rec.start(); }catch(e){} } }, 80);
+      }
+    };
+    rec.__setRestart = (v)=>{ shouldRestart = v; };
+    return rec;
+  }
+
+  function switchToFallback(){
+    usingFallback = true;
+    transcriptEl.contentEditable = 'true';
+    transcriptEl.innerHTML = '';
+    transcriptEl.focus();
+    micStatus.textContent = 'Escribe tu traducción en inglés y pulsa "Terminé"';
+    transcriptEl.addEventListener('input', ()=>{ spokenText = transcriptEl.innerText; });
+  }
+
+  function startRound(){
+    if(running || !currentItem) return;
+    running = true;
+    usingFallback = false;
+    spokenText = '';
+    startBtn.disabled = true; stopBtn.disabled = false; newBtn.disabled = true;
+    transcriptEl.contentEditable = 'false';
+    transcriptEl.innerHTML = '<span class="imp-placeholder">Escuchando…</span>';
+    playbackWrap.style.display = 'none';
+    referenceWrap.style.display = 'none';
+    startBeep();
+
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.abort(); }catch(e){} }
+    recognition = setupRecognition();
+    if(recognition){
+      recognition.__setRestart(true);
+      try{ recognition.start(); micStatus.textContent = 'Micrófono activo — habla en inglés'; }
+      catch(e){ switchToFallback(); micStatus.textContent = 'Modo escritura (voz no disponible)'; }
+    } else {
+      switchToFallback();
+      micStatus.textContent = 'Este navegador no soporta voz — modo escritura activado';
+    }
+
+    startRecording();
+    resetPitchChart();
+    startPitchMeter();
+    energySamples = [];
+    startEnergyMeter();
+  }
+
+  function endRound(){
+    if(!running) return;
+    running = false;
+    if(recognition){ try{ recognition.__setRestart && recognition.__setRestart(false); recognition.stop(); }catch(e){} }
+    stopRecordingAndShow();
+    stopPitchMeter();
+    stopEnergyMeter();
+    startBtn.disabled = false; stopBtn.disabled = true; newBtn.disabled = false;
+    endBeep();
+
+    // Comparación de precisión: palabras de la referencia encontradas en orden aproximado
+    const said = normalize(spokenText);
+    const target = normalize(currentItem.en);
+    const targetWords = target.split(/\s+/).filter(Boolean);
+    const saidWords = said.split(/\s+/).filter(Boolean);
+    let matches = 0, sIdx = 0;
+    targetWords.forEach(tw=>{
+      const found = saidWords.indexOf(tw, sIdx);
+      if(found !== -1){ matches++; sIdx = found+1; }
+    });
+    const accuracy = targetWords.length ? Math.round((matches/targetWords.length)*100) : 0;
+    accuracyEl.textContent = accuracy + '%';
+
+    referenceText.textContent = currentItem.en.replace(/\b\w/g, c=>c.toUpperCase()) + '.';
+    referenceWrap.style.display = 'block';
+
+    const pitchSummary = summarizePitch();
+    const energySummary = summarizeEnergy();
+
+    let score = accuracy;
+    if(energySummary && energySummary.avg < 20){ score = Math.max(0, score-10); }
+    score = Math.round(score);
+
+    const metrics = [
+      {value: accuracy+'%', label:'Precisión'},
+      {value: LEVEL_LABELS[level], label:'Nivel'}
+    ];
+    if(pitchSummary){ metrics.push({value: pitchSummary.avg+'Hz', label:'Tono promedio'}); }
+    if(energySummary){ metrics.push({value: energySummary.avg+'%', label:'Energía de voz'}); }
+
+    let note;
+    if(said.length < 3){
+      note = 'No se detectó suficiente voz — asegúrate de hablar claro y cerca del micrófono, en inglés.';
+    } else if(accuracy >= 80){
+      note = 'Muy buena traducción oral — la estructura y las palabras clave coinciden bien con la referencia.';
+    } else if(accuracy >= 50){
+      note = 'Vas encaminado, pero faltaron algunas palabras clave o el orden cambió bastante. Revisa la referencia y vuelve a intentarlo con el mismo texto.';
+    } else {
+      note = 'La traducción se alejó bastante de la referencia — no busques traducir palabra por palabra, sino la idea completa, y dilo con calma.';
+    }
+    if(energySummary && energySummary.avg < 20){
+      note += ' Además, hablaste bastante bajo — en inglés, sobre todo al principio, ayuda proyectar más para vencer la inseguridad del idioma.';
+    }
+
+    showStamp({
+      apparatus: 'traduccion',
+      score,
+      metrics,
+      note
+    });
+  }
+
+  startBtn.addEventListener('click', startRound);
+  stopBtn.addEventListener('click', endRound);
+
+  document.addEventListener('keydown', (e)=>{
+    if(window.__activePanel !== 'traduccion') return;
+    if(e.code === 'Space' && !transcriptEl.isContentEditable){
+      e.preventDefault();
+      running ? endRound() : startRound();
+    }
+    if(e.code === 'KeyN' && !running){ newBtn.click(); }
+  });
+})();
+
+/* ================= APARATO 8: ARSENAL ================= */
 (function(){
   const ARSENAL = [
     ['cosa','elemento / factor / componente'],
